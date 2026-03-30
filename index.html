@@ -281,7 +281,7 @@
 <div class="tooltip" id="tooltip" style="display:none;"></div>
 
 <script>
-const M=['#c25454','#c46a4e','#c48048','#c89648','#c0a44a','#a0a85a','#80a862','#60a46c','#4c9a68','#3c8a60','#2e7a52'];
+const M=['#c25454','#c46a4e','#c48048','#c89648','#c0a44a','#a0a85a','#b0a04e','#80a862','#60a46c','#4c9a68','#3c8a60','#2e7a52'];
 const LEVELS=[
   {level:0,name:'零基础',desc:'完全不使用任何AI工具',color:M[0]},
   {level:1,name:'入门聊天',desc:'使用飞书内置豆包，仅限基础聊天问答',color:M[1]},
@@ -289,16 +289,18 @@ const LEVELS=[
   {level:3,name:'国际大模型对话',desc:'使用GPT/Claude等国外大模型进行对话交流',color:M[3]},
   {level:4,name:'国产AI介入工作',desc:'用国产大模型辅助创建文档、修改内容、撰写报告等',color:M[4]},
   {level:5,name:'国际AI介入工作',desc:'用GPT/Claude进行文件处理、报告撰写、数据整理',color:M[5]},
-  {level:6,name:'深度数据分析',desc:'用AI做深度数据清洗、统计分析、建模、交叉验证',color:M[6]},
-  {level:7,name:'AI辅助编程',desc:'让AI编写Python/SQL/VBA脚本，搭建数据管道',color:M[7]},
-  {level:8,name:'自动化工作流',desc:'定时自动化：API取数、飞书机器人推送、工作流编排',color:M[8]},
-  {level:9,name:'多模态与智能体',desc:'AI操控电脑、图像视频生成、多Agent协作、复杂决策链',color:M[9]},
-  {level:10,name:'全流程深度集成',desc:'AI贯穿全业务链：采集→清洗→分析→决策→执行→监控',color:M[10]},
+  {level:6,name:'"养龙虾"',desc:'养龙虾开始介入工作，参与到日常工作流之中',color:M[6]},
+  {level:7,name:'深度数据分析',desc:'用AI做深度数据清洗、统计分析、建模、交叉验证',color:M[7]},
+  {level:8,name:'AI辅助编程',desc:'让AI编写Python/SQL/VBA脚本，搭建数据管道',color:M[8]},
+  {level:9,name:'自动化工作流',desc:'定时自动化：API取数、飞书机器人推送、工作流编排',color:M[9]},
+  {level:10,name:'多模态与智能体',desc:'AI操控电脑、图像视频生成、多Agent协作、复杂决策链',color:M[10]},
+  {level:11,name:'全流程深度集成',desc:'AI贯穿全业务链：采集→清洗→分析→决策→执行→监控',color:M[11]},
 ];
+const MAX_LV=11;
 
 const DEPARTMENTS=[
-  { name:'商业分析部', icon:'📈', color:'#6d8a9a', score:7.5, levelName:'AI辅助编程 ~ 自动化工作流',
-    range:{min:6,max:8,minName:'深度数据分析',maxName:'自动化工作流'},
+  { name:'商业分析部', icon:'📈', color:'#6d8a9a', score:8.5, levelName:'AI辅助编程 ~ 自动化工作流',
+    range:{min:7,max:9,minName:'深度数据分析',maxName:'自动化工作流'},
     evidence:['日常使用GPT/Claude进行深度数据分析与报告撰写','用AI编写Python脚本搭建竞品数据看板','已实现部分自动化工作流（飞书机器人+定时推送）','团队内部AI使用水平差距较小，整体处于较高水平'],
     teams:null,
     currentPlan:[
@@ -307,7 +309,7 @@ const DEPARTMENTS=[
       {cat:'track',label:'追踪',items:['飞书多维表格记录自动化项目状态（构想/开发/已上线）']},
     ]},
   { name:'品控部', icon:'🎯', color:'#7a9a99', score:null, levelName:'待完整评估',
-    range:null,
+    range:{min:3,max:5,minName:'国际大模型对话',maxName:'国际AI介入工作'},
     evidence:['杨茜团队已达到用国产大模型处理工作的水平（Lv.4）','其余团队情况待补充'],
     teams:[{name:'杨茜团队',score:4}], partialScore:4,
     currentPlan:[
@@ -335,8 +337,8 @@ const DEPARTMENTS=[
       {cat:'tip',label:'技巧',items:['敏感数据用"A公司""B门店"替代真实名称后再给AI处理']},
       {cat:'track',label:'追踪',items:['每周记录一次"AI辅助 vs 手工"同一任务的用时对比']},
     ]},
-  { name:'SuperHi财务部', icon:'💰', color:'#7a9a6d', score:7.5, levelName:'AI辅助编程 ~ 自动化工作流',
-    range:{min:6,max:8,minName:'深度数据分析',maxName:'自动化工作流'},
+  { name:'SuperHi财务部', icon:'💰', color:'#7a9a6d', score:8.5, levelName:'AI辅助编程 ~ 自动化工作流',
+    range:{min:7,max:9,minName:'深度数据分析',maxName:'自动化工作流'},
     evidence:['日常使用GPT/Claude进行深度数据分析与报告撰写','已实现部分自动化工作流（飞书机器人+定时推送）','团队内部AI使用水平差距较小，整体处于较高水平'],
     teams:null,
     currentPlan:[
@@ -345,9 +347,9 @@ const DEPARTMENTS=[
       {cat:'track',label:'追踪',items:['飞书多维表格记录自动化项目状态（构想/开发/已上线）']},
     ]},
   { name:'品牌运营中心', icon:'📢', color:'#9a8a8a', score:2, levelName:'国产大模型对话',
-    range:{min:1,max:6,minName:'入门聊天',maxName:'深度数据分析'},
-    evidence:['李妍妍团队与陈婧仪团队处于入门聊天阶段','申江团队已达到深度数据分析水平（Lv.6）','团队间AI使用水平差异极大（Lv.1~Lv.6）','整体仍有大量手工操作空间可被AI替代'],
-    teams:[{name:'用户运营组·公域',score:1},{name:'用户运营组·私域',score:1},{name:'菜单管理组',score:6}],
+    range:{min:1,max:7,minName:'入门聊天',maxName:'深度数据分析'},
+    evidence:['李妍妍团队与陈婧仪团队处于入门聊天阶段','申江团队已达到深度数据分析水平（Lv.7）','团队间AI使用水平差异极大（Lv.1~Lv.7）','整体仍有大量手工操作空间可被AI替代'],
+    teams:[{name:'用户运营组·公域',score:1},{name:'用户运营组·私域',score:1},{name:'菜单管理组',score:7}],
     currentPlan:[
       {cat:'daily',label:'练习',items:['用AI改写一段营销文案，尝试3种风格（正式/活泼/种草）']},
       {cat:'challenge',label:'目标',items:['各团队各自用AI优化一条抖音短视频脚本，提交对比稿']},
@@ -357,16 +359,16 @@ const DEPARTMENTS=[
 ];
 
 const ROADMAPS=[
-  { dept:'商业分析部', cur:7.5, tgt:9,
+  { dept:'商业分析部', cur:8.5, tgt:10,
     note:'作为AI推广部门，目标是达到多模态与智能体水平，引领全公司AI应用',
     milestones:[
-      { from:7.5,to:8,label:'AI辅助编程 → 自动化工作流',skills:[
+      { from:8.5,to:9,label:'AI辅助编程 → 自动化工作流',skills:[
         {t:'sk',s:'掌握工作流编排思维：触发条件→数据流→异常处理→结果通知'},
         {t:'sk',s:'学习API对接能力：理解RESTful接口、鉴权方式、数据格式转换'},
         {t:'ac',s:'将竞品数据看板从手动触发升级为定时自动更新+飞书推送'},
         {t:'ac',s:'搭建数据质量监控流：异常值自动检测→告警→日志记录'},
       ]},
-      { from:8,to:9,label:'自动化工作流 → 多模态与智能体',skills:[
+      { from:9,to:10,label:'自动化工作流 → 多模态与智能体',skills:[
         {t:'sk',s:'掌握多模态输入处理：图片识别、语音转文字、视频帧分析'},
         {t:'vi',s:'构建"竞品智能体"：自动抓取竞品动态→多源分析→生成洞察报告→推送决策建议'},
         {t:'vi',s:'搭建AI辅助经营决策系统：多维数据实时汇聚→趋势预测→策略推荐'},
@@ -375,7 +377,7 @@ const ROADMAPS=[
   { dept:'品控部', cur:null, tgt:null,
     note:'待完成完整访谈评估后设定里程碑；杨茜团队当前 Lv.4 可作为基准参考',
     milestones:[] },
-  { dept:'人事部', cur:1, tgt:8,
+  { dept:'人事部', cur:1, tgt:9,
     note:'从基础问答出发，最终目标实现自动化工作流，覆盖人效看板、档案更新等高频场景',
     milestones:[
       { from:1,to:3,label:'入门聊天 → 国际大模型对话',skills:[
@@ -393,13 +395,13 @@ const ROADMAPS=[
         {t:'ac',s:'用AI整合店经理全档案：多数据源→按Skill规则自动填表'},
         {t:'ac',s:'用AI批量生成贺卡：同模板替换姓名和照片'},
       ]},
-      { from:5,to:7,label:'国际AI介入工作 → AI辅助编程',skills:[
+      { from:5,to:8,label:'国际AI介入工作 → AI辅助编程',skills:[
         {t:'sk',s:'学习让AI做交叉分析：多维度筛选+透视表+趋势对比'},
         {t:'ac',s:'用AI分析员工离职预警：考勤异常+绩效波动+入职时长→风险评分'},
         {t:'ac',s:'用AI做人力成本分析：各区门店人力配置→人效比对→优化建议'},
         {t:'ac',s:'让AI编写人效看板自动刷新脚本：定时从BI取数→计算→异常标红→推送'},
       ]},
-      { from:7,to:8,label:'AI辅助编程 → 自动化工作流',skills:[
+      { from:8,to:9,label:'AI辅助编程 → 自动化工作流',skills:[
         {t:'sk',s:'掌握工作流串联：多个AI脚本→触发器→定时任务→异常处理→通知'},
         {t:'sk',s:'学习API对接基础：理解数据接口的输入输出格式'},
         {t:'vi',s:'搭建人效看板全自动化：BI取数→AI计算→异常检测→飞书机器人每日推送'},
@@ -407,7 +409,7 @@ const ROADMAPS=[
         {t:'vi',s:'搭建AI辅助招聘全流程：简历解析→条件匹配→排序推荐→面试安排→通知'},
       ]},
     ]},
-  { dept:'国内财务部', cur:2, tgt:9,
+  { dept:'国内财务部', cur:2, tgt:10,
     note:'从国产大模型对话出发，目标是自动化工作流并接近多模态与智能体水平，彻底解放重复性报表工作',
     milestones:[
       { from:2,to:3,label:'国产大模型对话 → 国际大模型对话',skills:[
@@ -424,24 +426,24 @@ const ROADMAPS=[
         {t:'ac',s:'用AI处理月度经营分析：多系统数据→汇总→校验→报告输出'},
         {t:'ac',s:'让AI生成带公式的Excel报表（检查几次确认后可信赖产出）'},
       ]},
-      { from:5,to:7,label:'国际AI介入工作 → AI辅助编程',skills:[
+      { from:5,to:8,label:'国际AI介入工作 → AI辅助编程',skills:[
         {t:'sk',s:'学习让AI做财务建模：收入预测、成本结构分析、敏感性测试'},
         {t:'ac',s:'用AI构建产品盲测分析模型：历史成本+销售数据→定价建议→毛利模拟'},
         {t:'ac',s:'用AI做门店经营健康度评分：多维财务指标→综合评分→排名→预警'},
         {t:'ac',s:'让AI生成财务异常分析报告：同比环比波动→自动归因→建议措施'},
       ]},
-      { from:7,to:9,label:'AI辅助编程 → 多模态与智能体',skills:[
+      { from:8,to:10,label:'AI辅助编程 → 多模态与智能体',skills:[
         {t:'sk',s:'掌握工作流串联：多个AI脚本→定时触发→异常处理→结果通知'},
         {t:'vi',s:'搭建多系统报表全自动刷新流：定时取数→AI合并校验→输出到指定模板→邮件分发'},
         {t:'vi',s:'搭建AI辅助预算追踪系统：实际vs预算自动对比→偏差分析→管理层简报'},
         {t:'vi',s:'搭建费用报销智能审核流：发票OCR→规则校验→异常标记→审批流自动推进'},
       ]},
     ]},
-  { dept:'SuperHi财务部', cur:7.5, tgt:null,
-    note:'与商业分析部同等水平，分阶段里程碑待后续制定',
+  { dept:'SuperHi财务部', cur:8.5, tgt:null,
+    note:'处于较高水平，分阶段里程碑待后续制定',
     milestones:[] },
-  { dept:'品牌运营中心', cur:2, tgt:7,
-    note:'用户运营组从入门出发，菜单管理组已达Lv.6；各工种按自身节奏提升，目标AI辅助编程',
+  { dept:'品牌运营中心', cur:2, tgt:8,
+    note:'用户运营组从入门出发，菜单管理组已达Lv.7；各工种按自身节奏提升，目标AI辅助编程',
     milestones:[
       { from:1,to:3,label:'入门聊天 → 国际大模型对话（用户运营组）',skills:[
         {t:'sk',s:'学习Prompt三要素：角色设定 + 任务拆解 + 输出格式要求'},
@@ -457,7 +459,7 @@ const ROADMAPS=[
         {t:'ac',s:'用AI辅助套餐配置复核：按规则校验荤素搭配、价格、日期'},
         {t:'ac',s:'用AI辅助企微员工异动运维：入离职→档案调整→通知推送'},
       ]},
-      { from:5,to:7,label:'国际AI介入工作 → AI辅助编程',skills:[
+      { from:5,to:8,label:'国际AI介入工作 → AI辅助编程',skills:[
         {t:'sk',s:'学习让AI做投放效果分析：ROI计算、渠道对比、归因模型'},
         {t:'ac',s:'用AI分析抖音投放数据：播放量+互动率+转化率→优化脚本策略'},
         {t:'ac',s:'用AI做售卖数据多维分析：时段×门店×品类→热销趋势→补货建议'},
@@ -495,20 +497,20 @@ const REQS=[
 
 /* ── 进度追踪数据 ── */
 const PROGRESS_DATA=[
-  { dept:'商业分析部', target:9, records:[
-    {date:'2026-03-30',score:7.5,note:'初始评估'},
+  { dept:'商业分析部', target:10, records:[
+    {date:'2026-03-30',score:8.5,note:'初始评估'},
   ]},
-  { dept:'品牌运营中心', target:7, records:[
+  { dept:'品牌运营中心', target:8, records:[
     {date:'2026-03-30',score:2,note:'初始评估'},
   ]},
-  { dept:'人事部', target:8, records:[
+  { dept:'人事部', target:9, records:[
     {date:'2026-03-30',score:1,note:'初始评估'},
   ]},
-  { dept:'国内财务部', target:9, records:[
+  { dept:'国内财务部', target:10, records:[
     {date:'2026-03-30',score:2,note:'初始评估'},
   ]},
   { dept:'SuperHi财务部', target:null, records:[
-    {date:'2026-03-30',score:7.5,note:'初始评估'},
+    {date:'2026-03-30',score:8.5,note:'初始评估'},
   ]},
   { dept:'品控部', target:null, records:[
     {date:'2026-03-30',score:4,note:'杨茜团队初步评估'},
@@ -550,7 +552,7 @@ const SUB_DEPTS={
             {t:'ac',s:'用AI批量生成15+门店宣传图：同模板替换店名/门店信息/尺寸'},
             {t:'ac',s:'让AI按投放反馈数据分析短视频脚本表现：哪类风格/时段转化率最高'},
           ]},
-          {from:5,to:7,label:'国际AI介入工作 → AI辅助编程',cur:1,skills:[
+          {from:5,to:8,label:'国际AI介入工作 → AI辅助编程',cur:1,skills:[
             {t:'ac',s:'用AI分析抖音投放数据：播放量+互动率+转化率→找出最优投放策略'},
             {t:'ac',s:'用AI做售卖数据多维分析：时段×门店×品类→热销趋势→补货建议'},
             {t:'vi',s:'让AI编写售卖数据自动抓取脚本：定时从美团/抖音/小程序API取数→汇总→推送'},
@@ -576,7 +578,7 @@ const SUB_DEPTS={
             {t:'ac',s:'用AI辅助企微异动运维：入离职名单→自动生成操作清单→人工执行→AI校验结果'},
             {t:'ac',s:'用AI辅助PS档案批量更新：变动数据→匹配字段→生成更新表'},
           ]},
-          {from:5,to:7,label:'国际AI介入工作 → AI辅助编程',cur:1,skills:[
+          {from:5,to:8,label:'国际AI介入工作 → AI辅助编程',cur:1,skills:[
             {t:'ac',s:'让AI编写企微运维辅助脚本：读取异动名单→自动生成批量操作指令'},
             {t:'ac',s:'用AI优化私域托管流程：识别可自动化环节→编写辅助脚本→缩短单店耗时'},
             {t:'vi',s:'搭建企微运维全自动化流：HR系统推送异动→AI判断操作类型→自动执行→结果通知'},
@@ -584,21 +586,21 @@ const SUB_DEPTS={
         ],
       },
     ]},
-    { name:'菜单管理组', score:6, levelName:'深度数据分析',
-      range:{min:5,max:7,minName:'国际AI介入工作',maxName:'AI辅助编程'},
+    { name:'菜单管理组', score:7, levelName:'深度数据分析',
+      range:{min:5,max:8,minName:'国际AI介入工作',maxName:'AI辅助编程'},
       currentPlan:[
         {cat:'daily',label:'练习',items:['用AI做一次套餐销售数据分析，输出品类趋势报告']},
         {cat:'challenge',label:'目标',items:['让AI编写套餐配置自动校验脚本（荤素搭配/价格/日期）']},
         {cat:'track',label:'追踪',items:['记录AI辅助完成的菜单管理任务及节省时间']},
       ],
       milestones:[
-        {from:6,to:7,label:'深度数据分析 → AI辅助编程',cur:6,skills:[
+        {from:7,to:8,label:'深度数据分析 → AI辅助编程',cur:7,skills:[
           {t:'sk',s:'学习让AI做售卖数据多维分析：时段×门店×品类→热销趋势'},
           {t:'ac',s:'用AI辅助套餐配置复核：按规则校验荤素搭配、价格、日期'},
           {t:'ac',s:'用AI做售卖数据多维分析：时段×门店×品类→热销趋势→补货建议'},
           {t:'vi',s:'让AI开发套餐智能配置系统：历史销售数据→AI推荐搭配→自动校验→一键上架'},
         ]},
-        {from:7,to:8,label:'AI辅助编程 → 自动化工作流',cur:6,skills:[
+        {from:8,to:9,label:'AI辅助编程 → 自动化工作流',cur:7,skills:[
           {t:'sk',s:'掌握工作流编排思维：触发条件→数据流→异常处理→结果通知'},
           {t:'ac',s:'搭建AI辅助商品上下架自动化：规则配置→批量执行→异常回退→结果通知'},
           {t:'vi',s:'让AI编写售卖数据自动抓取脚本：定时从美团/抖音/小程序API取数→汇总→推送'},
@@ -612,17 +614,23 @@ const SUB_DEPTS={
 };
 
 let deptFilter='all',reqFilter='all',trackFilter='all';
-function clr(s){return s===null?'var(--gray-300)':LEVELS[Math.min(Math.round(s),10)].color;}
+function clr(s){return s===null?'var(--gray-300)':LEVELS[Math.min(Math.round(s),MAX_LV)].color;}
 
 function renderScale(){
   const w=document.getElementById('scaleWrap');
-  let h='<h3>AI 使用能力 10 级评分体系</h3><div class="scale-bar">';
-  LEVELS.forEach(lv=>{h+=`<div class="scale-seg" style="background:${lv.color}" onmouseenter="tip(event,'Lv.${lv.level} ${lv.name}\\n${lv.desc}')" onmouseleave="untip()">${lv.level}</div>`;});
+  let h='<h3>AI 使用能力评分体系</h3><div class="scale-bar">';
+  LEVELS.forEach(lv=>{
+    const label=lv.level===MAX_LV?'∞':lv.level;
+    h+=`<div class="scale-seg" style="background:${lv.color}" onmouseenter="tip(event,'Lv.${lv.level} ${lv.name}\\n${lv.desc}')" onmouseleave="untip()">${label}</div>`;
+  });
   h+='</div><div class="scale-names">';
   LEVELS.forEach(lv=>{h+=`<span>${lv.name}</span>`;});
-  h+=`</div><button class="scale-expand-btn" onclick="togScale(this)">▸ 展开各等级详情</button>`;
+  h+=`</div><button class="scale-expand-btn" onclick="togScale(this)">▸  展开各等级详情</button>`;
   h+=`<div class="scale-detail-grid collapsed" id="sdGrid">`;
-  LEVELS.forEach(lv=>{h+=`<div class="sd-item"><div class="sd-num" style="background:${lv.color}">${lv.level}</div><div class="sd-text"><strong>${lv.name}</strong><span>${lv.desc}</span></div></div>`;});
+  LEVELS.forEach(lv=>{
+    const label=lv.level===MAX_LV?'∞':lv.level;
+    h+=`<div class="sd-item"><div class="sd-num" style="background:${lv.color}">${label}</div><div class="sd-text"><strong>${lv.name}</strong><span>${lv.desc}</span></div></div>`;
+  });
   h+='</div>';w.innerHTML=h;
 }
 function togScale(b){const d=document.getElementById('sdGrid');const c=d.classList.toggle('collapsed');b.textContent=c?'▸ 展开各等级详情':'▾ 收起等级详情';}
@@ -638,14 +646,14 @@ function renderSummary(){
     h+=`<span class="summary-dept">${dept.icon} ${dept.name}</span>`;
     h+=`<div class="summary-bar-wrap">`;
     if(hasRange){
-      const minP=(dept.range.min/10*100).toFixed(1);
-      const maxP=(dept.range.max/10*100).toFixed(1);
+      const minP=(dept.range.min/MAX_LV*100).toFixed(1);
+      const maxP=(dept.range.max/MAX_LV*100).toFixed(1);
       const bandW=(maxP-minP).toFixed(1);
       h+=`<div class="summary-band" style="left:${minP}%;width:${bandW}%;background:${c}"></div>`;
       h+=`<div class="summary-mkr" style="left:${minP}%"></div>`;
       h+=`<div class="summary-mkr" style="left:${maxP}%"></div>`;
     } else if(dept.partialScore){
-      const pct=(dept.partialScore/10*100).toFixed(1);
+      const pct=(dept.partialScore/MAX_LV*100).toFixed(1);
       h+=`<div class="summary-mkr" style="left:${pct}%"></div>`;
     }
     h+=`</div>`;
@@ -673,7 +681,7 @@ function filt(key,val,btn){
 function miniScale(dept){
   const ds=dept.range?dept.range.max:(dept.partialScore||null);
   if(ds===null)return '';
-  const pct=(ds/10*100).toFixed(1);
+  const pct=(ds/MAX_LV*100).toFixed(1);
   let h='<div class="mini-scale-wrap"><div class="mini-scale">';
   LEVELS.forEach(lv=>{h+=`<div class="mini-seg" style="background:${lv.color}"></div>`;});
   h+=`<div class="mini-marker" style="left:${pct}%"><span class="mini-marker-label">${dept.range?'Lv.'+ds:'已知Lv.'+ds}</span></div>`;
@@ -686,8 +694,8 @@ function renderRangeBar(dept){
   const c=dept.range?clr(dept.range.max):(dept.partialScore?clr(dept.partialScore):'var(--gray-300)');
   let h=`<div class="range-bar">`;
   if(dept.range){
-    const minP=(dept.range.min/10*100).toFixed(1);
-    const maxP=(dept.range.max/10*100).toFixed(1);
+    const minP=(dept.range.min/MAX_LV*100).toFixed(1);
+    const maxP=(dept.range.max/MAX_LV*100).toFixed(1);
     const bandW=(maxP-minP).toFixed(1);
     h+=`<div class="range-fill" style="width:${maxP}%;background:${c};opacity:.2"></div>`;
     h+=`<div class="range-band" style="left:${minP}%;width:${bandW}%;background:${c}"></div>`;
@@ -696,13 +704,13 @@ function renderRangeBar(dept){
     h+=`<div class="range-mkr" style="left:${maxP}%;background:var(--gray-700)"></div>`;
     h+=`<span class="range-mkr-btm" style="left:${maxP}%;color:var(--gray-700)">上限 Lv.${dept.range.max} ${dept.range.maxName}</span>`;
   } else if(dept.partialScore){
-    const pct=(dept.partialScore/10*100).toFixed(1);
+    const pct=(dept.partialScore/MAX_LV*100).toFixed(1);
     h+=`<div class="range-fill" style="width:${pct}%;background:${c};opacity:.5"></div>`;
     h+=`<div class="range-mkr" style="left:${pct}%;background:var(--gray-800)"></div>`;
     h+=`<span class="range-mkr-label" style="left:${pct}%;color:var(--gray-800)">已知 Lv.${dept.partialScore}</span>`;
   }
   h+=`</div>`;
-  h+=`<div class="score-bar-labels"><span>Lv.0</span><span>Lv.5</span><span>Lv.10</span></div>`;
+  h+=`<div class="score-bar-labels"><span>Lv.0</span><span>Lv.5</span><span>Lv.11</span></div>`;
   return h;
 }
 
@@ -736,7 +744,7 @@ function renderCards(){
       <div class="dept-icon" style="background:${dept.color}18;color:${dept.color}">${dept.icon}</div>
       <div><h3>${dept.name}</h3><span class="level-tag" style="background:${c}18;color:${c}">${dept.range?'Lv.'+dept.range.max:(dept.partialScore?'部分评估 Lv.'+dept.partialScore:'待评估')} ${dept.range?dept.range.maxName:dept.levelName}</span></div>
     </div>
-    <div class="score-badge" style="color:${c}">${dispScore!==null?dispScore:'—'}<span class="score-sub">${dispScore!==null?'/10':''}</span></div></div>`;
+    <div class="score-badge" style="color:${c}">${dispScore!==null?dispScore:'—'}<span class="score-sub">${dispScore!==null?'/11':''}</span></div></div>`;
     h+=renderRangeBar(dept);
     h+=miniScale(dept);
     // evidence
@@ -750,7 +758,7 @@ function renderCards(){
       if(dept.teams&&dept.teams.length){
         h+=`<div class="teams-wrap"><div class="teams-title">团队细分</div>`;
         dept.teams.forEach(t=>{
-          const tp=(t.score/10*100).toFixed(1),tc=clr(t.score);
+          const tp=(t.score/MAX_LV*100).toFixed(1),tc=clr(t.score);
           h+=`<div class="team-row"><span class="team-name">${t.name}</span><div class="team-bar-bg"><div class="team-bar-fill" style="width:${tp}%;background:${tc}"></div></div><span class="team-score" style="color:${tc}">${t.score}</span></div>`;
         });
         h+=`</div>`;
@@ -759,8 +767,8 @@ function renderCards(){
         const hasTgt=rm.tgt!==null,hasCur=rm.cur!==null;
         const tgtC=hasTgt?clr(rm.tgt):'var(--gray-400)';
         const curC=hasCur?clr(rm.cur):c;
-        const curPct=hasCur?(rm.cur/10*100).toFixed(1):'0';
-        const tgtPct=hasTgt?(rm.tgt/10*100).toFixed(1):'0';
+        const curPct=hasCur?(rm.cur/MAX_LV*100).toFixed(1):'0';
+        const tgtPct=hasTgt?(rm.tgt/MAX_LV*100).toFixed(1):'0';
         h+=`<div class="roadmap"><div class="roadmap-head"><span class="label">🚀 提升路径</span>`;
         h+=hasTgt?`<span class="target-tag" style="background:${tgtC}18;color:${tgtC}">🎯 目标 Lv.${rm.tgt} ${LEVELS[rm.tgt].name}</span>`
                  :`<span class="target-tag" style="background:var(--gray-100);color:var(--gray-400)">🎯 目标待定</span>`;
@@ -773,7 +781,7 @@ function renderCards(){
             <div class="journey-dot" style="left:${tgtPct}%;background:${tgtC};border-style:dashed;opacity:.7"></div>
             <span class="journey-label" style="left:${curPct}%;color:${curC}">当前 Lv.${rm.cur}</span>
             <span class="journey-label" style="left:${tgtPct}%;color:${tgtC}">目标 Lv.${rm.tgt}</span>
-          </div></div><div class="journey-end-labels"><span>Lv.0</span><span>Lv.5</span><span>Lv.10</span></div>`;
+          </div></div><div class="journey-end-labels"><span>Lv.0</span><span>Lv.5</span><span>Lv.11</span></div>`;
         }
         if(rm.milestones.length){
           h+=`<div class="toggle-wrap" style="margin-top:12px"><button class="toggle-btn" onclick="tog(this)">分阶段里程碑（${rm.milestones.length}阶段）</button><div class="toggle-body"><div class="milestones">`;
@@ -805,7 +813,7 @@ function renderCards(){
       if(dept.teams&&dept.teams.length){
         h+=`<div class="teams-wrap"><div class="teams-title">工种概览</div>`;
         dept.teams.forEach(t=>{
-          const tp=(t.score/10*100).toFixed(1),tc=clr(t.score);
+          const tp=(t.score/MAX_LV*100).toFixed(1),tc=clr(t.score);
           h+=`<div class="team-row"><span class="team-name">${t.name}</span><div class="team-bar-bg"><div class="team-bar-fill" style="width:${tp}%;background:${tc}"></div></div><span class="team-score" style="color:${tc}">${t.score}</span></div>`;
         });
         h+=`</div>`;
@@ -863,19 +871,19 @@ function renderSubDeptContent(s,uidKey){
   if(s.score!==null){
     const sc=clr(s.score);
     h+=`<div class="subdept-score-row"><span class="subdept-score-badge" style="color:${sc}">Lv.${s.score}</span><span class="subdept-score-sub">${s.levelName}</span></div>`;
-    const pct=(s.score/10*100).toFixed(1);
+    const pct=(s.score/MAX_LV*100).toFixed(1);
     h+=`<div class="range-bar"><div class="range-fill" style="width:${pct}%;background:${sc}"></div>`;
     h+=`<div class="range-mkr" style="left:${pct}%;background:var(--gray-800)"></div>`;
     h+=`<span class="range-mkr-label" style="left:${pct}%;color:var(--gray-800)">Lv.${s.score}</span>`;
     if(s.range){
-      const minP=(s.range.min/10*100).toFixed(1),maxP=(s.range.max/10*100).toFixed(1);
+      const minP=(s.range.min/MAX_LV*100).toFixed(1),maxP=(s.range.max/MAX_LV*100).toFixed(1);
       h+=`<div class="range-band" style="left:${minP}%;width:${(maxP-minP).toFixed(1)}%;background:${sc}"></div>`;
       h+=`<div class="range-mkr" style="left:${minP}%;background:var(--gray-700)"></div>`;
       h+=`<span class="range-mkr-btm" style="left:${minP}%;color:var(--gray-700)">下限 Lv.${s.range.min} ${s.range.minName}</span>`;
       h+=`<div class="range-mkr" style="left:${maxP}%;background:var(--gray-700)"></div>`;
       h+=`<span class="range-mkr-btm" style="left:${maxP}%;color:var(--gray-700)">上限 Lv.${s.range.max} ${s.range.maxName}</span>`;
     }
-    h+=`</div><div class="score-bar-labels"><span>Lv.0</span><span>Lv.5</span><span>Lv.10</span></div>`;
+    h+=`</div><div class="score-bar-labels"><span>Lv.0</span><span>Lv.5</span><span>Lv.11</span></div>`;
     // mini color scale
     h+=`<div class="mini-scale-wrap"><div class="mini-scale">`;
     LEVELS.forEach(lv=>{h+=`<div class="mini-seg" style="background:${lv.color}"></div>`;});
@@ -1011,14 +1019,14 @@ function renderMountainSVG(pd,color){
   // 如果只有一个数据点，生成一个带未来虚线的起始图
   let svg=`<div class="chart-svg-wrap"><svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;">`;
   // 背景网格
-  for(let i=0;i<=10;i+=2){
-    const y=PAD.t+ch-ch*(i/10);
+  for(let i=0;i<=MAX_LV;i+=2){
+    const y=PAD.t+ch-ch*(i/MAX_LV);
     svg+=`<line x1="${PAD.l}" y1="${y}" x2="${W-PAD.r}" y2="${y}" stroke="var(--gray-200)" stroke-width="1"/>`;
     svg+=`<text x="${PAD.l-8}" y="${y+4}" text-anchor="end" fill="var(--gray-400)" font-size="12">Lv.${i}</text>`;
   }
   // 目标虚线
   if(tgt!==null){
-    const ty=PAD.t+ch-ch*(tgt/10);
+    const ty=PAD.t+ch-ch*(tgt/MAX_LV);
     svg+=`<line x1="${PAD.l}" y1="${ty}" x2="${W-PAD.r}" y2="${ty}" stroke="${clr(tgt)}" stroke-width="2" stroke-dasharray="8,4" opacity="0.6"/>`;
     svg+=`<text x="${W-PAD.r+4}" y="${ty+4}" fill="${clr(tgt)}" font-size="12" font-weight="600">Lv.${tgt}</text>`;
   }
@@ -1027,7 +1035,7 @@ function renderMountainSVG(pd,color){
     // 单点：显示一个大圆点 + 渐变区域暗示未来
     const score=recs[0].score;
     const x=PAD.l+cw*0.08;
-    const y=PAD.t+ch-ch*(score/10);
+    const y=PAD.t+ch-ch*(score/MAX_LV);
     // 渐变填充区
     svg+=`<defs><linearGradient id="grad_${pd.dept.replace(/[^a-z]/gi,'')}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${color}" stop-opacity="0.15"/><stop offset="1" stop-color="${color}" stop-opacity="0.03"/></linearGradient></defs>`;
     const baseY=PAD.t+ch;
@@ -1046,7 +1054,7 @@ function renderMountainSVG(pd,color){
   } else {
     // 多点：绘制折线面积图
     const step=cw/(recs.length-1);
-    const pts=recs.map((r,i)=>({x:PAD.l+step*i, y:PAD.t+ch-ch*(r.score/10), s:r.score, d:r.date}));
+    const pts=recs.map((r,i)=>({x:PAD.l+step*i, y:PAD.t+ch-ch*(r.score/MAX_LV), s:r.score, d:r.date}));
     // 渐变
     svg+=`<defs><linearGradient id="grad_${pd.dept.replace(/[^a-z]/gi,'')}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${color}" stop-opacity="0.2"/><stop offset="1" stop-color="${color}" stop-opacity="0.02"/></linearGradient></defs>`;
     const baseY=PAD.t+ch;
