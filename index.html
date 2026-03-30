@@ -76,11 +76,39 @@
   .expand-btn { width:100%; padding:8px; border:none; background:var(--gray-100); border-radius:8px; cursor:pointer; font-size:13px; color:var(--gray-500); margin-top:12px; transition:background .2s; }
   .expand-btn:hover { background:var(--gray-200); }
 
-  /* Milestone Detail Table */
-  .ms-table { width:100%; border-collapse:collapse; margin-top:12px; display:none; }
-  .ms-table.show { display:table; }
-  .ms-table th { background:var(--gray-100); padding:10px 12px; text-align:left; font-size:12px; color:var(--gray-500); font-weight:600; }
-  .ms-table td { padding:10px 12px; border-bottom:1px solid var(--gray-100); font-size:13px; }
+  /* Sub-stage detail panel */
+  .stage-detail-panel { display:none; margin-top:12px; }
+  .stage-detail-panel.show { display:block; }
+
+  .stage-group { margin-bottom:16px; border:1px solid var(--gray-200); border-radius:10px; overflow:hidden; }
+  .stage-group-header { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; background:var(--gray-100); cursor:pointer; user-select:none; }
+  .stage-group-header:hover { background:var(--gray-200); }
+  .stage-group-title { font-size:14px; font-weight:600; color:var(--gray-900); display:flex; align-items:center; gap:8px; }
+  .stage-group-title .stage-num { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:6px; background:var(--primary); color:#fff; font-size:11px; font-weight:700; }
+  .stage-group-status { font-size:12px; }
+  .stage-group-body { padding:0; }
+
+  .sub-step { display:flex; align-items:center; gap:12px; padding:10px 16px; border-bottom:1px solid var(--gray-100); transition:background .2s; }
+  .sub-step:last-child { border-bottom:none; }
+  .sub-step:hover { background:#fafbfd; }
+
+  .sub-step-check { width:20px; height:20px; border-radius:50%; border:2px solid var(--gray-300); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:11px; }
+  .sub-step-check.done { background:var(--success); border-color:var(--success); color:#fff; }
+  .sub-step-check.wip { background:var(--warning); border-color:var(--warning); color:#fff; }
+
+  .sub-step-info { flex:1; min-width:0; }
+  .sub-step-name { font-size:13px; font-weight:500; color:var(--gray-900); }
+  .sub-step-desc { font-size:11px; color:var(--gray-500); margin-top:2px; }
+
+  .sub-step-meta { display:flex; gap:8px; align-items:center; flex-shrink:0; }
+  .sub-step-status { font-size:11px; padding:2px 8px; border-radius:10px; font-weight:500; }
+
+  /* Mini progress for stage group */
+  .stage-mini-progress { display:flex; gap:3px; align-items:center; }
+  .stage-mini-dot { width:8px; height:8px; border-radius:50%; background:var(--gray-200); }
+  .stage-mini-dot.done { background:var(--success); }
+  .stage-mini-dot.wip { background:var(--warning); }
+
   .status-tag { display:inline-block; padding:2px 10px; border-radius:12px; font-size:11px; font-weight:500; }
   .status-done { background:var(--success-light); color:var(--success); }
   .status-wip { background:var(--warning-light); color:var(--warning); }
@@ -136,7 +164,7 @@
   <div class="stats-row">
     <div class="stat-card"><div class="num" id="statDepts">-</div><div class="label">参与部门</div></div>
     <div class="stat-card"><div class="num" id="statAvg">-</div><div class="label">平均进度</div></div>
-    <div class="stat-card"><div class="num" id="statMsComplete">-</div><div class="label">已完成里程碑</div></div>
+    <div class="stat-card"><div class="num" id="statSubComplete">-</div><div class="label">已完成子步骤</div></div>
     <div class="stat-card"><div class="num" id="statTools">-</div><div class="label">推荐AI工具</div></div>
   </div>
 
@@ -171,7 +199,7 @@
 const DEPT_ICONS = {
   '市场部':'📢','销售部':'💰','技术部':'💻','人事部':'👥','财务部':'📊',
   '运营部':'⚙️','客服部':'🎧','产品部':'🎯','研发部':'🔬','设计部':'🎨',
-  '法务部':'⚖️','行政部':'🏢','采购部':'📦','质量部':'✅'
+  '法务部':'⚖️','行政部':'🏢','采购部':'📦','质量部':'✅','商业分析部':'📋'
 };
 const DEPT_COLORS = ['#2563eb','#059669','#7c3aed','#dc2626','#d97706','#0891b2','#be185d','#4f46e5','#15803d','#c2410c'];
 
@@ -183,7 +211,6 @@ async function loadData() {
     DATA = await res.json();
     render();
   } catch(e) {
-    // Fallback: try embedded demo data
     console.warn('Failed to load data.json, using demo data');
     DATA = getDemoData();
     render();
@@ -192,44 +219,37 @@ async function loadData() {
 
 function getDemoData() {
   return {
-    config: { company: '我的公司', title: '各部门AI提效进度看板', syncTime: new Date().toISOString(), stages: ['需求调研','工具选型','试点测试','培训推广','全面应用','持续优化'] },
+    config: { company: '我的公司', title: '各部门AI提效进度看板', syncTime: new Date().toISOString(),
+      stages: ['需求调研','模型选择与提示词学习','自动化工作流学习','全面应用','持续优化'] },
     departments: [
-      { name:'市场部', stage:'工具选型', progress:25, stages:{需求调研:'已完成',工具选型:'进行中',试点测试:'未开始',培训推广:'未开始',全面应用:'未开始',持续优化:'未开始'}, owner:'张三', updated:'2026-03-30', note:'正在评估AI内容生成工具' },
-      { name:'销售部', stage:'需求调研', progress:10, stages:{需求调研:'进行中',工具选型:'未开始',试点测试:'未开始',培训推广:'未开始',全面应用:'未开始',持续优化:'未开始'}, owner:'李四', updated:'2026-03-28', note:'梳理销售流程中的AI应用场景' },
-      { name:'技术部', stage:'试点测试', progress:45, stages:{需求调研:'已完成',工具选型:'已完成',试点测试:'进行中',培训推广:'未开始',全面应用:'未开始',持续优化:'未开始'}, owner:'王五', updated:'2026-03-30', note:'Copilot代码辅助测试中' },
-      { name:'人事部', stage:'需求调研', progress:8, stages:{需求调研:'进行中',工具选型:'未开始',试点测试:'未开始',培训推广:'未开始',全面应用:'未开始',持续优化:'未开始'}, owner:'赵六', updated:'2026-03-25', note:'调研AI简历筛选工具' },
-      { name:'财务部', stage:'工具选型', progress:20, stages:{需求调研:'已完成',工具选型:'进行中',试点测试:'未开始',培训推广:'未开始',全面应用:'未开始',持续优化:'未开始'}, owner:'孙七', updated:'2026-03-29', note:'评估AI财务分析工具' },
-      { name:'运营部', stage:'试点测试', progress:40, stages:{需求调研:'已完成',工具选型:'已完成',试点测试:'进行中',培训推广:'未开始',全面应用:'未开始',持续优化:'未开始'}, owner:'周八', updated:'2026-03-30', note:'AI数据分析工具试点' },
-      { name:'客服部', stage:'培训推广', progress:60, stages:{需求调研:'已完成',工具选型:'已完成',试点测试:'已完成',培训推广:'进行中',全面应用:'未开始',持续优化:'未开始'}, owner:'吴九', updated:'2026-03-30', note:'AI客服机器人培训推广中' },
-      { name:'产品部', stage:'工具选型', progress:22, stages:{需求调研:'已完成',工具选型:'进行中',试点测试:'未开始',培训推广:'未开始',全面应用:'未开始',持续优化:'未开始'}, owner:'郑十', updated:'2026-03-27', note:'评估AI原型设计工具' }
+      { name:'商业分析部', stage:'模型选择与提示词学习', progress:35, stages:{'需求调研':'已完成','模型选择与提示词学习':'进行中','自动化工作流学习':'未开始','全面应用':'未开始','持续优化':'未开始'}, owner:'张三', updated:'2026-03-30', note:'正在学习提示词技巧' },
+      { name:'市场部', stage:'需求调研', progress:10, stages:{'需求调研':'进行中','模型选择与提示词学习':'未开始','自动化工作流学习':'未开始','全面应用':'未开始','持续优化':'未开始'}, owner:'李四', updated:'2026-03-28', note:'部门需求收集中' }
     ],
+    subStages: [
+      { stageId:'阶段1', stageName:'需求调研', subName:'部门需求收集', description:'与部门沟通，收集现有痛点和业务需求' },
+      { stageId:'阶段1', stageName:'需求调研', subName:'AI场景挖掘', description:'主动为部门识别可用AI赋能的新场景' },
+      { stageId:'阶段2', stageName:'模型选择与提示词学习', subName:'模型选型', description:'确定适合业务的AI模型与工具' },
+      { stageId:'阶段2', stageName:'模型选择与提示词学习', subName:'提示词入门', description:'学习基础提示词写法、常用模板' },
+      { stageId:'阶段2', stageName:'模型选择与提示词学习', subName:'提示词进阶', description:'掌握角色设定、Few-shot、思维链等高级技巧' },
+      { stageId:'阶段3', stageName:'自动化工作流学习', subName:'单步自动化', description:'单一AI工具完成独立任务（如AI写邮件、整理数据）' },
+      { stageId:'阶段3', stageName:'自动化工作流学习', subName:'多步工作流', description:'串联多步骤自动化（如数据采集→分析→生成报告）' },
+      { stageId:'阶段3', stageName:'自动化工作流学习', subName:'系统集成', description:'与现有业务系统对接，实现端到端自动化' },
+      { stageId:'阶段4', stageName:'全面应用', subName:'业务全覆盖', description:'AI工具融入日常核心业务流程' },
+      { stageId:'阶段4', stageName:'全面应用', subName:'智能体应用', description:'使用AI Agent（GPTs、Claude、Coze等）处理复杂任务' },
+      { stageId:'阶段5', stageName:'持续优化', subName:'效果评估', description:'量化AI提效成果，收集使用反馈' },
+      { stageId:'阶段5', stageName:'持续优化', subName:'迭代优化', description:'优化提示词与工作流，沉淀最佳实践' }
+    ],
+    subStageProgress: [],
     milestones: [],
-    guides: [
-      { dept:'市场部', tool:'ChatGPT / Claude', scene:'内容生成、文案撰写、市场分析', efficiency:'30-40%', note:'建议优先用于社交媒体内容生成' },
-      { dept:'市场部', tool:'Midjourney / DALL-E', scene:'营销素材设计、广告图片生成', efficiency:'20-30%', note:'适合快速产出创意视觉内容' },
-      { dept:'销售部', tool:'ChatGPT / Claude', scene:'客户邮件撰写、销售话术优化', efficiency:'25-35%', note:'可结合CRM系统使用' },
-      { dept:'技术部', tool:'GitHub Copilot', scene:'代码编写、代码审查辅助', efficiency:'30-50%', note:'已在试点测试中' },
-      { dept:'技术部', tool:'Claude Code', scene:'API开发、技术文档编写', efficiency:'25-40%', note:'适合复杂编程任务' },
-      { dept:'人事部', tool:'AI简历筛选工具', scene:'简历初筛、人才匹配', efficiency:'40-60%', note:'需评估准确性和公平性' },
-      { dept:'财务部', tool:'AI财务分析工具', scene:'财报分析、预算预测', efficiency:'20-35%', note:'需确保数据安全性' },
-      { dept:'运营部', tool:'AI数据分析平台', scene:'运营数据分析、异常检测', efficiency:'30-45%', note:'已在试点阶段' },
-      { dept:'客服部', tool:'AI客服机器人', scene:'常见问题自动回复、工单分类', efficiency:'50-70%', note:'培训推广中，效果显著' },
-      { dept:'产品部', tool:'AI原型设计工具', scene:'产品原型快速生成、需求分析', efficiency:'20-30%', note:'正在评估中' }
-    ],
-    logs: [
-      { date:'2026-03-30', dept:'客服部', content:'AI客服机器人通过测试，进入培训推广阶段', author:'吴九' },
-      { date:'2026-03-30', dept:'技术部', content:'GitHub Copilot试点测试启动，首批5人参与', author:'王五' },
-      { date:'2026-03-30', dept:'运营部', content:'AI数据分析工具试点开始，覆盖核心指标监控', author:'周八' },
-      { date:'2026-03-29', dept:'财务部', content:'完成3款AI财务分析工具对比评估', author:'孙七' },
-      { date:'2026-03-28', dept:'销售部', content:'启动销售流程AI应用场景调研', author:'李四' }
-    ]
+    guides: [],
+    logs: []
   };
 }
 
 function render() {
   if (!DATA) return;
-  const { config, departments, guides, logs } = DATA;
-  const stages = config.stages || ['需求调研','工具选型','试点测试','培训推广','全面应用','持续优化'];
+  const { config, departments, guides, logs, subStages, subStageProgress } = DATA;
+  const stages = config.stages || ['需求调研','模型选择与提示词学习','自动化工作流学习','全面应用','持续优化'];
 
   // Header
   document.getElementById('boardTitle').textContent = config.title || '各部门AI提效进度看板';
@@ -238,23 +258,63 @@ function render() {
 
   // Stats
   document.getElementById('statDepts').textContent = departments.length;
-  const avg = departments.reduce((s,d) => s + d.progress, 0) / departments.length;
+  const avg = departments.length ? departments.reduce((s,d) => s + d.progress, 0) / departments.length : 0;
   document.getElementById('statAvg').textContent = Math.round(avg) + '%';
-  let msComplete = 0;
-  departments.forEach(d => { Object.values(d.stages).forEach(v => { if(v==='已完成') msComplete++; }); });
-  document.getElementById('statMsComplete').textContent = msComplete;
+
+  // Count completed sub-steps
+  let subComplete = 0;
+  if (subStageProgress && subStageProgress.length) {
+    subStageProgress.forEach(sp => { if(sp.status === '已完成') subComplete++; });
+  } else {
+    // Fallback: count from main stages
+    departments.forEach(d => { Object.values(d.stages||{}).forEach(v => { if(v==='已完成') subComplete++; }); });
+  }
+  document.getElementById('statSubComplete').textContent = subComplete;
+
   const toolSet = new Set();
-  guides.forEach(g => toolSet.add(g.tool));
+  (guides||[]).forEach(g => toolSet.add(g.tool));
   document.getElementById('statTools').textContent = toolSet.size;
+
+  // Build sub-stage lookup: { dept: { stageName: [ {subName, status, desc, ...} ] } }
+  const subLookup = {};
+  if (subStages && subStages.length) {
+    // First build definitions
+    const defs = {};
+    subStages.forEach(ss => {
+      if (!defs[ss.stageName]) defs[ss.stageName] = [];
+      defs[ss.stageName].push({ subName: ss.subName, description: ss.description });
+    });
+
+    // Then overlay progress data
+    departments.forEach(dept => {
+      subLookup[dept.name] = {};
+      Object.keys(defs).forEach(stageName => {
+        subLookup[dept.name][stageName] = defs[stageName].map(d => {
+          // Find matching progress entry
+          const prog = (subStageProgress||[]).find(p =>
+            p.dept === dept.name && p.stageName === stageName && p.subName === d.subName
+          );
+          return {
+            subName: d.subName,
+            description: d.description,
+            status: prog ? prog.status : '未开始',
+            completedDate: prog ? prog.completedDate : '',
+            owner: prog ? prog.owner : '',
+            note: prog ? prog.note : ''
+          };
+        });
+      });
+    });
+  }
 
   // Dept filter
   const deptNames = departments.map(d => d.name);
-  renderFilter('deptFilter', deptNames, (sel) => renderDepts(departments, stages, sel));
-  renderFilter('guideFilter', [...new Set(guides.map(g => g.dept))], (sel) => renderGuides(guides, sel));
+  renderFilter('deptFilter', deptNames, (sel) => renderDepts(departments, stages, sel, subLookup));
+  renderFilter('guideFilter', [...new Set((guides||[]).map(g => g.dept))], (sel) => renderGuides(guides||[], sel));
 
-  renderDepts(departments, stages, null);
-  renderGuides(guides, null);
-  renderLogs(logs);
+  renderDepts(departments, stages, null, subLookup);
+  renderGuides(guides||[], null);
+  renderLogs(logs||[]);
 }
 
 function renderFilter(containerId, items, onChange) {
@@ -270,23 +330,80 @@ function renderFilter(containerId, items, onChange) {
   });
 }
 
-function renderDepts(departments, stages, filter) {
+function renderDepts(departments, stages, filter, subLookup) {
   const grid = document.getElementById('deptGrid');
   const depts = filter ? departments.filter(d => d.name === filter) : departments;
   grid.innerHTML = depts.map((dept, i) => {
     const color = DEPT_COLORS[i % DEPT_COLORS.length];
     const icon = DEPT_ICONS[dept.name] || '📋';
+
+    // Main milestone dots
     const msHtml = stages.map((s, si) => {
       const pct = ((si + 1) / stages.length * 100).toFixed(1);
-      const status = dept.stages[s] || '未开始';
+      const stageKey = Object.keys(dept.stages||{}).find(k => k === s || k.includes(s) || s.includes(k));
+      const status = stageKey ? dept.stages[stageKey] : '未开始';
       const dotClass = status === '已完成' ? 'completed' : status === '进行中' ? 'current' : '';
       return `<div class="milestone" style="left:${pct}%"><div class="dot ${dotClass}"></div><div class="name">${s}</div></div>`;
     }).join('');
 
-    const stageTableHtml = stages.map(s => {
-      const st = dept.stages[s] || '未开始';
-      const cls = st === '已完成' ? 'status-done' : st === '进行中' ? 'status-wip' : 'status-todo';
-      return `<tr><td>${s}</td><td><span class="status-tag ${cls}">${st}</span></td><td>--</td></tr>`;
+    // Sub-stage detail groups
+    const deptSubs = subLookup[dept.name] || {};
+    const stageGroupsHtml = stages.map((stageName, si) => {
+      const subs = deptSubs[stageName] || [];
+      if (!subs.length) {
+        // No sub-stages defined, show simple row
+        const stageKey = Object.keys(dept.stages||{}).find(k => k === stageName || k.includes(stageName) || stageName.includes(k));
+        const st = stageKey ? dept.stages[stageKey] : '未开始';
+        const cls = st === '已完成' ? 'status-done' : st === '进行中' ? 'status-wip' : 'status-todo';
+        return `<div class="stage-group">
+          <div class="stage-group-header">
+            <div class="stage-group-title"><span class="stage-num">${si+1}</span>${stageName}</div>
+            <span class="status-tag ${cls}">${st}</span>
+          </div>
+        </div>`;
+      }
+
+      // Mini dots for stage header
+      const miniDots = subs.map(sub => {
+        const dc = sub.status === '已完成' ? 'done' : sub.status === '进行中' ? 'wip' : '';
+        return `<div class="stage-mini-dot ${dc}"></div>`;
+      }).join('');
+
+      // Count completed
+      const doneCount = subs.filter(s => s.status === '已完成').length;
+      const stageKey = Object.keys(dept.stages||{}).find(k => k === stageName || k.includes(stageName) || stageName.includes(k));
+      const stageSt = stageKey ? dept.stages[stageKey] : '未开始';
+      const cls = stageSt === '已完成' ? 'status-done' : stageSt === '进行中' ? 'status-wip' : 'status-todo';
+
+      const subsHtml = subs.map(sub => {
+        const checkClass = sub.status === '已完成' ? 'done' : sub.status === '进行中' ? 'wip' : '';
+        const checkIcon = sub.status === '已完成' ? '✓' : sub.status === '进行中' ? '◐' : '';
+        const stCls = sub.status === '已完成' ? 'status-done' : sub.status === '进行中' ? 'status-wip' : 'status-todo';
+        return `<div class="sub-step">
+          <div class="sub-step-check ${checkClass}">${checkIcon}</div>
+          <div class="sub-step-info">
+            <div class="sub-step-name">${sub.subName}</div>
+            <div class="sub-step-desc">${sub.description}</div>
+          </div>
+          <div class="sub-step-meta">
+            <span class="sub-step-status ${stCls}">${sub.status}</span>
+          </div>
+        </div>`;
+      }).join('');
+
+      return `<div class="stage-group">
+        <div class="stage-group-header" onclick="this.parentElement.querySelector('.stage-group-body').classList.toggle('show');this.parentElement.classList.toggle('expanded')">
+          <div class="stage-group-title">
+            <span class="stage-num">${si+1}</span>${stageName}
+            <span style="font-size:11px;color:var(--gray-500);font-weight:400;margin-left:4px">(${doneCount}/${subs.length})</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="stage-mini-progress">${miniDots}</div>
+            <span class="status-tag ${cls}">${stageSt}</span>
+          </div>
+        </div>
+        <div class="stage-group-body" style="display:none">${subsHtml}</div>
+      </div>`;
     }).join('');
 
     return `
@@ -308,46 +425,58 @@ function renderDepts(departments, stages, filter) {
         <div class="detail-item"><span class="label">更新日期:</span><span class="value">${dept.updated||'--'}</span></div>
         <div class="detail-item" style="grid-column:1/-1"><span class="label">当前情况:</span><span class="value">${dept.note||'--'}</span></div>
       </div>
-      <button class="expand-btn" onclick="toggleTable(this)">展开里程碑详情 ▼</button>
-      <table class="ms-table">
-        <thead><tr><th>里程碑</th><th>状态</th><th>目标日期</th></tr></thead>
-        <tbody>${stageTableHtml}</tbody>
-      </table>
+      <button class="expand-btn" onclick="toggleDetail(this)">展开阶段详情 ▼</button>
+      <div class="stage-detail-panel">${stageGroupsHtml}</div>
     </div>`;
   }).join('');
+
+  // Initialize stage-group-body toggle via CSS
+  document.querySelectorAll('.stage-group-header').forEach(h => {
+    h.style.cursor = 'pointer';
+  });
 }
 
-function toggleTable(btn) {
-  const table = btn.nextElementSibling;
-  const show = !table.classList.contains('show');
-  table.classList.toggle('show');
-  btn.textContent = show ? '收起里程碑详情 ▲' : '展开里程碑详情 ▼';
+function toggleDetail(btn) {
+  const panel = btn.nextElementSibling;
+  const show = !panel.classList.contains('show');
+  panel.classList.toggle('show');
+  btn.textContent = show ? '收起阶段详情 ▲' : '展开阶段详情 ▼';
 }
+
+// Toggle stage group body
+document.addEventListener('click', function(e) {
+  const header = e.target.closest('.stage-group-header');
+  if (!header) return;
+  const body = header.nextElementSibling;
+  if (!body) return;
+  const isShown = body.style.display !== 'none';
+  body.style.display = isShown ? 'none' : 'block';
+});
 
 function renderGuides(guides, filter) {
   const grid = document.getElementById('guideGrid');
   const items = filter ? guides.filter(g => g.dept === filter) : guides;
-  grid.innerHTML = items.map(g => `
+  grid.innerHTML = items.length ? items.map(g => `
     <div class="guide-card">
       <h4>${g.dept}</h4>
       <div class="tool-name">${g.tool}</div>
       <div class="scene">${g.scene}</div>
-      <div class="efficiency">效率提升预估 ${g.efficiency}</div>
+      ${g.efficiency ? `<div class="efficiency">效率提升预估 ${g.efficiency}</div>` : ''}
       <p style="margin-top:8px;font-size:12px;color:var(--gray-500)">${g.note||''}</p>
     </div>
-  `).join('');
+  `).join('') : '<div style="text-align:center;color:var(--gray-500);padding:40px">暂无AI手册与建议数据</div>';
 }
 
 function renderLogs(logs) {
   const list = document.getElementById('logList');
-  list.innerHTML = logs.map(l => `
+  list.innerHTML = logs.length ? logs.map(l => `
     <div class="log-item">
       <div class="log-date">${l.date}</div>
       <div class="log-dept-tag">${l.dept}</div>
       <div class="log-content">${l.content}</div>
       <div class="log-author">${l.author||''}</div>
     </div>
-  `).join('');
+  `).join('') : '<div style="text-align:center;color:var(--gray-500);padding:40px">暂无更新日志</div>';
 }
 
 // Tab switching
