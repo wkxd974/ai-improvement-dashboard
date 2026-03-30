@@ -6,165 +6,153 @@
 <title>各部门AI使用能力诊断看板</title>
 <style>
   :root {
-    --bg: #f8fafc; --card: #ffffff; --primary: #2563eb; --primary-light: #dbeafe;
-    --success: #059669; --success-light: #d1fae5; --warning: #d97706; --warning-light: #fef3c7;
-    --danger: #dc2626; --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0;
-    --gray-300: #cbd5e1; --gray-400: #94a3b8; --gray-500: #64748b; --gray-600: #475569;
-    --gray-700: #334155; --gray-800: #1e293b; --gray-900: #0f172a;
-    --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
-    --shadow-md: 0 4px 6px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.05);
-    --shadow-lg: 0 10px 15px rgba(0,0,0,.1), 0 4px 6px rgba(0,0,0,.05);
-    --radius: 12px;
+    --bg: #f5f3f0; --card: #ffffff; --primary: #5b7a8a; --primary-light: #e8eef1;
+    --success: #7a9a6d; --success-light: #e8f0e4; --warning: #c4a35a; --warning-light: #f5f0e0;
+    --gray-50: #faf9f7; --gray-100: #f0eeeb; --gray-200: #e0ddd8; --gray-300: #c8c4be;
+    --gray-400: #a09b94; --gray-500: #7a756e; --gray-600: #5c5750; --gray-700: #3e3a35;
+    --gray-800: #2a2724; --gray-900: #1a1816;
+    --shadow: 0 1px 4px rgba(0,0,0,.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,.08);
+    --radius: 14px;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background:var(--bg); color:var(--gray-700); line-height:1.6; }
-  .container { max-width:1100px; margin:0 auto; padding:24px; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background:var(--bg); color:var(--gray-700); line-height:1.7; font-size:15px; }
+  .container { max-width:1100px; margin:0 auto; padding:28px; }
 
-  .header { text-align:center; padding:40px 0 24px; }
-  .header h1 { font-size:26px; font-weight:700; color:var(--gray-900); margin-bottom:6px; letter-spacing:-.5px; }
-  .header p { color:var(--gray-500); font-size:14px; }
-  .header .meta { display:inline-flex; align-items:center; gap:6px; background:var(--gray-100); color:var(--gray-500); padding:4px 14px; border-radius:20px; font-size:12px; margin-top:10px; }
+  .header { text-align:center; padding:44px 0 28px; }
+  .header h1 { font-size:28px; font-weight:700; color:var(--gray-900); margin-bottom:6px; }
+  .header p { color:var(--gray-500); font-size:15px; }
+  .header .meta { display:inline-flex; align-items:center; gap:6px; background:var(--gray-100); color:var(--gray-500); padding:5px 16px; border-radius:20px; font-size:13px; margin-top:10px; }
 
-  /* Tabs */
-  .tabs { display:flex; gap:4px; margin-bottom:20px; background:var(--gray-100); padding:4px; border-radius:10px; width:fit-content; }
-  .tab { padding:8px 22px; border-radius:8px; border:none; background:transparent; cursor:pointer; font-size:14px; color:var(--gray-500); font-weight:500; transition:all .2s; }
+  .tabs { display:flex; gap:4px; margin-bottom:22px; background:var(--gray-100); padding:4px; border-radius:12px; width:fit-content; }
+  .tab { padding:9px 24px; border-radius:10px; border:none; background:transparent; cursor:pointer; font-size:15px; color:var(--gray-500); font-weight:500; transition:all .2s; }
   .tab.active { background:var(--card); color:var(--primary); box-shadow:var(--shadow); }
-  .tab:hover { color:var(--gray-900); }
+  .tab:hover { color:var(--gray-800); }
   .tab-content { display:none; } .tab-content.active { display:block; }
 
-  /* Filter buttons */
-  .filter-bar { display:flex; gap:6px; margin-bottom:20px; flex-wrap:wrap; }
-  .filter-btn { padding:6px 16px; border-radius:20px; border:1.5px solid var(--gray-200); background:var(--card); cursor:pointer; font-size:13px; color:var(--gray-500); font-weight:500; transition:all .2s; display:flex; align-items:center; gap:5px; }
+  .filter-bar { display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap; }
+  .filter-btn { padding:7px 18px; border-radius:22px; border:1.5px solid var(--gray-200); background:var(--card); cursor:pointer; font-size:14px; color:var(--gray-500); font-weight:500; transition:all .2s; display:flex; align-items:center; gap:6px; }
   .filter-btn:hover { border-color:var(--primary); color:var(--primary); }
   .filter-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); }
-  .filter-btn .f-icon { font-size:14px; }
 
-  /* Scale bar */
-  .scale-bar-wrap { background:var(--card); border-radius:var(--radius); padding:20px 24px 16px; box-shadow:var(--shadow); margin-bottom:20px; }
-  .scale-bar-wrap h3 { font-size:14px; font-weight:600; color:var(--gray-800); margin-bottom:12px; }
-  .scale-bar { display:flex; gap:2px; height:32px; border-radius:8px; overflow:hidden; }
-  .scale-seg { flex:1; display:flex; align-items:center; justify-content:center; color:#fff; font-size:10px; font-weight:600; cursor:pointer; transition:filter .15s,transform .15s; position:relative; }
-  .scale-seg:hover { filter:brightness(1.15); transform:scaleY(1.12); z-index:1; }
-  .scale-labels { display:flex; gap:2px; margin-top:3px; }
-  .scale-labels span { flex:1; text-align:center; font-size:9px; color:var(--gray-400); }
-  .scale-expand { margin-top:10px; }
-  .scale-expand-btn { font-size:12px; color:var(--primary); cursor:pointer; border:none; background:none; padding:2px 0; }
+  /* ===== Morandi Scale ===== */
+  .scale-wrap { background:var(--card); border-radius:var(--radius); padding:22px 26px 18px; box-shadow:var(--shadow); margin-bottom:22px; }
+  .scale-wrap h3 { font-size:15px; font-weight:600; color:var(--gray-700); margin-bottom:14px; }
+  .scale-bar { display:flex; gap:2px; height:34px; border-radius:8px; overflow:hidden; }
+  .scale-seg { flex:1; display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; font-weight:600; cursor:pointer; transition:filter .15s,transform .15s; }
+  .scale-seg:hover { filter:brightness(1.1); transform:scaleY(1.1); z-index:1; }
+  .scale-names { display:flex; gap:2px; margin-top:4px; }
+  .scale-names span { flex:1; text-align:center; font-size:10px; color:var(--gray-400); line-height:1.3; }
+  .scale-expand-btn { font-size:13px; color:var(--primary); cursor:pointer; border:none; background:none; padding:6px 0; margin-top:6px; }
   .scale-expand-btn:hover { text-decoration:underline; }
-  .scale-detail-inline { display:none; margin-top:10px; display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:6px; }
-  .scale-detail-inline.collapsed { display:none; }
-  .scale-mini-item { display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:6px; background:var(--gray-50); }
-  .scale-mini-num { width:24px; height:24px; border-radius:5px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; font-weight:700; flex-shrink:0; }
-  .scale-mini-info { font-size:11px; }
-  .scale-mini-info strong { color:var(--gray-800); }
-  .scale-mini-info span { color:var(--gray-400); display:block; font-size:10px; line-height:1.3; }
+  .scale-detail-grid { display:none; margin-top:12px; display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:8px; }
+  .scale-detail-grid.collapsed { display:none; }
+  .sd-item { display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:8px; background:var(--gray-50); }
+  .sd-num { width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:700; flex-shrink:0; }
+  .sd-text strong { font-size:13px; color:var(--gray-700); display:block; }
+  .sd-text span { font-size:11px; color:var(--gray-400); line-height:1.4; }
 
-  /* Reference Band */
-  .ref-band { margin-top:12px; padding:12px 0 0; border-top:1px solid var(--gray-100); }
-  .ref-title { font-size:12px; color:var(--gray-500); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
-  .ref-bar-wrap { position:relative; height:24px; background:var(--gray-100); border-radius:6px; overflow:visible; }
-  .ref-range { position:absolute; top:0; height:100%; border-radius:6px; opacity:.25; }
-  .ref-marker { position:absolute; top:-4px; width:3px; height:32px; border-radius:2px; z-index:2; }
-  .ref-marker-label { position:absolute; top:-20px; font-size:10px; font-weight:600; white-space:nowrap; transform:translateX(-50%); }
-  .ref-legend { display:flex; gap:16px; margin-top:8px; font-size:11px; color:var(--gray-500); flex-wrap:wrap; }
-
-  /* Dept cards */
-  .dept-grid { display:grid; gap:20px; }
-  .dept-card { background:var(--card); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); transition:box-shadow .2s; }
+  /* ===== Department Card ===== */
+  .dept-grid { display:grid; gap:22px; }
+  .dept-card { background:var(--card); border-radius:var(--radius); padding:26px; box-shadow:var(--shadow); }
   .dept-card:hover { box-shadow:var(--shadow-md); }
-  .dept-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
-  .dept-name { display:flex; align-items:center; gap:10px; }
-  .dept-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; }
-  .dept-name h3 { font-size:17px; font-weight:600; color:var(--gray-900); }
-  .score-badge { font-size:28px; font-weight:700; letter-spacing:-1px; }
-  .score-sub { font-size:12px; font-weight:400; color:var(--gray-400); margin-left:2px; }
-  .score-bar-wrap { margin-bottom:14px; }
-  .score-bar-bg { height:12px; background:var(--gray-100); border-radius:6px; overflow:hidden; }
-  .score-bar-fill { height:100%; border-radius:6px; transition:width .6s ease; }
-  .score-bar-labels { display:flex; justify-content:space-between; margin-top:4px; font-size:11px; color:var(--gray-400); }
-  .level-tag { display:inline-block; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:500; }
+  .dept-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .dept-name { display:flex; align-items:center; gap:12px; }
+  .dept-icon { width:44px; height:44px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:22px; }
+  .dept-name h3 { font-size:19px; font-weight:600; color:var(--gray-900); }
+  .level-tag { display:inline-block; padding:3px 12px; border-radius:20px; font-size:13px; font-weight:500; margin-top:2px; }
+  .score-badge { font-size:32px; font-weight:700; letter-spacing:-1px; }
+  .score-sub { font-size:13px; font-weight:400; color:var(--gray-400); margin-left:2px; }
 
-  /* Evidence */
-  .evidence { margin-top:12px; }
-  .toggle-title { font-size:12px; color:var(--gray-400); margin-bottom:6px; display:flex; align-items:center; gap:4px; cursor:pointer; user-select:none; }
-  .toggle-title::before { content:'▸'; font-size:10px; transition:transform .2s; display:inline-block; }
-  .toggle-title.open::before { transform:rotate(90deg); }
-  .toggle-body { display:none; }
+  .score-bar-bg { height:14px; background:var(--gray-100); border-radius:7px; overflow:hidden; margin-bottom:4px; }
+  .score-bar-fill { height:100%; border-radius:7px; transition:width .6s ease; }
+  .score-bar-labels { display:flex; justify-content:space-between; font-size:12px; color:var(--gray-400); margin-bottom:12px; }
+
+  /* Mini dept scale */
+  .mini-scale { display:flex; gap:1px; height:8px; border-radius:4px; overflow:hidden; margin-bottom:16px; position:relative; }
+  .mini-seg { flex:1; position:relative; }
+  .mini-marker { position:absolute; top:-3px; width:3px; height:14px; border-radius:2px; background:var(--gray-800); z-index:2; transform:translateX(-50%); }
+  .mini-marker-label { position:absolute; top:-20px; font-size:10px; font-weight:600; color:var(--gray-700); white-space:nowrap; transform:translateX(-50%); }
+
+  /* Toggle sections */
+  .toggle-wrap { margin-top:10px; }
+  .toggle-btn { font-size:14px; color:var(--gray-500); cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:5px; padding:5px 0; border:none; background:none; font-weight:500; }
+  .toggle-btn::before { content:'▸'; font-size:11px; transition:transform .2s; display:inline-block; }
+  .toggle-btn.open::before { transform:rotate(90deg); }
+  .toggle-btn:hover { color:var(--gray-700); }
+  .toggle-body { display:none; padding-top:8px; }
   .toggle-body.open { display:block; }
-  .evidence-list { padding-left:16px; }
-  .evidence-list li { font-size:13px; color:var(--gray-600); margin-bottom:4px; list-style:none; position:relative; padding-left:12px; }
-  .evidence-list li::before { content:'·'; position:absolute; left:0; color:var(--gray-300); font-weight:bold; }
 
-  /* Teams */
+  .evidence-list li { font-size:14px; color:var(--gray-600); margin-bottom:5px; list-style:none; position:relative; padding-left:14px; }
+  .evidence-list li::before { content:'·'; position:absolute; left:0; color:var(--gray-300); font-weight:bold; font-size:18px; line-height:1; }
+
   .teams-wrap { margin-top:14px; padding-top:12px; border-top:1px dashed var(--gray-200); }
-  .teams-title { font-size:12px; color:var(--gray-400); margin-bottom:8px; }
-  .team-row { display:flex; align-items:center; gap:12px; padding:6px 0; }
-  .team-name { font-size:13px; color:var(--gray-600); min-width:80px; }
+  .teams-title { font-size:13px; color:var(--gray-400); margin-bottom:8px; }
+  .team-row { display:flex; align-items:center; gap:14px; padding:5px 0; }
+  .team-name { font-size:14px; color:var(--gray-600); min-width:90px; }
   .team-bar-bg { flex:1; height:8px; background:var(--gray-100); border-radius:4px; overflow:hidden; }
-  .team-bar-fill { height:100%; border-radius:4px; transition:width .6s ease; }
-  .team-score { font-size:13px; font-weight:600; min-width:28px; text-align:right; }
+  .team-bar-fill { height:100%; border-radius:4px; }
+  .team-score { font-size:14px; font-weight:600; min-width:30px; text-align:right; }
 
-  /* ===== Roadmap section inside dept card ===== */
-  .roadmap-section { margin-top:16px; padding-top:14px; border-top:1px solid var(--gray-100); }
-  .roadmap-header { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
-  .roadmap-header .target-tag { font-size:12px; padding:3px 10px; border-radius:20px; font-weight:500; }
-  .target-reason { font-size:12px; color:var(--gray-500); margin-bottom:14px; padding:6px 10px; background:var(--gray-50); border-radius:6px; border-left:3px solid var(--gray-300); }
-  .target-reason strong { color:var(--gray-700); }
+  /* Roadmap */
+  .roadmap { margin-top:18px; padding-top:16px; border-top:1px solid var(--gray-100); }
+  .roadmap-head { display:flex; align-items:center; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+  .roadmap-head .label { font-size:15px; font-weight:600; color:var(--gray-700); }
+  .target-tag { font-size:13px; padding:4px 12px; border-radius:20px; font-weight:500; margin-left:auto; }
+  .target-note { font-size:13px; color:var(--gray-500); margin-bottom:16px; padding:8px 12px; background:var(--gray-50); border-radius:8px; border-left:3px solid var(--gray-300); }
+  .target-note strong { color:var(--gray-700); }
 
-  .journey-bar { position:relative; display:flex; align-items:center; margin:0 0 18px; padding:0 4px; }
-  .journey-track { flex:1; height:6px; background:var(--gray-200); border-radius:3px; position:relative; }
-  .journey-fill { height:100%; border-radius:3px; position:absolute; left:0; top:0; }
-  .journey-target-fill { height:100%; border-radius:3px; position:absolute; top:0; opacity:.18; }
-  .journey-dot { width:14px; height:14px; border-radius:50%; border:3px solid #fff; position:absolute; top:50%; transform:translate(-50%,-50%); z-index:2; box-shadow:0 1px 4px rgba(0,0,0,.15); }
-  .journey-label { position:absolute; top:14px; transform:translateX(-50%); font-size:10px; font-weight:600; white-space:nowrap; }
-  .journey-end-labels { display:flex; justify-content:space-between; margin-top:2px; font-size:10px; color:var(--gray-400); padding:0 4px; }
+  .journey-bar { position:relative; margin:0 0 18px; }
+  .journey-track { height:8px; background:var(--gray-200); border-radius:4px; position:relative; }
+  .journey-fill { height:100%; border-radius:4px; position:absolute; left:0; top:0; }
+  .journey-target-fill { height:100%; border-radius:4px; position:absolute; top:0; opacity:.2; }
+  .journey-dot { width:16px; height:16px; border-radius:50%; border:3px solid #fff; position:absolute; top:50%; transform:translate(-50%,-50%); z-index:2; box-shadow:0 1px 4px rgba(0,0,0,.15); }
+  .journey-label { position:absolute; top:16px; transform:translateX(-50%); font-size:11px; font-weight:600; white-space:nowrap; }
+  .journey-end-labels { display:flex; justify-content:space-between; font-size:11px; color:var(--gray-400); margin-top:4px; }
 
-  .milestones { display:grid; gap:0; position:relative; padding-left:20px; }
-  .milestone { position:relative; padding:0 0 16px 20px; }
-  .milestone:last-child { padding-bottom:0; }
-  .milestone::before { content:''; position:absolute; left:-20px; top:7px; bottom:-4px; width:2px; background:var(--gray-200); }
-  .milestone:last-child::before { display:none; }
-  .milestone-dot { width:12px; height:12px; border-radius:50%; position:absolute; left:-25px; top:5px; z-index:1; border:2px solid #fff; box-shadow:0 0 0 2px var(--gray-200); }
-  .milestone-dot.reached { box-shadow:0 0 0 2px var(--success); }
-  .milestone-dot.current { box-shadow:0 0 0 2px var(--primary); animation:pulse 2s infinite; }
-  .milestone-dot.future { opacity:.6; }
-  @keyframes pulse { 0%,100%{box-shadow:0 0 0 2px var(--primary);} 50%{box-shadow:0 0 0 4px rgba(37,99,235,.25);} }
-  .milestone-level { font-size:11px; font-weight:600; color:var(--gray-400); margin-bottom:2px; }
-  .milestone-title { font-size:13px; font-weight:600; color:var(--gray-800); margin-bottom:4px; }
-  .ms-actions { display:flex; flex-direction:column; gap:4px; }
-  .ms-action { display:flex; align-items:flex-start; gap:6px; font-size:12px; color:var(--gray-600); padding:3px 8px; background:var(--gray-50); border-radius:6px; border-left:3px solid var(--gray-200); }
-  .ms-action.generic { border-left-color:var(--primary); color:var(--gray-500); }
-  .ms-action.specific { border-left-color:var(--success); }
-  .ms-action-tag { font-size:10px; font-weight:600; padding:1px 6px; border-radius:4px; white-space:nowrap; flex-shrink:0; margin-top:1px; }
-  .ms-action-tag.g { background:var(--primary-light); color:var(--primary); }
-  .ms-action-tag.s { background:var(--success-light); color:var(--success); }
+  .milestones { padding-left:22px; }
+  .ms { position:relative; padding:0 0 20px 22px; }
+  .ms:last-child { padding-bottom:0; }
+  .ms::before { content:''; position:absolute; left:-22px; top:8px; bottom:-4px; width:2px; background:var(--gray-200); }
+  .ms:last-child::before { display:none; }
+  .ms-dot { width:14px; height:14px; border-radius:50%; position:absolute; left:-28px; top:5px; z-index:1; border:2.5px solid #fff; }
+  .ms-dot.done { box-shadow:0 0 0 2px var(--success); }
+  .ms-dot.now { box-shadow:0 0 0 2px var(--primary); animation:pulse 2s infinite; }
+  .ms-dot.later { box-shadow:0 0 0 2px var(--gray-300); opacity:.6; }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 2px var(--primary);} 50%{box-shadow:0 0 0 5px rgba(91,122,138,.2);} }
+  .ms-level { font-size:12px; font-weight:600; margin-bottom:3px; }
+  .ms-status { font-size:14px; font-weight:600; color:var(--gray-800); margin-bottom:6px; }
+  .ms-items { display:flex; flex-direction:column; gap:5px; }
+  .ms-item { font-size:13px; color:var(--gray-600); padding:5px 10px; background:var(--gray-50); border-radius:7px; border-left:3px solid var(--gray-200); line-height:1.5; }
+  .ms-item.skill { border-left-color:var(--primary); }
+  .ms-item.action { border-left-color:var(--success); }
+  .ms-tag { font-size:10px; font-weight:600; padding:1px 6px; border-radius:4px; margin-right:5px; }
+  .ms-tag.sk { background:var(--primary-light); color:var(--primary); }
+  .ms-tag.ac { background:var(--success-light); color:var(--success); }
 
-  /* ===== Requirements Tab ===== */
-  .req-filter-bar { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
-  .req-dept-section { margin-bottom:24px; }
-  .req-dept-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; padding-bottom:8px; border-bottom:2px solid var(--gray-100); }
-  .req-dept-header .dept-icon { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; }
-  .req-dept-header h3 { font-size:16px; font-weight:600; color:var(--gray-900); }
-  .req-dept-header .req-count { font-size:12px; color:var(--gray-400); margin-left:auto; }
+  /* Requirements tab */
+  .req-section { margin-bottom:26px; }
+  .req-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; padding-bottom:8px; border-bottom:2px solid var(--gray-100); }
+  .req-header h3 { font-size:17px; font-weight:600; color:var(--gray-900); }
+  .req-header .count { font-size:13px; color:var(--gray-400); margin-left:auto; }
   .req-grid { display:grid; gap:10px; }
-  .req-card { display:flex; gap:10px; padding:12px 14px; background:var(--card); border-radius:10px; box-shadow:var(--shadow); }
-  .req-pri { font-size:10px; font-weight:600; padding:2px 8px; border-radius:4px; white-space:nowrap; height:fit-content; margin-top:2px; }
-  .req-pri.high { background:#fef2f2; color:#dc2626; }
-  .req-pri.mid { background:#fef3c7; color:#d97706; }
-  .req-pri.low { background:#f0fdf4; color:#059669; }
-  .req-body h5 { font-size:13px; font-weight:600; color:var(--gray-800); margin-bottom:2px; }
-  .req-body p { font-size:12px; color:var(--gray-500); }
-  .req-ai-note { font-size:11px; color:var(--primary); margin-top:4px; padding:3px 8px; background:var(--primary-light); border-radius:4px; display:inline-block; }
+  .req-card { display:flex; gap:12px; padding:14px 16px; background:var(--card); border-radius:10px; box-shadow:var(--shadow); }
+  .req-pri { font-size:11px; font-weight:600; padding:2px 10px; border-radius:5px; white-space:nowrap; height:fit-content; margin-top:2px; }
+  .req-pri.high { background:#f0e0dc; color:#8b5a4a; }
+  .req-pri.mid { background:#f0ead8; color:#8a7640; }
+  .req-pri.low { background:#dde8d8; color:#5a7a4e; }
+  .req-body h5 { font-size:14px; font-weight:600; color:var(--gray-800); margin-bottom:3px; }
+  .req-body p { font-size:13px; color:var(--gray-500); }
+  .req-ai { font-size:12px; color:var(--primary); margin-top:5px; padding:3px 10px; background:var(--primary-light); border-radius:5px; display:inline-block; }
 
-  /* Tooltip */
-  .tooltip { position:absolute; background:var(--gray-800); color:#fff; padding:8px 12px; border-radius:8px; font-size:12px; line-height:1.5; z-index:100; pointer-events:none; white-space:nowrap; box-shadow:var(--shadow-lg); }
+  .tooltip { position:absolute; background:var(--gray-800); color:#fff; padding:8px 14px; border-radius:8px; font-size:13px; line-height:1.5; z-index:100; pointer-events:none; white-space:nowrap; box-shadow:var(--shadow-md); }
   .tooltip::after { content:''; position:absolute; bottom:-5px; left:50%; transform:translateX(-50%); border-left:5px solid transparent; border-right:5px solid transparent; border-top:5px solid var(--gray-800); }
 
   @media(max-width:640px){
     .container { padding:16px; }
-    .header h1 { font-size:22px; }
-    .dept-card { padding:16px; }
-    .scale-seg { font-size:9px; }
-    .scale-detail-inline { grid-template-columns:1fr; }
+    .header h1 { font-size:24px; }
+    .dept-card { padding:18px; }
+    .scale-detail-grid { grid-template-columns:1fr; }
   }
 </style>
 </head>
@@ -173,341 +161,306 @@
   <div class="header">
     <h1>各部门 AI 使用能力诊断</h1>
     <p>商业分析部 · 基于部门访谈与实际工作场景评估</p>
-    <div class="meta">📋 诊断日期：2025年3月</div>
+    <div class="meta">诊断日期：2025年3月</div>
   </div>
-
   <div class="tabs">
     <button class="tab active" onclick="switchTab('diag')">能力诊断</button>
     <button class="tab" onclick="switchTab('reqs')">部门需求</button>
   </div>
-
-  <!-- Tab 1: 诊断 + 提升路径合并 -->
   <div id="tab-diag" class="tab-content active">
-    <div class="scale-bar-wrap" id="scaleBarWrap"></div>
+    <div class="scale-wrap" id="scaleWrap"></div>
     <div class="filter-bar" id="filterBar"></div>
     <div class="dept-grid" id="deptGrid"></div>
   </div>
-
-  <!-- Tab 2: 部门需求 -->
   <div id="tab-reqs" class="tab-content">
     <div class="filter-bar" id="reqFilterBar"></div>
     <div id="reqWrap"></div>
   </div>
 </div>
-
 <div class="tooltip" id="tooltip" style="display:none;"></div>
 
 <script>
-// ============ DATA ============
+// ============ Morandi Colors ============
+const M = ['#b0b8b4','#8e9a98','#7a9a99','#6d8a9a','#7a8a9e','#8a7f9a','#9a8a8a','#9a7a7a','#8a6a6a','#7a5a5a','#6a4a4a'];
 
 const LEVELS = [
-  { level:0,  name:'零基础',       desc:'完全不使用任何AI工具', color:'#94a3b8' },
-  { level:1,  name:'入门聊天',     desc:'使用飞书内置豆包，仅限基础聊天问答', color:'#64748b' },
-  { level:2,  name:'国产大模型对话', desc:'使用Kimi/DeepSeek等国产大模型进行对话交流', color:'#0891b2' },
-  { level:3,  name:'国际大模型对话', desc:'使用GPT/Claude等国外大模型进行对话交流', color:'#2563eb' },
-  { level:4,  name:'国产AI介入工作', desc:'用国产大模型辅助创建文档、修改内容、撰写报告等工作任务', color:'#7c3aed' },
-  { level:5,  name:'国际AI介入工作', desc:'用GPT/Claude等进行文件处理、文件生成、分析报告撰写', color:'#9333ea' },
-  { level:6,  name:'深度数据分析',   desc:'用AI进行深度数据清洗、处理、统计分析、建模、交叉验证', color:'#c026d3' },
-  { level:7,  name:'AI辅助编程',     desc:'让AI编写Python/SQL/VBA脚本，搭建数据管道，生成复杂公式逻辑', color:'#db2777' },
-  { level:8,  name:'自动化工作流',   desc:'搭建定时自动化任务：API对接、定时取数推送、飞书机器人、工作流编排', color:'#e11d48' },
-  { level:9,  name:'多模态与智能体', desc:'AI操控电脑执行复杂任务、图像/视频生成处理、多Agent协作、复杂决策链', color:'#dc2626' },
-  { level:10, name:'全流程深度集成', desc:'AI贯穿全业务链：数据采集→清洗→分析→决策→执行→监控，全自动闭环', color:'#b91c1c' },
+  {level:0, name:'零基础',       desc:'完全不使用任何AI工具',                                     color:M[0]},
+  {level:1, name:'入门聊天',     desc:'使用飞书内置豆包，仅限基础聊天问答',                       color:M[1]},
+  {level:2, name:'国产大模型对话',desc:'使用Kimi/DeepSeek等国产大模型进行对话交流',                color:M[2]},
+  {level:3, name:'国际大模型对话',desc:'使用GPT/Claude等国外大模型进行对话交流',                   color:M[3]},
+  {level:4, name:'国产AI介入工作',desc:'用国产大模型辅助创建文档、修改内容、撰写报告等',           color:M[4]},
+  {level:5, name:'国际AI介入工作',desc:'用GPT/Claude进行文件处理、报告撰写、数据整理',             color:M[5]},
+  {level:6, name:'深度数据分析',  desc:'用AI做深度数据清洗、统计分析、建模、交叉验证',             color:M[6]},
+  {level:7, name:'AI辅助编程',    desc:'让AI编写Python/SQL/VBA脚本，搭建数据管道',                 color:M[7]},
+  {level:8, name:'自动化工作流',  desc:'定时自动化：API取数、飞书机器人推送、工作流编排',           color:M[8]},
+  {level:9, name:'多模态与智能体',desc:'AI操控电脑、图像视频生成、多Agent协作、复杂决策链',         color:M[9]},
+  {level:10,name:'全流程深度集成',desc:'AI贯穿全业务链：采集→清洗→分析→决策→执行→监控',           color:M[10]},
 ];
-
-const REF = { name:'商业分析部', upper:9, lower:6, avg:null };
 
 const DEPARTMENTS = [
-  {
-    name:'人事部', icon:'👥', color:'#2E75B6', score:1,
-    levelName:'入门聊天',
+  { name:'商业分析部', icon:'📈', color:'#6d8a9a', score:7.5, levelName:'AI辅助编程 ~ 自动化工作流',
+    evidence:['日常使用GPT/Claude进行深度数据分析与报告撰写','用AI编写Python脚本搭建竞品数据看板','已实现部分自动化工作流（飞书机器人+定时推送）','团队内部AI使用水平差异较大，待补充详细评估'],
+    teams:null },
+  { name:'产品部', icon:'🎯', color:'#7a9a99', score:null, levelName:'待完整评估',
+    evidence:['杨茜团队已达到用国产大模型处理工作的水平（Lv.4）','其余团队情况待补充'],
+    teams:[{name:'杨茜团队',score:4}] },
+  { name:'人事部', icon:'👥', color:'#7a8a9e', score:1, levelName:'入门聊天',
     evidence:['主要使用飞书内置豆包进行基础问答','未接触过Kimi/DeepSeek等独立AI产品','没有将AI应用于日常HR工作流程','对AI能力边界认知有限，需要系统性引导'],
-    teams:null,
+    teams:null },
+  { name:'财务部', icon:'📊', color:'#8a9a98', score:1.5, levelName:'入门聊天 ~ 国产对话',
+    evidence:['部分员工使用豆包做基础查询','核心财务工作仍以传统Excel手工为主','对AI处理敏感财务数据存在顾虑','希望AI能帮助自动化重复性报表刷新工作'],
+    teams:null },
+  { name:'市场部', icon:'📢', color:'#9a8a8a', score:2.3, levelName:'入门聊天 ~ 国产对话',
+    evidence:['李妍妍团队与陈婧仪团队处于入门聊天阶段','申江团队已达到使用国外大模型处理文件的水平（Lv.5）','团队间AI使用水平差异较大','整体仍有大量手工操作空间可被AI替代'],
+    teams:[{name:'李妍妍团队',score:1},{name:'陈婧仪团队',score:1},{name:'申江团队',score:5}] },
+];
+
+// ============ 提升路径（合并跳级 + 实用技能 + 针对性行动） ============
+const ROADMAPS = [
+  { dept:'商业分析部', cur:7.5, tgt:null,
+    note:'作为AI推广部门，持续探索前沿能力，暂不设目标上限',
+    milestones:[] },
+  { dept:'产品部', cur:null, tgt:null,
+    note:'待完成完整访谈评估后设定里程碑',
+    milestones:[] },
+  { dept:'人事部', cur:1, tgt:5,
+    note:'核心需求为数据报表自动化和模板化输出，Lv.5可覆盖绝大部分场景',
+    milestones:[
+      { from:1, to:3, label:'入门聊天 → 国际大模型对话', skills:[
+        {t:'sk',s:'学习Prompt三要素：角色设定 + 任务拆解 + 输出格式要求'},
+        {t:'sk',s:'了解AI擅长什么（文本处理、数据整理）、不擅长什么（主观判断、实时数据）'},
+        {t:'sk',s:'掌握多轮对话技巧：追问、纠偏、让AI自检'},
+        {t:'ac',s:'开通GPT企业账号，跳过国产工具直接上手国际模型'},
+        {t:'ac',s:'用AI回答HR常见咨询（请假制度、薪资政策），体验对话能力差异'},
+      ]},
+      { from:3, to:5, label:'国际大模型对话 → 国际AI介入工作', skills:[
+        {t:'sk',s:'学习文件上传与处理：让AI读取Excel/PDF并输出结构化结果'},
+        {t:'sk',s:'掌握Skill文档编写：把重复流程写成AI可执行的标准化规则'},
+        {t:'sk',s:'建立AI质检习惯：先小批量验证，再批量执行'},
+        {t:'ac',s:'用AI处理人效看板：门店打卡数据→汇总→合理值对比→预警输出'},
+        {t:'ac',s:'用AI整合店经理全档案：多数据源→按Skill规则自动填表'},
+        {t:'ac',s:'用AI批量生成贺卡：同模板替换姓名和照片'},
+      ]},
+    ],
   },
-  {
-    name:'财务部', icon:'📊', color:'#548235', score:1.5,
-    levelName:'入门聊天 ~ 国产对话',
-    evidence:['部分员工使用豆包做基础查询','有个别人尝试过Kimi但未深入使用','核心财务工作仍以传统Excel手工为主','对AI处理敏感财务数据存在顾虑'],
-    teams:null,
+  { dept:'财务部', cur:1.5, tgt:5,
+    note:'核心工作为报表整理和格式化输出，Lv.5足以覆盖日常场景',
+    milestones:[
+      { from:1.5, to:3, label:'入门聊天 → 国际大模型对话', skills:[
+        {t:'sk',s:'学习Prompt三要素：角色设定 + 任务拆解 + 输出格式要求'},
+        {t:'sk',s:'理解AI的数据安全边界：哪些数据可以给AI、哪些需脱敏处理'},
+        {t:'sk',s:'掌握让AI带公式输出Excel的方法，学会核验公式正确性'},
+        {t:'ac',s:'开通GPT企业账号，直接体验国际模型的数据处理能力'},
+        {t:'ac',s:'用AI回答财务制度类问题，整理会议纪要'},
+      ]},
+      { from:3, to:5, label:'国际大模型对话 → 国际AI介入工作', skills:[
+        {t:'sk',s:'学习文件上传处理：让AI读取多张报表并合并输出'},
+        {t:'sk',s:'掌握Skill文档编写：把报表刷新流程写成标准化规则'},
+        {t:'sk',s:'学会分步骤给AI下指令：取数逻辑→计算规则→输出模板，拆细才准'},
+        {t:'ac',s:'用AI处理月度经营分析：多系统数据→汇总→校验→报告输出'},
+        {t:'ac',s:'让AI生成带公式的Excel报表（检查几次确认后可信赖产出）'},
+      ]},
+    ],
   },
-  {
-    name:'市场部', icon:'📢', color:'#BF8F00', score:2.3,
-    levelName:'入门聊天 ~ 国产对话',
-    evidence:['李妍妍团队与陈婧仪团队处于入门聊天阶段，主要使用豆包做基础问答','申江团队已达到使用国外大模型处理文件的水平（Lv.5）','团队间AI使用水平差异较大','整体仍有大量手工操作空间可被AI替代'],
-    teams:[{name:'李妍妍团队',score:1},{name:'陈婧仪团队',score:1},{name:'申江团队',score:5}],
+  { dept:'市场部', cur:2.3, tgt:4,
+    note:'需求偏向内容、设计和运维操作，Lv.4即可满足核心提效；申江团队已达Lv.5可作内部标杆',
+    milestones:[
+      { from:1, to:3, label:'入门聊天 → 国际大模型对话（李妍妍 & 陈婧仪团队）', skills:[
+        {t:'sk',s:'学习Prompt三要素：角色设定 + 任务拆解 + 输出格式要求'},
+        {t:'sk',s:'了解AI在内容创作中的能力：文案改写、脚本优化、数据整理'},
+        {t:'sk',s:'掌握让AI处理表格数据的基本方法'},
+        {t:'ac',s:'开通GPT企业账号，体验AI改写文案和优化短视频脚本'},
+        {t:'ac',s:'将每小时手动拉取售卖数据的流程改为AI辅助整理'},
+      ]},
+      { from:3, to:4, label:'国际大模型对话 → 国产AI介入工作', skills:[
+        {t:'sk',s:'学习让AI执行模板化批量任务：同模板换参数批量输出'},
+        {t:'sk',s:'理解AI操作第三方平台的限制：API权限、封号风险、人工兜底'},
+        {t:'ac',s:'用AI批量生成门店宣传图：同模板替换店名'},
+        {t:'ac',s:'用AI辅助套餐配置复核：按规则校验荤素搭配、价格、日期'},
+        {t:'ac',s:'用AI辅助企微员工异动运维：入离职→档案调整→通知推送'},
+      ]},
+    ],
   },
 ];
 
-const GENERIC_STEPS = {
-  '0→1':'开通飞书豆包，安排1次AI基础认知培训，让团队了解AI能做什么',
-  '1→2':'引入Kimi或DeepSeek，培训基本对话技巧和提示词方法',
-  '2→3':'开通GPT/Claude企业账号，对比国产与国际模型效果差异',
-  '3→4':'用国产AI处理日常文档：总结会议纪要、生成报告初稿、修改文案',
-  '4→5':'用GPT/Claude处理文件：数据整理、分析报告撰写、多文件汇总',
-  '5→6':'学习让AI做深度数据分析：建模、交叉验证、统计检验',
-  '6→7':'让AI编写Python/SQL脚本，搭建自动化数据处理管道',
-  '7→8':'配置定时任务、API取数、飞书机器人推送，形成自动化工作流',
-  '8→9':'引入AI Agent操控电脑、图像视频生成、多Agent协作',
-  '9→10':'全业务链AI闭环：采集→清洗→分析→决策→执行→监控',
-};
-
-const ROADMAPS = [
-  {
-    dept:'人事部', icon:'👥', color:'#2E75B6', currentScore:1, targetScore:5,
-    targetReason:'人事部核心需求为数据报表、信息整合和模板化输出，Lv.5可覆盖绝大部分场景',
-    milestones:[
-      {from:1,to:2,actions:['让团队试用Kimi处理简单HR咨询问题（请假政策、制度解答）','用DeepSeek汇总每日常用问答，形成HR知识库初稿']},
-      {from:2,to:3,actions:['开通GPT企业账号（公司已有企业合作），分发给关键岗位','对比豆包与GPT在文档生成（如贺卡模板）上的效果差异']},
-      {from:3,to:4,actions:['用Kimi/DeepSeek生成张大哥送祝福贺卡模板（换照片+姓名批量输出）','用AI辅助筛选订阅号文章初稿（按字数、格式等硬指标初筛）']},
-      {from:4,to:5,actions:['用GPT/Claude处理人效看板日数据：门店打卡→汇总→合理值对比→预警输出','用AI整合店经理全档案（从多个数据源合并，按Skill规则自动填表）','建立标准化Skill文档：定义数据来源、取数字段、输出格式']},
-    ],
-    requirements:[
-      {name:'人效看板自动化',desc:'每日从BI取门店打卡数据，自动计算人均看台、合理值对比并预警输出',priority:'high',aiNote:'需对接BI数仓接口，AI可实现全流程自动化'},
-      {name:'张大哥送祝福贺卡',desc:'季度/年度批量生成数百张贺卡，仅需替换姓名和照片',priority:'high',aiNote:'模板化输出，AI一步即可完成'},
-      {name:'店经理全档案更新',desc:'从PS、智能人事、OA、财务等多系统汇总，按月更新店经理全维度数据表',priority:'high',aiNote:'编写Skill规则文档，AI按规则从各数据源整合填表'},
-      {name:'订阅号文章初筛',desc:'从1000+篇投稿中按规则筛选合格文章',priority:'mid',aiNote:'硬指标（字数、格式）可AI初筛，主观质量判断仍需人工'},
-      {name:'大区数据保底差额',desc:'追踪门店人员数据，但部分数据不在BI上（PS等系统）',priority:'mid',aiNote:'需先推动BI接入更多数据源，再用AI处理'},
-    ],
-  },
-  {
-    dept:'财务部', icon:'📊', color:'#548235', currentScore:1.5, targetScore:5,
-    targetReason:'财务核心工作为报表整理、数据比对和格式化输出，Lv.5足以覆盖日常场景',
-    milestones:[
-      {from:1.5,to:2,actions:['安排Kimi体验session，用AI回答财务制度类常见问题','试用DeepSeek整理会议纪要，降低文字工作负担']},
-      {from:2,to:3,actions:['申请GPT企业账号，让核心岗位人员体验国际模型的数据处理能力','对比Kimi与GPT在Excel公式推荐、数据校验场景的表现']},
-      {from:3,to:4,actions:['用Kimi辅助生成月度经营分析报告初稿','用AI检查报表中的常见错误（数据一致性、公式引用）']},
-      {from:4,to:5,actions:['用GPT/Claude处理繁琐数据报表：从多系统下载→汇总→校验→输出','让AI生成带公式的Excel（检查几次确认后可信赖产出）','建立标准化经营分析Skill：定义取数逻辑、计算规则、输出模板']},
-    ],
-    requirements:[
-      {name:'经营分析报告自动化',desc:'月度/季度经营数据汇总分析，生成标准格式报告',priority:'high',aiNote:'AI擅长数据汇总与格式化输出，可大幅减少手工制表时间'},
-      {name:'多系统报表刷新',desc:'从不同系统下载数据后合并刷新报表，检查错误',priority:'high',aiNote:'固化流程最适合AI，下载→校验→合并→输出可全自动'},
-      {name:'产品盲测数据分析',desc:'用过往成本与销售数据建立分析模型',priority:'mid',aiNote:'AI可提供建模思路（如双重差分），但需精准的提示词拆解任务'},
-    ],
-  },
-  {
-    dept:'市场部', icon:'📢', color:'#BF8F00', currentScore:2.3, targetScore:4,
-    targetReason:'市场部需求偏向内容、设计和运维操作，Lv.4可满足核心提效场景；申江团队已达Lv.5，可作为部门内标杆',
-    milestones:[
-      {from:0.5,to:2,label:'李妍妍团队 & 陈婧仪团队',actions:['开通Kimi账号，先用AI处理简单文案改写和数据查询','将每小时手动拉取的美团/抖音/小程序售卖数据改为AI辅助整理']},
-      {from:2,to:3,actions:['申请GPT企业账号，让关键岗位体验国际模型的内容生成能力','用AI优化抖音短视频脚本，根据数据反馈调优内容方向']},
-      {from:3,to:4,actions:['用AI批量生成门店宣传图：同一模板批量替换店名和文字','用AI辅助套餐/代金券配置复核（按规则校验荤素搭配、价格、日期等）','用AI自动整理企业微信员工异动：入离职→PS档案调整→通知推送']},
-    ],
-    requirements:[
-      {name:'售卖数据自动抓取',desc:'每小时从美团/抖音/小程序后台拉取售卖数据并汇总到多维表',priority:'high',aiNote:'小程序和抖音可API对接；美团需确认是否允许自动抓取（曾有封号风险）'},
-      {name:'三方平台商品上下架',desc:'根据门店经营需求在美团/抖音后台批量上下架商品',priority:'high',aiNote:'需确认平台是否允许AI操控；可先从自有小程序试点'},
-      {name:'套餐配置复核',desc:'校验套餐荤素搭配、售卖日期、使用规则等是否正确配置',priority:'high',aiNote:'规则明确可AI自动校验；但平台后台不支持导出，需看能否用AI读取页面'},
-      {name:'抖音短视频脚本优化',desc:'基于投放数据反馈，AI辅助优化拍摄脚本和内容方向',priority:'mid',aiNote:'AI改脚本已非常成熟，可直接使用'},
-      {name:'门店宣传图批量制作',desc:'同模板15+门店，仅换店名，目前逐个手改',priority:'mid',aiNote:'AI可一步完成批量文字替换出图'},
-      {name:'企微员工异动运维',desc:'入离职员工的企业微信账号开通/调整、PS档案更新',priority:'mid',aiNote:'需确认企微API权限；操作需模板化且不让AI做"选择"类判断'},
-      {name:'私域托管自动化',desc:'每家门店托管需2小时，掉线后需重跑流程，占用大量客服人力',priority:'low',aiNote:'机械化流程理论可自动化，但需评估AI操作稳定性与客服场景容错'},
-    ],
-  },
+// Requirements
+const REQS = [
+  { dept:'人事部', icon:'👥', color:'#7a8a9e', items:[
+    {name:'人效看板自动化',desc:'每日从BI取门店打卡数据→计算人均看台→合理值对比→预警输出',pri:'high',ai:'需对接BI数仓接口，AI可实现全流程自动化'},
+    {name:'张大哥送祝福贺卡',desc:'季度/年度批量生成数百张贺卡，仅替换姓名和照片',pri:'high',ai:'模板化输出，AI一步完成'},
+    {name:'店经理全档案更新',desc:'从PS、智能人事、OA、财务等多系统汇总，按月更新全维度数据表',pri:'high',ai:'编写Skill规则文档，AI按规则从各数据源整合填表'},
+    {name:'订阅号文章初筛',desc:'从1000+篇投稿中按规则筛选合格文章',pri:'mid',ai:'硬指标可AI初筛，主观质量判断仍需人工'},
+    {name:'大区数据保底差额',desc:'追踪门店人员数据，部分数据不在BI上',pri:'mid',ai:'需先推动BI接入更多数据源'},
+  ]},
+  { dept:'财务部', icon:'📊', color:'#8a9a98', items:[
+    {name:'经营分析报告自动化',desc:'月度/季度经营数据汇总→生成标准格式报告',pri:'high',ai:'AI擅长数据汇总与格式化输出'},
+    {name:'多系统报表刷新',desc:'从不同系统下载数据→合并→校验→输出',pri:'high',ai:'固化流程最适合AI全自动处理'},
+    {name:'产品盲测数据分析',desc:'用过往成本与销售数据建立分析模型',pri:'mid',ai:'AI可提供建模思路，需精准提示词'},
+  ]},
+  { dept:'市场部', icon:'📢', color:'#9a8a8a', items:[
+    {name:'售卖数据自动抓取',desc:'每小时从美团/抖音/小程序后台拉取售卖数据并汇总',pri:'high',ai:'小程序和抖音可API对接；美团需确认'},
+    {name:'三方平台商品上下架',desc:'在美团/抖音后台批量上下架商品',pri:'high',ai:'需确认平台权限；可先从自有小程序试点'},
+    {name:'套餐配置复核',desc:'校验套餐荤素搭配、日期、规则是否正确',pri:'high',ai:'规则明确可AI自动校验'},
+    {name:'抖音短视频脚本优化',desc:'基于投放数据反馈优化拍摄脚本',pri:'mid',ai:'AI改脚本已非常成熟'},
+    {name:'门店宣传图批量制作',desc:'同模板15+门店仅换店名',pri:'mid',ai:'AI一步完成批量替换出图'},
+    {name:'企微员工异动运维',desc:'入离职员工企微账号开通/调整、PS档案更新',pri:'mid',ai:'需确认企微API权限'},
+    {name:'私域托管自动化',desc:'每家门店托管需2小时，掉线需重跑',pri:'low',ai:'需评估AI操作稳定性'},
+  ]},
 ];
 
 // ============ STATE ============
-let activeDeptFilter = 'all'; // 'all' or dept name
-let activeReqFilter = 'all';
+let deptFilter = 'all', reqFilter = 'all';
 
 // ============ RENDER ============
-function getColorForScore(s) { return LEVELS[Math.min(Math.round(s),10)].color; }
+function clr(s){ return s===null?'var(--gray-300)':LEVELS[Math.min(Math.round(s),10)].color; }
 
-function renderScaleBar() {
-  const w = document.getElementById('scaleBarWrap');
-  let h = '<h3>AI 使用能力 10 级评分体系</h3><div class="scale-bar">';
-  LEVELS.forEach(lv => {
-    h += `<div class="scale-seg" style="background:${lv.color}" onmouseenter="showTip(event,'Lv.${lv.level} ${lv.name}\\n${lv.desc}')" onmouseleave="hideTip()">${lv.level}</div>`;
-  });
-  h += '</div><div class="scale-labels">';
-  LEVELS.forEach(lv => { h += `<span>${lv.name}</span>`; });
-  h += '</div>';
-  // Inline expandable detail
-  h += `<div class="scale-expand"><button class="scale-expand-btn" onclick="toggleScaleDetail(this)">▸ 展开各等级详情</button></div>`;
-  h += `<div class="scale-detail-inline collapsed" id="scaleDetailInline">`;
-  LEVELS.forEach(lv => {
-    h += `<div class="scale-mini-item"><div class="scale-mini-num" style="background:${lv.color}">${lv.level}</div><div class="scale-mini-info"><strong>${lv.name}</strong><span>${lv.desc}</span></div></div>`;
-  });
-  h += `</div>`;
-  // Reference band
-  h += renderRefBand();
-  w.innerHTML = h;
+function renderScale(){
+  const w=document.getElementById('scaleWrap');
+  let h='<h3>AI 使用能力 10 级评分体系</h3><div class="scale-bar">';
+  LEVELS.forEach(lv=>{h+=`<div class="scale-seg" style="background:${lv.color}" onmouseenter="tip(event,'Lv.${lv.level} ${lv.name}\\n${lv.desc}')" onmouseleave="untip()">${lv.level}</div>`;});
+  h+='</div><div class="scale-names">';
+  LEVELS.forEach(lv=>{h+=`<span>${lv.name}</span>`;});
+  h+='</div>';
+  h+=`<button class="scale-expand-btn" onclick="togScale(this)">▸ 展开各等级详情</button>`;
+  h+=`<div class="scale-detail-grid collapsed" id="sdGrid">`;
+  LEVELS.forEach(lv=>{h+=`<div class="sd-item"><div class="sd-num" style="background:${lv.color}">${lv.level}</div><div class="sd-text"><strong>${lv.name}</strong><span>${lv.desc}</span></div></div>`;});
+  h+=`</div>`;
+  w.innerHTML=h;
 }
+function togScale(b){const d=document.getElementById('sdGrid');const c=d.classList.toggle('collapsed');b.textContent=c?'▸ 展开各等级详情':'▾ 收起等级详情';}
 
-function toggleScaleDetail(btn) {
-  const d = document.getElementById('scaleDetailInline');
-  const open = d.classList.toggle('collapsed');
-  btn.textContent = open ? '▸ 展开各等级详情' : '▾ 收起等级详情';
+function renderFilters(id,key){
+  const b=document.getElementById(id);
+  let h=`<button class="filter-btn active" onclick="filt('${key}','all',this)">📋 全部</button>`;
+  DEPARTMENTS.forEach(d=>{h+=`<button class="filter-btn" onclick="filt('${key}','${d.name}',this)">${d.icon} ${d.name}</button>`;});
+  b.innerHTML=h;
 }
-
-function renderRefBand() {
-  const pct = v => (v/10*100);
-  const l = pct(REF.lower), wd = pct(REF.upper)-l;
-  let h = `<div class="ref-band"><div class="ref-title">📐 ${REF.name}（参考基准带）</div>`;
-  h += `<div class="ref-bar-wrap">`;
-  h += `<div class="ref-range" style="left:${l}%;width:${wd}%;background:linear-gradient(90deg,${LEVELS[REF.lower].color},${LEVELS[REF.upper].color})"></div>`;
-  h += `<div class="ref-marker" style="left:${l}%;background:${LEVELS[REF.lower].color}"><span class="ref-marker-label" style="color:${LEVELS[REF.lower].color}">下限 Lv.${REF.lower}</span></div>`;
-  h += `<div class="ref-marker" style="left:${pct(REF.upper)}%;background:${LEVELS[REF.upper].color}"><span class="ref-marker-label" style="color:${LEVELS[REF.upper].color}">上限 Lv.${REF.upper}</span></div>`;
-  if (REF.avg!==null) h += `<div class="ref-marker" style="left:${pct(REF.avg)}%;background:var(--primary);width:4px;"><span class="ref-marker-label" style="color:var(--primary)">均值 Lv.${REF.avg}</span></div>`;
-  h += `</div><div class="ref-legend">
-    <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${LEVELS[REF.lower].color};margin-right:5px;vertical-align:middle;"></span>下限 Lv.${REF.lower}（${LEVELS[REF.lower].name}）</span>
-    <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${LEVELS[REF.upper].color};margin-right:5px;vertical-align:middle;"></span>上限 Lv.${REF.upper}（${LEVELS[REF.upper].name}）</span>`;
-  h += REF.avg!==null
-    ? `<span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--primary);margin-right:5px;vertical-align:middle;"></span>均值 Lv.${REF.avg}</span>`
-    : `<span style="color:var(--gray-400);">均值：待评估</span>`;
-  h += `</div></div>`;
-  return h;
-}
-
-// ===== Filter bar =====
-function renderFilterBar(containerId, stateKey) {
-  const bar = document.getElementById(containerId);
-  let h = `<button class="filter-btn active" onclick="setFilter('${stateKey}','all',this)"><span class="f-icon">📋</span>全部显示</button>`;
-  DEPARTMENTS.forEach(d => {
-    h += `<button class="filter-btn" onclick="setFilter('${stateKey}','${d.name}',this)"><span class="f-icon">${d.icon}</span>${d.name}</button>`;
-  });
-  bar.innerHTML = h;
-}
-
-function setFilter(stateKey, val, btn) {
-  if (stateKey === 'dept') { activeDeptFilter = val; renderDeptCards(); }
-  else { activeReqFilter = val; renderReqs(); }
-  btn.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+function filt(key,val,btn){
+  if(key==='d'){deptFilter=val;renderCards();}else{reqFilter=val;renderReqs();}
+  btn.parentElement.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
 }
 
-// ===== Merged dept + roadmap cards =====
-function renderDeptCards() {
-  const grid = document.getElementById('deptGrid');
-  const filtered = activeDeptFilter === 'all' ? DEPARTMENTS : DEPARTMENTS.filter(d => d.name === activeDeptFilter);
-  grid.innerHTML = filtered.map(dept => {
-    const rm = ROADMAPS.find(r => r.dept === dept.name);
-    const pct = (dept.score/10*100).toFixed(1);
-    const clr = getColorForScore(dept.score);
-    let h = `<div class="dept-card">`;
-    // Header
-    h += `<div class="dept-header">
-      <div class="dept-name">
-        <div class="dept-icon" style="background:${dept.color}15;color:${dept.color}">${dept.icon}</div>
-        <div><h3>${dept.name}</h3><span class="level-tag" style="background:${clr}18;color:${clr}">Lv.${dept.score} ${dept.levelName}</span></div>
-      </div>
-      <div class="score-badge" style="color:${clr}">${dept.score}<span class="score-sub">/10</span></div>
-    </div>`;
-    // Score bar
-    h += `<div class="score-bar-wrap">
-      <div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:linear-gradient(90deg,${clr}88,${clr})"></div></div>
-      <div class="score-bar-labels"><span>0</span><span>5</span><span>10</span></div>
-    </div>`;
-    // Evidence
-    h += `<div class="evidence"><div class="toggle-title" onclick="toggle(this)">诊断依据（${dept.evidence.length}项）</div><ul class="toggle-body evidence-list">`;
-    dept.evidence.forEach(e => { h += `<li>${e}</li>`; });
-    h += `</ul></div>`;
-    // Teams
-    if (dept.teams && dept.teams.length) {
-      h += `<div class="teams-wrap"><div class="teams-title">团队细分</div>`;
-      dept.teams.forEach(t => {
-        const tp=(t.score/10*100).toFixed(1), tc=getColorForScore(t.score);
-        h += `<div class="team-row"><span class="team-name">${t.name}</span><div class="team-bar-bg"><div class="team-bar-fill" style="width:${tp}%;background:${tc}"></div></div><span class="team-score" style="color:${tc}">${t.score}</span></div>`;
+// Mini scale bar for each dept
+function miniScale(score){
+  if(score===null) return '';
+  const pct=(score/10*100).toFixed(1);
+  let h='<div class="mini-scale">';
+  LEVELS.forEach(lv=>{h+=`<div class="mini-seg" style="background:${lv.color}"></div>`;});
+  h+=`<div class="mini-marker" style="left:${pct}%"><span class="mini-marker-label">Lv.${score}</span></div>`;
+  h+='</div>';
+  return h;
+}
+
+function renderCards(){
+  const g=document.getElementById('deptGrid');
+  const list=deptFilter==='all'?DEPARTMENTS:DEPARTMENTS.filter(d=>d.name===deptFilter);
+  g.innerHTML=list.map(dept=>{
+    const rm=ROADMAPS.find(r=>r.dept===dept.name);
+    const hasS=dept.score!==null;
+    const pct=hasS?(dept.score/10*100).toFixed(1):'0';
+    const c=clr(dept.score);
+    let h=`<div class="dept-card">`;
+    // header
+    h+=`<div class="dept-header"><div class="dept-name">
+      <div class="dept-icon" style="background:${dept.color}18;color:${dept.color}">${dept.icon}</div>
+      <div><h3>${dept.name}</h3><span class="level-tag" style="background:${c}18;color:${c}">${hasS?'Lv.'+dept.score:'待评估'} ${dept.levelName}</span></div>
+    </div>
+    <div class="score-badge" style="color:${c}">${hasS?dept.score:'—'}<span class="score-sub">${hasS?'/10':''}</span></div></div>`;
+    // bar
+    h+=`<div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:${c}"></div></div>`;
+    h+=`<div class="score-bar-labels"><span>0</span><span>5</span><span>10</span></div>`;
+    // mini scale
+    h+=miniScale(dept.score);
+    // evidence
+    h+=`<div class="toggle-wrap"><button class="toggle-btn" onclick="tog(this)">诊断依据（${dept.evidence.length}项）</button><div class="toggle-body"><ul class="evidence-list">`;
+    dept.evidence.forEach(e=>{h+=`<li>${e}</li>`;});
+    h+=`</ul></div></div>`;
+    // teams
+    if(dept.teams&&dept.teams.length){
+      h+=`<div class="teams-wrap"><div class="teams-title">团队细分</div>`;
+      dept.teams.forEach(t=>{
+        const tp=(t.score/10*100).toFixed(1),tc=clr(t.score);
+        h+=`<div class="team-row"><span class="team-name">${t.name}</span><div class="team-bar-bg"><div class="team-bar-fill" style="width:${tp}%;background:${tc}"></div></div><span class="team-score" style="color:${tc}">${t.score}</span></div>`;
       });
-      h += `</div>`;
+      h+=`</div>`;
     }
-    // ===== Roadmap section =====
-    if (rm) {
-      const tgtClr = getColorForScore(rm.targetScore);
-      const curPct = (rm.currentScore/10*100).toFixed(1);
-      const tgtPct = (rm.targetScore/10*100).toFixed(1);
-      h += `<div class="roadmap-section">`;
-      h += `<div class="roadmap-header"><span style="font-size:13px;font-weight:600;color:var(--gray-700);">🚀 提升路径</span>
-        <span class="target-tag" style="background:${tgtClr}15;color:${tgtClr};margin-left:auto;">🎯 目标 Lv.${rm.targetScore} ${LEVELS[rm.targetScore].name}</span></div>`;
-      h += `<div class="target-reason"><strong>目标依据：</strong>${rm.targetReason}</div>`;
-      // Journey bar
-      h += `<div class="journey-bar"><div class="journey-track">
-        <div class="journey-target-fill" style="width:${tgtPct}%;background:${tgtClr}"></div>
-        <div class="journey-fill" style="width:${curPct}%;background:linear-gradient(90deg,${clr}88,${clr})"></div>
-        <div class="journey-dot" style="left:${curPct}%;background:${clr}"></div>
-        <div class="journey-dot" style="left:${tgtPct}%;background:${tgtClr};border-style:dashed;opacity:.7"></div>
-        <span class="journey-label" style="left:${curPct}%;color:${clr}">当前</span>
-        <span class="journey-label" style="left:${tgtPct}%;color:${tgtClr}">目标</span>
-      </div></div>
-      <div class="journey-end-labels"><span>Lv.0</span><span>Lv.5</span><span>Lv.10</span></div>`;
-      // Milestones
-      h += `<div style="margin-top:14px"><div class="toggle-title" onclick="toggle(this)" style="font-size:13px;font-weight:600;color:var(--gray-700);">📍 分阶段里程碑（${rm.milestones.length}阶段）</div><div class="toggle-body"><div class="milestones" style="margin-top:10px;">`;
-      rm.milestones.forEach(ms => {
-        const fromLv=Math.floor(ms.from), toLv=ms.to;
-        const isReached=rm.currentScore>=toLv, isCurrent=rm.currentScore>=fromLv&&rm.currentScore<toLv;
-        const dotClass=isReached?'reached':(isCurrent?'current':'future');
-        const dotColor=isReached?'var(--success)':(isCurrent?'var(--primary)':'var(--gray-300)');
-        const msColor=getColorForScore(toLv);
-        const stepKey=`${fromLv}→${toLv}`, gs=GENERIC_STEPS[stepKey];
-        h += `<div class="milestone"><div class="milestone-dot ${dotClass}" style="background:${dotColor}"></div>`;
-        h += `<div class="milestone-level" style="color:${msColor}">`;
-        if(ms.label) h += `${ms.label} · `;
-        h += `Lv.${ms.from} → Lv.${ms.to}（${LEVELS[toLv].name}）</div>`;
-        h += `<div class="milestone-title">${isReached?'✅ 已达成':(isCurrent?'🔄 当前阶段':'⏳ 待启动')}</div>`;
-        h += `<div class="ms-actions">`;
-        if(gs) h += `<div class="ms-action generic"><span class="ms-action-tag g">通用</span>${gs}</div>`;
-        ms.actions.forEach(a => { h += `<div class="ms-action specific"><span class="ms-action-tag s">专项</span>${a}</div>`; });
-        h += `</div></div>`;
-      });
-      h += `</div></div></div>`; // milestones, toggle-body, toggle wrapper
-      h += `</div>`; // roadmap-section
+    // roadmap
+    if(rm){
+      const hasTgt=rm.tgt!==null, hasCur=rm.cur!==null;
+      const tgtC=hasTgt?clr(rm.tgt):'var(--gray-400)';
+      const curPct=hasCur?(rm.cur/10*100).toFixed(1):'0';
+      const tgtPct=hasTgt?(rm.tgt/10*100).toFixed(1):'0';
+      h+=`<div class="roadmap"><div class="roadmap-head"><span class="label">🚀 提升路径</span>`;
+      h+=hasTgt?`<span class="target-tag" style="background:${tgtC}18;color:${tgtC}">🎯 目标 Lv.${rm.tgt} ${LEVELS[rm.tgt].name}</span>`
+               :`<span class="target-tag" style="background:var(--gray-100);color:var(--gray-400)">🎯 目标待定</span>`;
+      h+=`</div><div class="target-note"><strong>说明：</strong>${rm.note}</div>`;
+      if(hasCur&&hasTgt){
+        h+=`<div class="journey-bar"><div class="journey-track">
+          <div class="journey-target-fill" style="width:${tgtPct}%;background:${tgtC}"></div>
+          <div class="journey-fill" style="width:${curPct}%;background:${c}"></div>
+          <div class="journey-dot" style="left:${curPct}%;background:${c}"></div>
+          <div class="journey-dot" style="left:${tgtPct}%;background:${tgtC};border-style:dashed;opacity:.7"></div>
+          <span class="journey-label" style="left:${curPct}%;color:${c}">当前</span>
+          <span class="journey-label" style="left:${tgtPct}%;color:${tgtC}">目标</span>
+        </div></div><div class="journey-end-labels"><span>Lv.0</span><span>Lv.5</span><span>Lv.10</span></div>`;
+      }
+      if(rm.milestones.length){
+        h+=`<div class="toggle-wrap" style="margin-top:12px"><button class="toggle-btn" onclick="tog(this)">分阶段里程碑（${rm.milestones.length}阶段）</button><div class="toggle-body"><div class="milestones">`;
+        rm.milestones.forEach(ms=>{
+          const fromLv=Math.floor(ms.from),toLv=ms.to;
+          const done=rm.cur>=toLv, now=rm.cur>=fromLv&&rm.cur<toLv;
+          const dc=done?'done':(now?'now':'later');
+          const dotC=done?'var(--success)':(now?'var(--primary)':'var(--gray-300)');
+          const msC=clr(toLv);
+          h+=`<div class="ms"><div class="ms-dot ${dc}" style="background:${dotC}"></div>`;
+          h+=`<div class="ms-level" style="color:${msC}">${ms.label}</div>`;
+          h+=`<div class="ms-status">${done?'✅ 已达成':(now?'🔄 当前阶段':'⏳ 待启动')}</div>`;
+          h+=`<div class="ms-items">`;
+          ms.skills.forEach(s=>{
+            h+=`<div class="ms-item ${s.t==='sk'?'skill':'action'}"><span class="ms-tag ${s.t}">${s.t==='sk'?'能力':'行动'}</span>${s.s}</div>`;
+          });
+          h+=`</div></div>`;
+        });
+        h+=`</div></div></div>`;
+      }
+      h+=`</div>`; // roadmap
     }
-    h += `</div>`;
+    h+=`</div>`;
     return h;
   }).join('');
 }
 
-// ===== Requirements Tab =====
-function renderReqs() {
-  const wrap = document.getElementById('reqWrap');
-  const rms = activeReqFilter === 'all' ? ROADMAPS : ROADMAPS.filter(r => r.dept === activeReqFilter);
-  wrap.innerHTML = rms.map(rm => {
-    if (!rm.requirements || !rm.requirements.length) return '';
-    const highCount = rm.requirements.filter(r=>r.priority==='high').length;
-    let h = `<div class="req-dept-section">`;
-    h += `<div class="req-dept-header">
-      <div class="dept-icon" style="background:${rm.color}15;color:${rm.color};width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">${rm.icon}</div>
-      <h3>${rm.dept}</h3>
-      <span class="req-count">${rm.requirements.length}项需求 · ${highCount}项高优</span>
-    </div>`;
-    h += `<div class="req-grid">`;
-    rm.requirements.forEach(req => {
-      const priClass = req.priority==='high'?'high':(req.priority==='mid'?'mid':'low');
-      const priLabel = req.priority==='high'?'高优':(req.priority==='mid'?'中优':'低优');
-      h += `<div class="req-card"><span class="req-pri ${priClass}">${priLabel}</span><div class="req-body"><h5>${req.name}</h5><p>${req.desc}</p>${req.aiNote?`<span class="req-ai-note">💡 ${req.aiNote}</span>`:''}</div></div>`;
+function renderReqs(){
+  const w=document.getElementById('reqWrap');
+  const list=reqFilter==='all'?REQS:REQS.filter(r=>r.dept===reqFilter);
+  w.innerHTML=list.map(r=>{
+    const hc=r.items.filter(i=>i.pri==='high').length;
+    let h=`<div class="req-section"><div class="req-header">
+      <div class="dept-icon" style="background:${r.color}18;color:${r.color};width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;">${r.icon}</div>
+      <h3>${r.dept}</h3><span class="count">${r.items.length}项需求 · ${hc}项高优</span></div><div class="req-grid">`;
+    r.items.forEach(i=>{
+      const pc=i.pri==='high'?'high':(i.pri==='mid'?'mid':'low');
+      const pl=i.pri==='high'?'高优':(i.pri==='mid'?'中优':'低优');
+      h+=`<div class="req-card"><span class="req-pri ${pc}">${pl}</span><div class="req-body"><h5>${i.name}</h5><p>${i.desc}</p>${i.ai?`<span class="req-ai">💡 ${i.ai}</span>`:''}</div></div>`;
     });
-    h += `</div></div>`;
+    h+=`</div></div>`;
     return h;
   }).join('');
 }
 
-// ===== Utils =====
-function switchTab(id) {
-  document.querySelectorAll('.tab').forEach((t,i) => {
-    t.classList.toggle('active',['diag','reqs'][i]===id);
-  });
-  ['tab-diag','tab-reqs'].forEach(tid => {
-    document.getElementById(tid).classList.toggle('active', tid==='tab-'+id);
-  });
+function switchTab(id){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['diag','reqs'][i]===id));
+  ['tab-diag','tab-reqs'].forEach(tid=>document.getElementById(tid).classList.toggle('active',tid==='tab-'+id));
 }
+function tog(el){el.classList.toggle('open');el.nextElementSibling.classList.toggle('open');}
+function tip(e,t){const p=document.getElementById('tooltip');p.innerHTML=t.replace(/\\n/g,'<br>');p.style.display='block';const r=e.target.getBoundingClientRect();p.style.left=r.left+r.width/2-p.offsetWidth/2+'px';p.style.top=r.top-p.offsetHeight-10+window.scrollY+'px';}
+function untip(){document.getElementById('tooltip').style.display='none';}
 
-function toggle(el) {
-  el.classList.toggle('open');
-  el.nextElementSibling.classList.toggle('open');
-}
-
-function showTip(e,text) {
-  const tip=document.getElementById('tooltip');
-  tip.innerHTML=text.replace(/\\n/g,'<br>');
-  tip.style.display='block';
-  const r=e.target.getBoundingClientRect();
-  tip.style.left=r.left+r.width/2-tip.offsetWidth/2+'px';
-  tip.style.top=r.top-tip.offsetHeight-10+window.scrollY+'px';
-}
-function hideTip(){ document.getElementById('tooltip').style.display='none'; }
-
-// Init
-renderScaleBar();
-renderFilterBar('filterBar','dept');
-renderFilterBar('reqFilterBar','req');
-renderDeptCards();
+renderScale();
+renderFilters('filterBar','d');
+renderFilters('reqFilterBar','r');
+renderCards();
 renderReqs();
 </script>
 </body>
