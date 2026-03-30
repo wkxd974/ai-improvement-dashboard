@@ -14,12 +14,12 @@
     --shadow: 0 1px 4px rgba(0,0,0,.06); --shadow-md: 0 4px 12px rgba(0,0,0,.08); --radius: 14px;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background:var(--bg); color:var(--gray-700); line-height:1.7; font-size:16px; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background:var(--bg); color:var(--gray-700); line-height:1.7; font-size:17px; }
   .container { max-width:1400px; margin:0 auto; padding:28px 20px; }
 
   .header { text-align:center; padding:40px 0 28px; }
-  .header h1 { font-size:30px; font-weight:700; color:var(--gray-900); margin-bottom:6px; }
-  .header p { color:var(--gray-500); font-size:16px; }
+  .header h1 { font-size:32px; font-weight:700; color:var(--gray-900); margin-bottom:6px; }
+  .header p { color:var(--gray-500); font-size:17px; }
   .header .meta { display:inline-flex; align-items:center; gap:6px; background:var(--gray-100); color:var(--gray-500); padding:5px 16px; border-radius:20px; font-size:14px; margin-top:10px; }
 
   .tabs { display:flex; gap:4px; margin-bottom:22px; background:var(--gray-100); padding:4px; border-radius:12px; width:fit-content; }
@@ -55,19 +55,19 @@
   .dept-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
   .dept-name { display:flex; align-items:center; gap:12px; }
   .dept-icon { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:24px; }
-  .dept-name h3 { font-size:20px; font-weight:600; color:var(--gray-900); }
-  .level-tag { display:inline-block; padding:3px 12px; border-radius:20px; font-size:14px; font-weight:500; margin-top:2px; }
-  .score-badge { font-size:34px; font-weight:700; letter-spacing:-1px; }
-  .score-sub { font-size:14px; font-weight:400; color:var(--gray-400); margin-left:2px; }
+  .dept-name h3 { font-size:22px; font-weight:600; color:var(--gray-900); }
+  .level-tag { display:inline-block; padding:3px 12px; border-radius:20px; font-size:15px; font-weight:500; margin-top:2px; }
+  .score-badge { font-size:36px; font-weight:700; letter-spacing:-1px; }
+  .score-sub { font-size:15px; font-weight:400; color:var(--gray-400); margin-left:2px; }
 
   /* Range progress bar */
-  .range-bar { position:relative; height:16px; background:var(--gray-100); border-radius:8px; overflow:visible; margin-bottom:4px; }
-  .range-band { position:absolute; height:100%; border-radius:8px; opacity:.2; }
-  .range-fill { position:absolute; height:100%; border-radius:8px; left:0; top:0; }
-  .range-mkr { position:absolute; top:-3px; width:3px; height:22px; border-radius:2px; z-index:3; transform:translateX(-50%); }
-  .range-mkr-label { position:absolute; top:-22px; font-size:10px; font-weight:600; white-space:nowrap; transform:translateX(-50%); }
-  .range-mkr-btm { position:absolute; top:22px; font-size:10px; white-space:nowrap; transform:translateX(-50%); color:var(--gray-400); }
-  .score-bar-labels { display:flex; justify-content:space-between; font-size:13px; color:var(--gray-400); margin-bottom:8px; margin-top:22px; }
+  .range-bar { position:relative; height:18px; background:var(--gray-100); border-radius:9px; overflow:visible; margin-bottom:4px; }
+  .range-band { position:absolute; height:100%; border-radius:9px; opacity:.25; }
+  .range-fill { position:absolute; height:100%; border-radius:9px; left:0; top:0; }
+  .range-mkr { position:absolute; top:-5px; width:4px; height:28px; border-radius:2px; z-index:3; transform:translateX(-50%); }
+  .range-mkr-label { position:absolute; top:-24px; font-size:12px; font-weight:700; white-space:nowrap; transform:translateX(-50%); }
+  .range-mkr-btm { position:absolute; top:28px; font-size:11px; font-weight:500; white-space:nowrap; transform:translateX(-50%); }
+  .score-bar-labels { display:flex; justify-content:space-between; font-size:13px; color:var(--gray-400); margin-bottom:8px; margin-top:28px; }
 
   .mini-scale-wrap { margin-bottom:16px; }
   .mini-scale { display:flex; gap:1px; height:10px; border-radius:5px; overflow:hidden; position:relative; }
@@ -78,14 +78,14 @@
   .mini-names span { flex:1; text-align:center; font-size:8.5px; color:var(--gray-400); line-height:1.2; overflow:hidden; }
 
   .toggle-wrap { margin-top:12px; }
-  .toggle-btn { font-size:15px; color:var(--gray-500); cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:5px; padding:5px 0; border:none; background:none; font-weight:500; }
+  .toggle-btn { font-size:16px; color:var(--gray-500); cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:5px; padding:5px 0; border:none; background:none; font-weight:500; }
   .toggle-btn::before { content:'▸'; font-size:12px; transition:transform .2s; display:inline-block; }
   .toggle-btn.open::before { transform:rotate(90deg); }
   .toggle-btn:hover { color:var(--gray-700); }
   .toggle-body { display:none; padding-top:8px; }
   .toggle-body.open { display:block; }
 
-  .evidence-list li { font-size:15px; color:var(--gray-600); margin-bottom:5px; list-style:none; position:relative; padding-left:14px; }
+  .evidence-list li { font-size:16px; color:var(--gray-600); margin-bottom:5px; list-style:none; position:relative; padding-left:14px; }
   .evidence-list li::before { content:'·'; position:absolute; left:0; color:var(--gray-300); font-weight:bold; font-size:20px; line-height:1; }
 
   .teams-wrap { margin-top:14px; padding-top:12px; border-top:1px dashed var(--gray-200); }
@@ -113,7 +113,7 @@
   .plan-text { font-size:14px; color:var(--gray-600); line-height:1.6; }
   .plan-check { display:flex; align-items:flex-start; gap:8px; margin-top:4px; }
   .plan-check input { margin-top:5px; accent-color:var(--primary); }
-  .plan-check label { font-size:13px; color:var(--gray-600); cursor:pointer; line-height:1.5; }
+  .plan-check label { font-size:15px; color:var(--gray-600); cursor:pointer; line-height:1.5; }
 
   /* Roadmap */
   .roadmap { margin-top:18px; padding-top:16px; border-top:1px solid var(--gray-100); }
@@ -141,10 +141,10 @@
   .ms-dot.now { box-shadow:0 0 0 2px var(--primary); animation:pulse 2s infinite; }
   .ms-dot.later { box-shadow:0 0 0 2px var(--gray-300); opacity:.6; }
   @keyframes pulse { 0%,100%{box-shadow:0 0 0 2px var(--primary);} 50%{box-shadow:0 0 0 5px rgba(91,122,138,.2);} }
-  .ms-level { font-size:13px; font-weight:600; margin-bottom:3px; }
-  .ms-status { font-size:15px; font-weight:600; color:var(--gray-800); margin-bottom:6px; }
+  .ms-level { font-size:14px; font-weight:600; margin-bottom:3px; }
+  .ms-status { font-size:16px; font-weight:600; color:var(--gray-800); margin-bottom:6px; }
   .ms-items { display:flex; flex-direction:column; gap:5px; }
-  .ms-item { font-size:14px; color:var(--gray-600); padding:6px 12px; background:var(--gray-50); border-radius:7px; border-left:3px solid var(--gray-200); line-height:1.6; }
+  .ms-item { font-size:15px; color:var(--gray-600); padding:6px 12px; background:var(--gray-50); border-radius:7px; border-left:3px solid var(--gray-200); line-height:1.6; }
   .ms-item.skill { border-left-color:var(--primary); }
   .ms-item.action { border-left-color:var(--success); }
   .ms-item.vision { border-left-color:var(--warning); }
@@ -163,9 +163,9 @@
   .req-pri.high { background:#f0e0dc; color:#8b5a4a; }
   .req-pri.mid { background:#f0ead8; color:#8a7640; }
   .req-pri.low { background:#dde8d8; color:#5a7a4e; }
-  .req-body h5 { font-size:15px; font-weight:600; color:var(--gray-800); margin-bottom:3px; }
-  .req-body p { font-size:14px; color:var(--gray-500); }
-  .req-ai { font-size:13px; color:var(--primary); margin-top:5px; padding:3px 10px; background:var(--primary-light); border-radius:5px; display:inline-block; }
+  .req-body h5 { font-size:16px; font-weight:600; color:var(--gray-800); margin-bottom:3px; }
+  .req-body p { font-size:15px; color:var(--gray-500); }
+  .req-ai { font-size:14px; color:var(--primary); margin-top:5px; padding:3px 10px; background:var(--primary-light); border-radius:5px; display:inline-block; }
 
   .tooltip { position:absolute; background:var(--gray-800); color:#fff; padding:8px 14px; border-radius:8px; font-size:14px; line-height:1.5; z-index:100; pointer-events:none; white-space:nowrap; box-shadow:var(--shadow-md); }
   .tooltip::after { content:''; position:absolute; bottom:-5px; left:50%; transform:translateX(-50%); border-left:5px solid transparent; border-right:5px solid transparent; border-top:5px solid var(--gray-800); }
@@ -224,50 +224,48 @@ const DEPARTMENTS=[
     evidence:['日常使用GPT/Claude进行深度数据分析与报告撰写','用AI编写Python脚本搭建竞品数据看板','已实现部分自动化工作流（飞书机器人+定时推送）','团队内部AI使用水平差距较小，整体处于较高水平'],
     teams:null,
     currentPlan:[
-      {cat:'daily',label:'每日精进',items:['选一个重复性分析任务，尝试让AI一步到位生成完整脚本而非分段手动调整','阅读一篇AI工具更新日志（Claude/GPT），关注新功能对分析工作的影响']},
-      {cat:'challenge',label:'团队协同挑战',items:['本周目标：让团队中一位成员将自己的分析流程写成Skill文档，供其他人直接复用','每周五15分钟"AI提效复盘"：各自分享本周用AI节省最多时间的操作']},
-      {cat:'tip',label:'进阶技巧',items:['在Prompt中加入"请同时输出Python脚本和执行结果的示例"，减少来回调试','让AI对自己生成的代码做Code Review：先生成→再要求它检查潜在Bug']},
-      {cat:'track',label:'进度管理',items:['建立"AI项目看板"飞书多维表格：记录每个自动化项目的状态（构想/开发中/已上线/已废弃）','每月盘点：统计AI辅助完成 vs 纯手工完成的任务占比，追踪自动化率曲线']},
+      {cat:'daily',label:'练习',items:['将一个重复性分析任务交给AI一步到位生成完整脚本']},
+      {cat:'challenge',label:'目标',items:['每人将自己最常用的分析流程写成一份Skill文档']},
+      {cat:'track',label:'追踪',items:['飞书多维表格记录自动化项目状态（构想/开发/已上线）']},
     ]},
   { name:'产品部', icon:'🎯', color:'#7a9a99', score:null, levelName:'待完整评估',
     range:null,
     evidence:['杨茜团队已达到用国产大模型处理工作的水平（Lv.4）','其余团队情况待补充'],
     teams:[{name:'杨茜团队',score:4}], partialScore:4,
     currentPlan:[
-      {cat:'daily',label:'每日尝试',items:['杨茜团队：每天用AI辅助处理一项文档类工作（PRD整理、竞品摘要、会议纪要），记录节省时长']},
-      {cat:'challenge',label:'本周任务',items:['杨茜团队整理3个"AI最佳实践"案例，为后续其他团队评估提供参考基线']},
-      {cat:'tip',label:'经验沉淀',items:['将常用的产品分析Prompt整理成模板库（如用户故事生成、需求拆解、竞品对比框架）']},
-      {cat:'track',label:'评估准备',items:['联系其余团队安排访谈评估，收集各团队AI使用现状和痛点']},
+      {cat:'daily',label:'练习',items:['杨茜团队每天用AI处理一项文档工作（PRD整理/竞品摘要/会议纪要）']},
+      {cat:'challenge',label:'目标',items:['整理3个AI最佳实践案例，为其他团队评估提供参考']},
+      {cat:'track',label:'待办',items:['安排其余团队访谈评估，补全产品部整体AI使用画像']},
     ]},
   { name:'人事部', icon:'👥', color:'#7a8a9e', score:1, levelName:'入门聊天',
     range:{min:0,max:2,minName:'零基础',maxName:'国产大模型对话'},
     evidence:['主要使用飞书内置豆包进行基础问答','未接触过Kimi/DeepSeek等独立AI产品','没有将AI应用于日常HR工作流程','对AI能力边界认知有限，需要系统性引导'],
     teams:null,
     currentPlan:[
-      {cat:'daily',label:'每日一练',items:['每天用AI问一个工作相关问题（如"帮我解释劳动法第X条"），记录回答是否有用','用AI改写一段日常通知或公告文字，对比修改前后的表达效果']},
-      {cat:'challenge',label:'本周小目标',items:['用AI完整整理一次会议纪要：录音→粘贴文字→让AI提炼要点和待办','让AI帮你草拟一封面试邀约邮件，感受AI在文字润色上的效率']},
-      {cat:'tip',label:'入门小技巧',items:['开头先告诉AI身份："你是海底捞的资深HR专家"，回答质量会明显提升','遇到AI回答不满意时，不要重新问，而是追问"请更具体一些"或"请举个例子"']},
-      {cat:'track',label:'进度追踪',items:['建一张飞书表格"AI使用日志"：日期、场景、使用工具、效果评分(1-5)、心得','每两周统计一次：AI使用频率是否在上升？从哪些场景开始有信心了？']},
+      {cat:'daily',label:'练习',items:['每天用AI问一个工作相关问题，记录回答是否有用']},
+      {cat:'challenge',label:'目标',items:['用AI完整整理一次会议纪要（录音文字→要点→待办）']},
+      {cat:'tip',label:'技巧',items:['开头先说"你是海底捞资深HR专家"，回答质量会明显提升']},
+      {cat:'track',label:'追踪',items:['建飞书表格"AI使用日志"：日期、场景、效果评分(1-5)']},
     ]},
   { name:'财务部', icon:'📊', color:'#8a9a98', score:2, levelName:'国产大模型对话',
     range:{min:1,max:4,minName:'入门聊天',maxName:'国产AI介入工作'},
     evidence:['部分员工使用豆包做基础查询','少数成员已尝试用国产大模型辅助文档处理','核心财务工作仍以传统Excel手工为主','对AI处理敏感财务数据存在顾虑','希望AI能帮助自动化重复性报表刷新工作'],
     teams:null,
     currentPlan:[
-      {cat:'daily',label:'每日练手',items:['用AI解释一条复杂的财务准则或税务条款，检验其回答准确度','将一份非敏感的数据表（如公开的行业数据）上传AI，让它做基础汇总']},
-      {cat:'challenge',label:'本周小目标',items:['让AI帮你草拟一份月度数据摘要的框架（标题+小节+要点），对比与手写版本的效率差异','尝试让AI写3个Excel公式（VLOOKUP/SUMIFS/IF嵌套），手动验证正确性，建立判断力']},
-      {cat:'tip',label:'安全与效率',items:['敏感数据脱敏技巧：用"A公司""B门店"替代真实名称，数值可等比缩放后给AI处理','让AI输出公式时，要求它"同时解释每个参数的含义"，便于核验和学习']},
-      {cat:'track',label:'进度追踪',items:['每周记录一次"AI辅助 vs 纯手工"完成同一任务的用时对比，量化提效效果','建立"AI可信度评分表"：哪些类型的AI输出可以直接用？哪些必须人工校验？逐步明确边界']},
+      {cat:'daily',label:'练习',items:['将一份脱敏数据表上传AI做基础汇总，体验数据处理能力']},
+      {cat:'challenge',label:'目标',items:['让AI写3个Excel公式（VLOOKUP/SUMIFS/IF），手动验证正确性']},
+      {cat:'tip',label:'技巧',items:['敏感数据用"A公司""B门店"替代真实名称后再给AI处理']},
+      {cat:'track',label:'追踪',items:['每周记录一次"AI辅助 vs 手工"同一任务的用时对比']},
     ]},
   { name:'市场部', icon:'📢', color:'#9a8a8a', score:2, levelName:'国产大模型对话',
     range:{min:1,max:6,minName:'入门聊天',maxName:'深度数据分析'},
     evidence:['李妍妍团队与陈婧仪团队处于入门聊天阶段','申江团队已达到深度数据分析水平（Lv.6）','团队间AI使用水平差异极大（Lv.1~Lv.6）','整体仍有大量手工操作空间可被AI替代'],
     teams:[{name:'李妍妍团队',score:1},{name:'陈婧仪团队',score:1},{name:'申江团队',score:6}],
     currentPlan:[
-      {cat:'daily',label:'每日练手',items:['用AI改写一段营销文案，尝试给出3种不同风格（正式/活泼/种草），感受AI创作能力','将当天的售卖数据手动整理一份，再让AI整理一份，对比准确度和速度']},
-      {cat:'challenge',label:'本周小目标',items:['申江团队本周向其他团队做一次"AI实战分享"：演示一个AI处理数据的完整流程','李妍妍/陈婧仪团队各自尝试：用AI优化一条抖音短视频脚本，提交对比稿']},
-      {cat:'tip',label:'内容创作提示',items:['给AI一段"品牌调性说明+目标受众画像"作为上下文，文案质量会大幅提升','处理表格数据时先让AI"描述这张表的结构和内容"，确认理解正确再下指令']},
-      {cat:'track',label:'进度追踪',items:['各团队每周提交一份"AI使用周报"（3句话：用了什么、做了什么、效果如何）','以申江团队为标杆：建立"团队AI能力对标表"，其他团队每月评估一次距离标杆还有多远']},
+      {cat:'daily',label:'练习',items:['用AI改写一段营销文案，尝试3种风格（正式/活泼/种草）']},
+      {cat:'challenge',label:'目标',items:['各团队各自用AI优化一条抖音短视频脚本，提交对比稿']},
+      {cat:'tip',label:'技巧',items:['给AI品牌调性说明+目标受众画像作为上下文，文案质量大幅提升']},
+      {cat:'track',label:'追踪',items:['各团队每周交AI使用周报（用了什么、做了什么、效果如何）']},
     ]},
 ];
 
@@ -357,7 +355,7 @@ const ROADMAPS=[
       ]},
     ]},
   { dept:'市场部', cur:2, tgt:7,
-    note:'李妍妍&陈婧仪团队从入门出发追赶，申江团队(Lv.6)作内部标杆带动全部门；目标AI辅助编程',
+    note:'李妍妍&陈婧仪团队从入门出发，申江团队已达Lv.6；各团队按自身节奏提升，目标AI辅助编程',
     milestones:[
       { from:1,to:3,label:'入门聊天 → 国际大模型对话（李妍妍 & 陈婧仪团队）',skills:[
         {t:'sk',s:'学习Prompt三要素：角色设定 + 任务拆解 + 输出格式要求'},
@@ -426,10 +424,13 @@ function renderScale(){
 }
 function togScale(b){const d=document.getElementById('sdGrid');const c=d.classList.toggle('collapsed');b.textContent=c?'▸ 展开各等级详情':'▾ 收起等级详情';}
 
+const DISPLAY_ORDER=['市场部','人事部','财务部','产品部','商业分析部'];
+function orderedDepts(){return DISPLAY_ORDER.map(n=>DEPARTMENTS.find(d=>d.name===n)).filter(Boolean);}
+
 function renderFilters(id,key){
   const b=document.getElementById(id);
   let h=`<button class="filter-btn active" onclick="filt('${key}','all',this)">📋 全部</button>`;
-  DEPARTMENTS.forEach(d=>{h+=`<button class="filter-btn" onclick="filt('${key}','${d.name}',this)">${d.icon} ${d.name}</button>`;});
+  orderedDepts().forEach(d=>{h+=`<button class="filter-btn" onclick="filt('${key}','${d.name}',this)">${d.icon} ${d.name}</button>`;});
   b.innerHTML=h;
 }
 function filt(key,val,btn){
@@ -464,11 +465,11 @@ function renderRangeBar(dept){
     const bandW=(maxP-minP).toFixed(1);
     h+=`<div class="range-band" style="left:${minP}%;width:${bandW}%;background:${c}"></div>`;
     // min marker
-    h+=`<div class="range-mkr" style="left:${minP}%;background:${c};opacity:.4"></div>`;
-    h+=`<span class="range-mkr-btm" style="left:${minP}%;color:${c}">▼ ${dept.range.minName}</span>`;
+    h+=`<div class="range-mkr" style="left:${minP}%;background:var(--gray-700)"></div>`;
+    h+=`<span class="range-mkr-btm" style="left:${minP}%;color:var(--gray-700)">下限 Lv.${dept.range.min} ${dept.range.minName}</span>`;
     // max marker
-    h+=`<div class="range-mkr" style="left:${maxP}%;background:${c};opacity:.4"></div>`;
-    h+=`<span class="range-mkr-btm" style="left:${maxP}%;color:${c}">▲ ${dept.range.maxName}</span>`;
+    h+=`<div class="range-mkr" style="left:${maxP}%;background:var(--gray-700)"></div>`;
+    h+=`<span class="range-mkr-btm" style="left:${maxP}%;color:var(--gray-700)">上限 Lv.${dept.range.max} ${dept.range.maxName}</span>`;
   }
   // avg fill
   h+=`<div class="range-fill" style="width:${pct}%;background:${c}${!hasS?';opacity:.5':''}"></div>`;
@@ -502,7 +503,7 @@ function renderPlan(dept){
 
 function renderCards(){
   const g=document.getElementById('deptGrid');
-  const list=deptFilter==='all'?DEPARTMENTS:DEPARTMENTS.filter(d=>d.name===deptFilter);
+  const list=deptFilter==='all'?orderedDepts():orderedDepts().filter(d=>d.name===deptFilter);
   g.innerHTML=list.map(dept=>{
     const rm=ROADMAPS.find(r=>r.dept===dept.name);
     const hasS=dept.score!==null;
@@ -582,7 +583,8 @@ function renderCards(){
 
 function renderReqs(){
   const w=document.getElementById('reqWrap');
-  const list=reqFilter==='all'?REQS:REQS.filter(r=>r.dept===reqFilter);
+  const ordReqs=DISPLAY_ORDER.map(n=>REQS.find(r=>r.dept===n)).filter(Boolean);
+  const list=reqFilter==='all'?ordReqs:ordReqs.filter(r=>r.dept===reqFilter);
   w.innerHTML=list.map(r=>{
     const hc=r.items.filter(i=>i.pri==='high').length;
     let h=`<div class="req-section"><div class="req-header">
