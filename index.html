@@ -66,13 +66,16 @@
 
   .score-bar-bg { height:14px; background:var(--gray-100); border-radius:7px; overflow:hidden; margin-bottom:4px; }
   .score-bar-fill { height:100%; border-radius:7px; transition:width .6s ease; }
-  .score-bar-labels { display:flex; justify-content:space-between; font-size:12px; color:var(--gray-400); margin-bottom:12px; }
+  .score-bar-labels { display:flex; justify-content:space-between; font-size:12px; color:var(--gray-400); margin-bottom:6px; }
 
-  /* Mini dept scale */
-  .mini-scale { display:flex; gap:1px; height:8px; border-radius:4px; overflow:hidden; margin-bottom:16px; position:relative; }
+  /* Mini dept scale with names */
+  .mini-scale-wrap { margin-bottom:16px; }
+  .mini-scale { display:flex; gap:1px; height:10px; border-radius:5px; overflow:hidden; position:relative; }
   .mini-seg { flex:1; position:relative; }
-  .mini-marker { position:absolute; top:-3px; width:3px; height:14px; border-radius:2px; background:var(--gray-800); z-index:2; transform:translateX(-50%); }
-  .mini-marker-label { position:absolute; top:-20px; font-size:10px; font-weight:600; color:var(--gray-700); white-space:nowrap; transform:translateX(-50%); }
+  .mini-marker { position:absolute; top:-4px; width:3px; height:18px; border-radius:2px; background:var(--gray-800); z-index:2; transform:translateX(-50%); }
+  .mini-marker-label { position:absolute; top:-22px; font-size:10px; font-weight:700; color:var(--gray-700); white-space:nowrap; transform:translateX(-50%); }
+  .mini-names { display:flex; gap:1px; margin-top:3px; }
+  .mini-names span { flex:1; text-align:center; font-size:8px; color:var(--gray-400); line-height:1.2; overflow:hidden; }
 
   /* Toggle sections */
   .toggle-wrap { margin-top:10px; }
@@ -126,9 +129,11 @@
   .ms-item { font-size:13px; color:var(--gray-600); padding:5px 10px; background:var(--gray-50); border-radius:7px; border-left:3px solid var(--gray-200); line-height:1.5; }
   .ms-item.skill { border-left-color:var(--primary); }
   .ms-item.action { border-left-color:var(--success); }
+  .ms-item.vision { border-left-color:var(--warning); }
   .ms-tag { font-size:10px; font-weight:600; padding:1px 6px; border-radius:4px; margin-right:5px; }
   .ms-tag.sk { background:var(--primary-light); color:var(--primary); }
   .ms-tag.ac { background:var(--success-light); color:var(--success); }
+  .ms-tag.vi { background:var(--warning-light); color:var(--warning); }
 
   /* Requirements tab */
   .req-section { margin-bottom:26px; }
@@ -153,6 +158,7 @@
     .header h1 { font-size:24px; }
     .dept-card { padding:18px; }
     .scale-detail-grid { grid-template-columns:1fr; }
+    .mini-names span { font-size:7px; }
   }
 </style>
 </head>
@@ -203,7 +209,8 @@ const DEPARTMENTS = [
     teams:null },
   { name:'产品部', icon:'🎯', color:'#7a9a99', score:null, levelName:'待完整评估',
     evidence:['杨茜团队已达到用国产大模型处理工作的水平（Lv.4）','其余团队情况待补充'],
-    teams:[{name:'杨茜团队',score:4}] },
+    teams:[{name:'杨茜团队',score:4}],
+    partialScore:4 },
   { name:'人事部', icon:'👥', color:'#7a8a9e', score:1, levelName:'入门聊天',
     evidence:['主要使用飞书内置豆包进行基础问答','未接触过Kimi/DeepSeek等独立AI产品','没有将AI应用于日常HR工作流程','对AI能力边界认知有限，需要系统性引导'],
     teams:null },
@@ -215,16 +222,30 @@ const DEPARTMENTS = [
     teams:[{name:'李妍妍团队',score:1},{name:'陈婧仪团队',score:1},{name:'申江团队',score:5}] },
 ];
 
-// ============ 提升路径（合并跳级 + 实用技能 + 针对性行动） ============
+// ============ 提升路径 ============
 const ROADMAPS = [
-  { dept:'商业分析部', cur:7.5, tgt:null,
-    note:'作为AI推广部门，持续探索前沿能力，暂不设目标上限',
-    milestones:[] },
+  { dept:'商业分析部', cur:7.5, tgt:9,
+    note:'作为AI推广部门，目标是达到多模态与智能体水平，引领全公司AI应用',
+    milestones:[
+      { from:7.5, to:8, label:'AI辅助编程 → 自动化工作流', skills:[
+        {t:'sk',s:'掌握工作流编排思维：触发条件→数据流→异常处理→结果通知'},
+        {t:'sk',s:'学习API对接能力：理解RESTful接口、鉴权方式、数据格式转换'},
+        {t:'ac',s:'将竞品数据看板从手动触发升级为定时自动更新+飞书推送'},
+        {t:'ac',s:'搭建数据质量监控流：异常值自动检测→告警→日志记录'},
+      ]},
+      { from:8, to:9, label:'自动化工作流 → 多模态与智能体', skills:[
+        {t:'sk',s:'理解Agent架构：规划→执行→反馈→迭代的自主决策链路'},
+        {t:'sk',s:'掌握多模态输入处理：图片识别、语音转文字、视频帧分析'},
+        {t:'vi',s:'构建"竞品智能体"：自动抓取竞品动态→多源分析→生成洞察报告→推送决策建议'},
+        {t:'vi',s:'搭建AI辅助经营决策系统：多维数据实时汇聚→趋势预测→策略推荐'},
+      ]},
+    ],
+  },
   { dept:'产品部', cur:null, tgt:null,
-    note:'待完成完整访谈评估后设定里程碑',
+    note:'待完成完整访谈评估后设定里程碑；杨茜团队当前 Lv.4 可作为基准参考',
     milestones:[] },
-  { dept:'人事部', cur:1, tgt:5,
-    note:'核心需求为数据报表自动化和模板化输出，Lv.5可覆盖绝大部分场景',
+  { dept:'人事部', cur:1, tgt:7,
+    note:'从基础问答出发，经过文件处理达到核心需求覆盖（Lv.5），进一步向数据分析和自动化脚本进阶',
     milestones:[
       { from:1, to:3, label:'入门聊天 → 国际大模型对话', skills:[
         {t:'sk',s:'学习Prompt三要素：角色设定 + 任务拆解 + 输出格式要求'},
@@ -241,10 +262,24 @@ const ROADMAPS = [
         {t:'ac',s:'用AI整合店经理全档案：多数据源→按Skill规则自动填表'},
         {t:'ac',s:'用AI批量生成贺卡：同模板替换姓名和照片'},
       ]},
+      { from:5, to:6, label:'国际AI介入工作 → 深度数据分析', skills:[
+        {t:'sk',s:'学习让AI做交叉分析：多维度筛选+透视表+趋势对比'},
+        {t:'sk',s:'掌握数据可视化指令：告诉AI生成图表并解读关键发现'},
+        {t:'ac',s:'用AI分析员工离职预警：考勤异常+绩效波动+入职时长→风险评分'},
+        {t:'ac',s:'用AI做人力成本分析：各区门店人力配置→人效比对→优化建议'},
+        {t:'ac',s:'用AI做订阅号文章数据复盘：阅读量、互动率→内容策略优化'},
+      ]},
+      { from:6, to:7, label:'深度数据分析 → AI辅助编程', skills:[
+        {t:'sk',s:'理解"让AI写代码为你工作"的思路：描述需求→AI生成脚本→测试→部署'},
+        {t:'sk',s:'学习基础Python/VBA脚本验证：能看懂AI生成的代码逻辑并判断对错'},
+        {t:'vi',s:'让AI编写人效看板自动刷新脚本：定时从BI取数→计算→异常标红→推送'},
+        {t:'vi',s:'让AI开发店经理档案自动更新工具：多系统API对接→汇总→校验→输出'},
+        {t:'vi',s:'搭建AI辅助招聘筛选流：简历解析→条件匹配→排序推荐→一键通知'},
+      ]},
     ],
   },
-  { dept:'财务部', cur:1.5, tgt:5,
-    note:'核心工作为报表整理和格式化输出，Lv.5足以覆盖日常场景',
+  { dept:'财务部', cur:1.5, tgt:7,
+    note:'从基础报表处理出发，经过AI文件处理覆盖日常需求（Lv.5），向数据建模和自动化脚本进阶',
     milestones:[
       { from:1.5, to:3, label:'入门聊天 → 国际大模型对话', skills:[
         {t:'sk',s:'学习Prompt三要素：角色设定 + 任务拆解 + 输出格式要求'},
@@ -260,10 +295,24 @@ const ROADMAPS = [
         {t:'ac',s:'用AI处理月度经营分析：多系统数据→汇总→校验→报告输出'},
         {t:'ac',s:'让AI生成带公式的Excel报表（检查几次确认后可信赖产出）'},
       ]},
+      { from:5, to:6, label:'国际AI介入工作 → 深度数据分析', skills:[
+        {t:'sk',s:'学习让AI做财务建模：收入预测、成本结构分析、敏感性测试'},
+        {t:'sk',s:'掌握数据清洗规范：缺失值处理、异常值识别、口径统一'},
+        {t:'ac',s:'用AI构建产品盲测分析模型：历史成本+销售数据→定价建议→毛利模拟'},
+        {t:'ac',s:'用AI做门店经营健康度评分：多维财务指标→综合评分→排名→预警'},
+        {t:'ac',s:'用AI自动生成财务异常分析报告：同比环比波动→自动归因→建议措施'},
+      ]},
+      { from:6, to:7, label:'深度数据分析 → AI辅助编程', skills:[
+        {t:'sk',s:'理解"让AI写代码为你工作"的思路：描述需求→AI生成脚本→测试→上线'},
+        {t:'sk',s:'学习基础脚本验证能力：看懂AI生成的Python/VBA代码并判断逻辑正确性'},
+        {t:'vi',s:'让AI编写多系统报表自动刷新脚本：定时取数→合并→校验→输出到指定模板'},
+        {t:'vi',s:'搭建AI辅助预算追踪系统：实际vs预算自动对比→偏差分析→管理层简报生成'},
+        {t:'vi',s:'让AI开发费用报销智能审核：规则校验→异常标记→审批流自动推进'},
+      ]},
     ],
   },
-  { dept:'市场部', cur:2.3, tgt:4,
-    note:'需求偏向内容、设计和运维操作，Lv.4即可满足核心提效；申江团队已达Lv.5可作内部标杆',
+  { dept:'市场部', cur:2.3, tgt:7,
+    note:'李妍妍&陈婧仪团队从入门出发，申江团队已达Lv.5可做内部标杆；全部门向数据分析和自动化进阶',
     milestones:[
       { from:1, to:3, label:'入门聊天 → 国际大模型对话（李妍妍 & 陈婧仪团队）', skills:[
         {t:'sk',s:'学习Prompt三要素：角色设定 + 任务拆解 + 输出格式要求'},
@@ -272,12 +321,27 @@ const ROADMAPS = [
         {t:'ac',s:'开通GPT企业账号，体验AI改写文案和优化短视频脚本'},
         {t:'ac',s:'将每小时手动拉取售卖数据的流程改为AI辅助整理'},
       ]},
-      { from:3, to:4, label:'国际大模型对话 → 国产AI介入工作', skills:[
+      { from:3, to:5, label:'国际大模型对话 → 国际AI介入工作', skills:[
         {t:'sk',s:'学习让AI执行模板化批量任务：同模板换参数批量输出'},
         {t:'sk',s:'理解AI操作第三方平台的限制：API权限、封号风险、人工兜底'},
+        {t:'sk',s:'掌握Skill文档编写：把批量运营操作写成标准化规则'},
         {t:'ac',s:'用AI批量生成门店宣传图：同模板替换店名'},
         {t:'ac',s:'用AI辅助套餐配置复核：按规则校验荤素搭配、价格、日期'},
         {t:'ac',s:'用AI辅助企微员工异动运维：入离职→档案调整→通知推送'},
+      ]},
+      { from:5, to:6, label:'国际AI介入工作 → 深度数据分析', skills:[
+        {t:'sk',s:'学习让AI做投放效果分析：ROI计算、渠道对比、归因模型'},
+        {t:'sk',s:'掌握A/B测试数据解读：让AI自动计算统计显著性并给出结论'},
+        {t:'ac',s:'用AI分析抖音投放数据：播放量+互动率+转化率→优化脚本策略'},
+        {t:'ac',s:'用AI做售卖数据多维分析：时段×门店×品类→热销趋势→补货建议'},
+        {t:'ac',s:'用AI做私域运营效果复盘：触达率+转化率+留存→策略调整建议'},
+      ]},
+      { from:6, to:7, label:'深度数据分析 → AI辅助编程', skills:[
+        {t:'sk',s:'理解"让AI写代码为你工作"的思路：描述需求→AI生成脚本→测试→部署'},
+        {t:'sk',s:'学习基础脚本验证能力：能看懂AI生成的代码并判断运行结果是否正确'},
+        {t:'vi',s:'让AI编写售卖数据自动抓取脚本：定时从美团/抖音/小程序API取数→汇总→推送'},
+        {t:'vi',s:'搭建AI辅助商品上下架自动化：规则配置→批量执行→异常回退→结果通知'},
+        {t:'vi',s:'让AI开发套餐智能配置系统：历史销售数据→AI推荐搭配→自动校验→一键上架'},
       ]},
     ],
   },
@@ -341,14 +405,17 @@ function filt(key,val,btn){
   btn.classList.add('active');
 }
 
-// Mini scale bar for each dept
-function miniScale(score){
-  if(score===null) return '';
-  const pct=(score/10*100).toFixed(1);
-  let h='<div class="mini-scale">';
+// Mini scale bar with level names for each dept
+function miniScale(score, partialScore){
+  const displayScore = score !== null ? score : partialScore;
+  if(displayScore === undefined || displayScore === null) return '';
+  const pct=(displayScore/10*100).toFixed(1);
+  let h='<div class="mini-scale-wrap"><div class="mini-scale">';
   LEVELS.forEach(lv=>{h+=`<div class="mini-seg" style="background:${lv.color}"></div>`;});
-  h+=`<div class="mini-marker" style="left:${pct}%"><span class="mini-marker-label">Lv.${score}</span></div>`;
-  h+='</div>';
+  h+=`<div class="mini-marker" style="left:${pct}%"><span class="mini-marker-label">${score!==null?'Lv.'+displayScore:'已知Lv.'+displayScore}</span></div>`;
+  h+='</div><div class="mini-names">';
+  LEVELS.forEach(lv=>{h+=`<span>${lv.name}</span>`;});
+  h+='</div></div>';
   return h;
 }
 
@@ -358,20 +425,21 @@ function renderCards(){
   g.innerHTML=list.map(dept=>{
     const rm=ROADMAPS.find(r=>r.dept===dept.name);
     const hasS=dept.score!==null;
-    const pct=hasS?(dept.score/10*100).toFixed(1):'0';
-    const c=clr(dept.score);
+    const displayScore = hasS ? dept.score : dept.partialScore;
+    const pct=displayScore?(displayScore/10*100).toFixed(1):'0';
+    const c=hasS?clr(dept.score):(dept.partialScore?clr(dept.partialScore):'var(--gray-300)');
     let h=`<div class="dept-card">`;
     // header
     h+=`<div class="dept-header"><div class="dept-name">
       <div class="dept-icon" style="background:${dept.color}18;color:${dept.color}">${dept.icon}</div>
-      <div><h3>${dept.name}</h3><span class="level-tag" style="background:${c}18;color:${c}">${hasS?'Lv.'+dept.score:'待评估'} ${dept.levelName}</span></div>
+      <div><h3>${dept.name}</h3><span class="level-tag" style="background:${c}18;color:${c}">${hasS?'Lv.'+dept.score:(dept.partialScore?'部分评估 Lv.'+dept.partialScore:'待评估')} ${dept.levelName}</span></div>
     </div>
-    <div class="score-badge" style="color:${c}">${hasS?dept.score:'—'}<span class="score-sub">${hasS?'/10':''}</span></div></div>`;
+    <div class="score-badge" style="color:${c}">${hasS?dept.score:(dept.partialScore?'~'+dept.partialScore:'—')}<span class="score-sub">${displayScore?'/10':''}</span></div></div>`;
     // bar
-    h+=`<div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:${c}"></div></div>`;
+    h+=`<div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:${c}${!hasS&&dept.partialScore?';opacity:.5':''}"></div></div>`;
     h+=`<div class="score-bar-labels"><span>0</span><span>5</span><span>10</span></div>`;
-    // mini scale
-    h+=miniScale(dept.score);
+    // mini scale with names
+    h+=miniScale(dept.score, dept.partialScore);
     // evidence
     h+=`<div class="toggle-wrap"><button class="toggle-btn" onclick="tog(this)">诊断依据（${dept.evidence.length}项）</button><div class="toggle-body"><ul class="evidence-list">`;
     dept.evidence.forEach(e=>{h+=`<li>${e}</li>`;});
@@ -389,6 +457,7 @@ function renderCards(){
     if(rm){
       const hasTgt=rm.tgt!==null, hasCur=rm.cur!==null;
       const tgtC=hasTgt?clr(rm.tgt):'var(--gray-400)';
+      const curC=hasCur?clr(rm.cur):c;
       const curPct=hasCur?(rm.cur/10*100).toFixed(1):'0';
       const tgtPct=hasTgt?(rm.tgt/10*100).toFixed(1):'0';
       h+=`<div class="roadmap"><div class="roadmap-head"><span class="label">🚀 提升路径</span>`;
@@ -398,10 +467,10 @@ function renderCards(){
       if(hasCur&&hasTgt){
         h+=`<div class="journey-bar"><div class="journey-track">
           <div class="journey-target-fill" style="width:${tgtPct}%;background:${tgtC}"></div>
-          <div class="journey-fill" style="width:${curPct}%;background:${c}"></div>
-          <div class="journey-dot" style="left:${curPct}%;background:${c}"></div>
+          <div class="journey-fill" style="width:${curPct}%;background:${curC}"></div>
+          <div class="journey-dot" style="left:${curPct}%;background:${curC}"></div>
           <div class="journey-dot" style="left:${tgtPct}%;background:${tgtC};border-style:dashed;opacity:.7"></div>
-          <span class="journey-label" style="left:${curPct}%;color:${c}">当前</span>
+          <span class="journey-label" style="left:${curPct}%;color:${curC}">当前</span>
           <span class="journey-label" style="left:${tgtPct}%;color:${tgtC}">目标</span>
         </div></div><div class="journey-end-labels"><span>Lv.0</span><span>Lv.5</span><span>Lv.10</span></div>`;
       }
@@ -409,7 +478,8 @@ function renderCards(){
         h+=`<div class="toggle-wrap" style="margin-top:12px"><button class="toggle-btn" onclick="tog(this)">分阶段里程碑（${rm.milestones.length}阶段）</button><div class="toggle-body"><div class="milestones">`;
         rm.milestones.forEach(ms=>{
           const fromLv=Math.floor(ms.from),toLv=ms.to;
-          const done=rm.cur>=toLv, now=rm.cur>=fromLv&&rm.cur<toLv;
+          const curLv=rm.cur||0;
+          const done=curLv>=toLv, now=curLv>=fromLv&&curLv<toLv;
           const dc=done?'done':(now?'now':'later');
           const dotC=done?'var(--success)':(now?'var(--primary)':'var(--gray-300)');
           const msC=clr(toLv);
@@ -418,7 +488,10 @@ function renderCards(){
           h+=`<div class="ms-status">${done?'✅ 已达成':(now?'🔄 当前阶段':'⏳ 待启动')}</div>`;
           h+=`<div class="ms-items">`;
           ms.skills.forEach(s=>{
-            h+=`<div class="ms-item ${s.t==='sk'?'skill':'action'}"><span class="ms-tag ${s.t}">${s.t==='sk'?'能力':'行动'}</span>${s.s}</div>`;
+            const cls=s.t==='sk'?'skill':(s.t==='ac'?'action':'vision');
+            const tag=s.t==='sk'?'能力':(s.t==='ac'?'行动':'愿景');
+            const tagCls=s.t==='vi'?'vi':s.t;
+            h+=`<div class="ms-item ${cls}"><span class="ms-tag ${tagCls}">${tag}</span>${s.s}</div>`;
           });
           h+=`</div></div>`;
         });
