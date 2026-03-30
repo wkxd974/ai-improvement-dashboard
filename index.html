@@ -73,6 +73,15 @@
   .detail-item .label { color:var(--gray-500); }
   .detail-item .value { color:var(--gray-700); font-weight:500; }
 
+  /* Stage summary bars */
+  .stage-summary { margin-top:16px; padding-top:16px; border-top:1px solid var(--gray-200); display:flex; flex-direction:column; gap:8px; }
+  .stage-summary-row { display:flex; align-items:center; gap:10px; font-size:12px; }
+  .stage-summary-label { min-width:140px; color:var(--gray-700); font-weight:500; display:flex; align-items:center; gap:6px; }
+  .stage-summary-label .snum { display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:5px; background:var(--primary); color:#fff; font-size:10px; font-weight:700; flex-shrink:0; }
+  .stage-summary-bar { flex:1; height:6px; background:var(--gray-200); border-radius:3px; overflow:hidden; }
+  .stage-summary-fill { height:100%; border-radius:3px; transition:width .4s; }
+  .stage-summary-pct { min-width:36px; text-align:right; color:var(--gray-500); font-weight:500; }
+
   .expand-btn { width:100%; padding:8px; border:none; background:var(--gray-100); border-radius:8px; cursor:pointer; font-size:13px; color:var(--gray-500); margin-top:12px; transition:background .2s; }
   .expand-btn:hover { background:var(--gray-200); }
 
@@ -330,13 +339,110 @@ function toggleSubStatus(dept, stageName, subName) {
   }
 
   updateSaveBar();
-  render();
+  // 局部更新而非全量 render，避免折叠收起
+  updateSubStepInPlace(dept, stageName, subName, newStatus, newStatus !== origStatus);
+  updateStageGroupHeader(dept, stageName);
+  updateStats();
 }
 
 function updateSaveBar() {
   const count = Object.keys(pendingChanges).length;
   document.getElementById('changeCount').textContent = count;
   document.getElementById('saveBar').classList.toggle('show', count > 0);
+}
+
+// ============ 局部更新（不重新渲染整个页面）============
+function updateSubStepInPlace(dept, stageName, subName, newStatus, isPending) {
+  // 找到对应的 sub-step 元素
+  const allToggles = document.querySelectorAll('.sub-step-toggle');
+  allToggles.forEach(btn => {
+    if (btn.getAttribute('onclick').includes(escAttr(dept)) &&
+        btn.getAttribute('onclick').includes(escAttr(stageName)) &&
+        btn.getAttribute('onclick').includes(escAttr(subName))) {
+      const subStep = btn.closest('.sub-step');
+      if (!subStep) return;
+
+      // 更新 check icon
+      const check = subStep.querySelector('.sub-step-check');
+      check.className = 'sub-step-check ' + (newStatus === '已完成' ? 'done' : newStatus === '进行中' ? 'wip' : '');
+      check.textContent = newStatus === '已完成' ? '✓' : newStatus === '进行中' ? '◐' : '';
+
+      // 更新 status tag
+      const statusTag = subStep.querySelector('.sub-step-status');
+      statusTag.className = 'sub-step-status ' + (newStatus === '已完成' ? 'status-done' : newStatus === '进行中' ? 'status-wip' : 'status-todo');
+      statusTag.textContent = newStatus;
+
+      // 更新 pending 高亮
+      subStep.style.outline = isPending ? '2px solid var(--warning)' : '';
+      subStep.style.outlineOffset = isPending ? '-2px' : '';
+      subStep.style.borderRadius = isPending ? '4px' : '';
+    }
+  });
+}
+
+function escAttr(s) { return s.replace(/'/g, "\\'"); }
+
+function updateStageGroupHeader(dept, stageName) {
+  // 重新计算该阶段的 mini dots 和状态
+  const stages = DATA.config.stages || [];
+  const subStages = DATA.subStages || [];
+  const subStageProgress = DATA.subStageProgress || [];
+
+  const defs = subStages.filter(ss => ss.stageName === stageName);
+  const subs = defs.map(d => {
+    const prog = subStageProgress.find(p => p.dept === dept && p.stageName === stageName && p.subName === d.subName);
+    const key = `${dept}|${stageName}|${d.subName}`;
+    return { status: pendingChanges[key] || (prog ? prog.status : '未开始') };
+  });
+
+  const doneCount = subs.filter(s => s.status === '已完成').length;
+  const wipCount = subs.filter(s => s.status === '进行中').length;
+  let stageSt = '未开始';
+  if (doneCount === subs.length && subs.length > 0) stageSt = '已完成';
+  else if (doneCount > 0 || wipCount > 0) stageSt = '进行中';
+
+  // 找到对应的 stage-group-header
+  document.querySelectorAll('.stage-group-header').forEach(header => {
+    const title = header.querySelector('.stage-group-title');
+    if (!title) return;
+    if (title.textContent.includes(stageName)) {
+      const card = header.closest('.dept-card');
+      if (!card) return;
+      const cardName = card.querySelector('.dept-name');
+      if (!cardName || !cardName.textContent.includes(dept)) return;
+
+      // 更新 mini dots
+      const miniProgress = header.querySelector('.stage-mini-progress');
+      if (miniProgress) {
+        miniProgress.innerHTML = subs.map(sub => {
+          const dc = sub.status === '已完成' ? 'done' : sub.status === '进行中' ? 'wip' : '';
+          return `<div class="stage-mini-dot ${dc}"></div>`;
+        }).join('');
+      }
+
+      // 更新 count
+      const countSpan = title.querySelector('span');
+      if (countSpan) countSpan.textContent = `(${doneCount}/${subs.length})`;
+
+      // 更新 status tag
+      const tag = header.querySelector('.status-tag');
+      if (tag) {
+        tag.className = 'status-tag ' + (stageSt === '已完成' ? 'status-done' : stageSt === '进行中' ? 'status-wip' : 'status-todo');
+        tag.textContent = stageSt;
+      }
+    }
+  });
+}
+
+function updateStats() {
+  if (!DATA) return;
+  let subComplete = 0;
+  (DATA.subStageProgress || []).forEach(sp => {
+    const key = `${sp.dept}|${sp.stageName}|${sp.subName}`;
+    const effectiveStatus = pendingChanges[key] || sp.status;
+    if (effectiveStatus === '已完成') subComplete++;
+  });
+  document.getElementById('statSubComplete').textContent = subComplete;
 }
 
 function cancelChanges() {
@@ -542,6 +648,24 @@ function renderFilter(containerId, items, onChange) {
   });
 }
 
+function renderStageSummary(dept, stages, deptSubs) {
+  const STAGE_COLORS = ['#2563eb','#059669','#7c3aed','#d97706','#0891b2'];
+  const rows = stages.map((stageName, si) => {
+    const subs = deptSubs[stageName] || [];
+    const total = subs.length;
+    const done = subs.filter(s => s.status === '已完成').length;
+    const wip = subs.filter(s => s.status === '进行中').length;
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+    const color = STAGE_COLORS[si % STAGE_COLORS.length];
+    return `<div class="stage-summary-row">
+      <div class="stage-summary-label"><span class="snum" style="background:${color}">${si+1}</span>${stageName}</div>
+      <div class="stage-summary-bar"><div class="stage-summary-fill" style="width:${pct}%;background:${color}"></div></div>
+      <div class="stage-summary-pct" style="color:${pct===100?'var(--success)':'var(--gray-500)'}">${done}/${total}</div>
+    </div>`;
+  }).join('');
+  return `<div class="stage-summary">${rows}</div>`;
+}
+
 function renderDepts(departments, stages, filter, subLookup) {
   const grid = document.getElementById('deptGrid');
   const depts = filter ? departments.filter(d => d.name === filter) : departments;
@@ -611,6 +735,7 @@ function renderDepts(departments, stages, filter, subLookup) {
       <div class="dept-details"><div class="detail-item"><span class="label">负责人:</span><span class="value">${dept.owner||'--'}</span></div>
       <div class="detail-item"><span class="label">更新日期:</span><span class="value">${dept.updated||'--'}</span></div>
       <div class="detail-item" style="grid-column:1/-1"><span class="label">当前情况:</span><span class="value">${dept.note||'--'}</span></div></div>
+      ${renderStageSummary(dept, stages, deptSubs)}
       <button class="expand-btn" onclick="toggleDetail(this)">展开阶段详情 ▼</button>
       <div class="stage-detail-panel">${stageGroupsHtml}</div>
     </div>`;
