@@ -170,12 +170,50 @@
   .tooltip { position:absolute; background:var(--gray-800); color:#fff; padding:8px 14px; border-radius:8px; font-size:14px; line-height:1.5; z-index:100; pointer-events:none; white-space:nowrap; box-shadow:var(--shadow-md); }
   .tooltip::after { content:''; position:absolute; bottom:-5px; left:50%; transform:translateX(-50%); border-left:5px solid transparent; border-right:5px solid transparent; border-top:5px solid var(--gray-800); }
 
+  /* Track tab */
+  .track-mod-btns { display:flex; gap:4px; margin-bottom:18px; background:var(--gray-100); padding:4px; border-radius:10px; width:fit-content; }
+  .track-mod-btn { padding:8px 22px; border-radius:8px; border:none; background:transparent; cursor:pointer; font-size:15px; color:var(--gray-500); font-weight:500; transition:all .2s; }
+  .track-mod-btn.active { background:var(--card); color:var(--primary); box-shadow:var(--shadow); }
+  .track-mod-btn:hover { color:var(--gray-800); }
+  .track-mod { display:none; } .track-mod.active { display:block; }
+
+  .chart-card { background:var(--card); border-radius:var(--radius); padding:24px 28px; box-shadow:var(--shadow); margin-bottom:18px; }
+  .chart-card-head { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .chart-card-head h3 { font-size:20px; font-weight:600; color:var(--gray-900); }
+  .chart-card-head .ch-tag { font-size:14px; padding:3px 12px; border-radius:20px; font-weight:500; }
+  .chart-svg-wrap { width:100%; overflow:hidden; }
+  .chart-legend { display:flex; gap:20px; margin-top:12px; font-size:13px; color:var(--gray-500); }
+  .chart-legend span { display:flex; align-items:center; gap:6px; }
+  .chart-legend .dot { width:10px; height:10px; border-radius:50%; }
+  .chart-legend .dash { width:20px; height:2px; border-top:2px dashed; }
+  .chart-empty { text-align:center; padding:30px; color:var(--gray-400); font-size:15px; }
+
+  .log-card { background:var(--card); border-radius:var(--radius); padding:24px 28px; box-shadow:var(--shadow); margin-bottom:18px; }
+  .log-card h3 { font-size:20px; font-weight:600; color:var(--gray-900); margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+  .log-timeline { position:relative; padding-left:24px; }
+  .log-item { position:relative; padding:12px 18px; margin-bottom:14px; background:var(--gray-50); border-radius:10px; border-left:3px solid var(--gray-300); }
+  .log-item::before { content:''; position:absolute; left:-27px; top:18px; width:12px; height:12px; border-radius:50%; background:var(--primary); border:2px solid #fff; box-shadow:0 0 0 2px var(--primary); }
+  .log-date { font-size:13px; color:var(--gray-400); font-weight:500; margin-bottom:4px; }
+  .log-dept { font-size:16px; font-weight:600; color:var(--gray-800); margin-bottom:4px; }
+  .log-text { font-size:15px; color:var(--gray-600); line-height:1.6; }
+  .log-next { display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--primary); margin-top:6px; padding:2px 10px; background:var(--primary-light); border-radius:5px; }
+
+  .freq-card { background:var(--card); border-radius:var(--radius); padding:24px 28px; box-shadow:var(--shadow); margin-bottom:18px; }
+  .freq-card h3 { font-size:20px; font-weight:600; color:var(--gray-900); margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+  .freq-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; }
+  .freq-item { padding:14px 18px; background:var(--gray-50); border-radius:10px; display:flex; align-items:center; gap:14px; }
+  .freq-icon { width:42px; height:42px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .freq-info h4 { font-size:16px; font-weight:600; color:var(--gray-800); }
+  .freq-info p { font-size:14px; color:var(--gray-500); }
+  .freq-info .freq-count { font-size:22px; font-weight:700; margin-top:2px; }
+
   @media(max-width:768px){
     .container { padding:16px 12px; }
     .header h1 { font-size:24px; }
     .dept-card { padding:18px; }
     .scale-detail-grid { grid-template-columns:1fr; }
     .plan-grid { grid-template-columns:1fr; }
+    .freq-grid { grid-template-columns:1fr; }
   }
 </style>
 </head>
@@ -189,6 +227,7 @@
   <div class="tabs">
     <button class="tab active" onclick="switchTab('diag')">能力诊断</button>
     <button class="tab" onclick="switchTab('reqs')">部门需求</button>
+    <button class="tab" onclick="switchTab('track')">进度追踪</button>
   </div>
   <div id="tab-diag" class="tab-content active">
     <div class="scale-wrap" id="scaleWrap"></div>
@@ -198,6 +237,19 @@
   <div id="tab-reqs" class="tab-content">
     <div class="filter-bar" id="reqFilterBar"></div>
     <div id="reqWrap"></div>
+  </div>
+  <div id="tab-track" class="tab-content">
+    <div class="track-mod-btns">
+      <button class="track-mod-btn active" onclick="switchTrackMod('chart')">📈 爬山图</button>
+      <button class="track-mod-btn" onclick="switchTrackMod('log')">📋 日志与进度</button>
+    </div>
+    <div id="mod-chart" class="track-mod active">
+      <div class="filter-bar" id="trackFilterBar"></div>
+      <div id="chartWrap"></div>
+    </div>
+    <div id="mod-log" class="track-mod">
+      <div id="logWrap"></div>
+    </div>
   </div>
 </div>
 <div class="tooltip" id="tooltip" style="display:none;"></div>
@@ -280,7 +332,6 @@ const ROADMAPS=[
         {t:'ac',s:'搭建数据质量监控流：异常值自动检测→告警→日志记录'},
       ]},
       { from:8,to:9,label:'自动化工作流 → 多模态与智能体',skills:[
-        {t:'sk',s:'理解Agent架构：规划→执行→反馈→迭代的自主决策链路'},
         {t:'sk',s:'掌握多模态输入处理：图片识别、语音转文字、视频帧分析'},
         {t:'vi',s:'构建"竞品智能体"：自动抓取竞品动态→多源分析→生成洞察报告→推送决策建议'},
         {t:'vi',s:'搭建AI辅助经营决策系统：多维数据实时汇聚→趋势预测→策略推荐'},
@@ -309,7 +360,6 @@ const ROADMAPS=[
       ]},
       { from:5,to:7,label:'国际AI介入工作 → AI辅助编程',skills:[
         {t:'sk',s:'学习让AI做交叉分析：多维度筛选+透视表+趋势对比'},
-        {t:'sk',s:'理解"让AI写代码为你工作"的思路：描述需求→AI生成脚本→测试→部署'},
         {t:'ac',s:'用AI分析员工离职预警：考勤异常+绩效波动+入职时长→风险评分'},
         {t:'ac',s:'用AI做人力成本分析：各区门店人力配置→人效比对→优化建议'},
         {t:'ac',s:'让AI编写人效看板自动刷新脚本：定时从BI取数→计算→异常标红→推送'},
@@ -341,14 +391,12 @@ const ROADMAPS=[
       ]},
       { from:5,to:7,label:'国际AI介入工作 → AI辅助编程',skills:[
         {t:'sk',s:'学习让AI做财务建模：收入预测、成本结构分析、敏感性测试'},
-        {t:'sk',s:'理解"让AI写代码为你工作"的思路：描述需求→AI生成脚本→测试→上线'},
         {t:'ac',s:'用AI构建产品盲测分析模型：历史成本+销售数据→定价建议→毛利模拟'},
         {t:'ac',s:'用AI做门店经营健康度评分：多维财务指标→综合评分→排名→预警'},
         {t:'ac',s:'让AI生成财务异常分析报告：同比环比波动→自动归因→建议措施'},
       ]},
       { from:7,to:9,label:'AI辅助编程 → 多模态与智能体',skills:[
         {t:'sk',s:'掌握工作流串联：多个AI脚本→定时触发→异常处理→结果通知'},
-        {t:'sk',s:'理解多模态输入：发票图片识别→结构化数据→自动入账'},
         {t:'vi',s:'搭建多系统报表全自动刷新流：定时取数→AI合并校验→输出到指定模板→邮件分发'},
         {t:'vi',s:'搭建AI辅助预算追踪系统：实际vs预算自动对比→偏差分析→管理层简报'},
         {t:'vi',s:'搭建费用报销智能审核流：发票OCR→规则校验→异常标记→审批流自动推进'},
@@ -366,7 +414,6 @@ const ROADMAPS=[
       ]},
       { from:3,to:5,label:'国际大模型对话 → 国际AI介入工作',skills:[
         {t:'sk',s:'学习让AI执行模板化批量任务：同模板换参数批量输出'},
-        {t:'sk',s:'理解AI操作第三方平台的限制：API权限、封号风险、人工兜底'},
         {t:'sk',s:'掌握Skill文档编写：把批量运营操作写成标准化规则'},
         {t:'ac',s:'用AI批量生成门店宣传图：同模板替换店名'},
         {t:'ac',s:'用AI辅助套餐配置复核：按规则校验荤素搭配、价格、日期'},
@@ -374,7 +421,6 @@ const ROADMAPS=[
       ]},
       { from:5,to:7,label:'国际AI介入工作 → AI辅助编程',skills:[
         {t:'sk',s:'学习让AI做投放效果分析：ROI计算、渠道对比、归因模型'},
-        {t:'sk',s:'理解"让AI写代码为你工作"的思路：描述需求→AI生成脚本→测试→部署'},
         {t:'ac',s:'用AI分析抖音投放数据：播放量+互动率+转化率→优化脚本策略'},
         {t:'ac',s:'用AI做售卖数据多维分析：时段×门店×品类→热销趋势→补货建议'},
         {t:'vi',s:'让AI编写售卖数据自动抓取脚本：定时从美团/抖音/小程序API取数→汇总→推送'},
@@ -408,7 +454,38 @@ const REQS=[
   ]},
 ];
 
-let deptFilter='all',reqFilter='all';
+/* ── 进度追踪数据 ── */
+const PROGRESS_DATA=[
+  { dept:'商业分析部', target:9, records:[
+    {date:'2026-03-30',score:7.5,note:'初始评估'},
+  ]},
+  { dept:'市场部', target:7, records:[
+    {date:'2026-03-30',score:2,note:'初始评估'},
+  ]},
+  { dept:'人事部', target:8, records:[
+    {date:'2026-03-30',score:1,note:'初始评估'},
+  ]},
+  { dept:'财务部', target:9, records:[
+    {date:'2026-03-30',score:2,note:'初始评估'},
+  ]},
+  { dept:'产品部', target:null, records:[
+    {date:'2026-03-30',score:4,note:'杨茜团队初步评估'},
+  ]},
+];
+
+const COMM_LOGS=[
+  {date:'2026-03-30',dept:'市场部',icon:'📢',color:'#9a8a8a',
+   summary:'完成市场部AI使用能力诊断访谈。覆盖李妍妍团队、陈婧仪团队、申江团队，了解各团队AI使用现状、工具偏好及业务痛点，形成初步评分与需求清单。',
+   next:'根据诊断结果制定各团队分级提升方案'},
+  {date:'2026-03-30',dept:'人事部',icon:'👥',color:'#7a8a9e',
+   summary:'完成人事部AI使用能力诊断访谈。了解人效看板、店经理档案、贺卡生成等核心场景的现有操作方式，确认部门整体处于入门阶段，识别高优自动化需求。',
+   next:'协助开通GPT企业账号，启动入门培训'},
+  {date:'2026-03-30',dept:'财务部',icon:'📊',color:'#8a9a98',
+   summary:'完成财务部AI使用能力诊断访谈。梳理经营分析报告、多系统报表刷新、产品盲测分析等场景，确认部门已有国产大模型使用基础，评估提升空间。',
+   next:'引导使用国际大模型处理报表合并与校验任务'},
+];
+
+let deptFilter='all',reqFilter='all',trackFilter='all';
 function clr(s){return s===null?'var(--gray-300)':LEVELS[Math.min(Math.round(s),10)].color;}
 
 function renderScale(){
@@ -424,7 +501,7 @@ function renderScale(){
 }
 function togScale(b){const d=document.getElementById('sdGrid');const c=d.classList.toggle('collapsed');b.textContent=c?'▸ 展开各等级详情':'▾ 收起等级详情';}
 
-const DISPLAY_ORDER=['市场部','人事部','财务部','产品部','商业分析部'];
+const DISPLAY_ORDER=['商业分析部','市场部','人事部','财务部','产品部'];
 function orderedDepts(){return DISPLAY_ORDER.map(n=>DEPARTMENTS.find(d=>d.name===n)).filter(Boolean);}
 
 function renderFilters(id,key){
@@ -600,12 +677,153 @@ function renderReqs(){
 }
 
 function switchTab(id){
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['diag','reqs'][i]===id));
-  ['tab-diag','tab-reqs'].forEach(tid=>document.getElementById(tid).classList.toggle('active',tid==='tab-'+id));
+  const tabs=['diag','reqs','track'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',tabs[i]===id));
+  tabs.forEach(t=>document.getElementById('tab-'+t).classList.toggle('active',t===id));
+  if(id==='track'){renderCharts();renderLogs();}
+}
+function switchTrackMod(mod){
+  document.querySelectorAll('.track-mod-btn').forEach((b,i)=>b.classList.toggle('active',['chart','log'][i]===mod));
+  ['mod-chart','mod-log'].forEach(m=>document.getElementById(m).classList.toggle('active',m==='mod-'+mod));
 }
 function tog(el){el.classList.toggle('open');el.nextElementSibling.classList.toggle('open');}
 function tip(e,t){const p=document.getElementById('tooltip');p.innerHTML=t.replace(/\\n/g,'<br>');p.style.display='block';const r=e.target.getBoundingClientRect();p.style.left=r.left+r.width/2-p.offsetWidth/2+'px';p.style.top=r.top-p.offsetHeight-10+window.scrollY+'px';}
 function untip(){document.getElementById('tooltip').style.display='none';}
+
+/* ── 爬山图渲染 ── */
+function renderCharts(){
+  // filters
+  const fb=document.getElementById('trackFilterBar');
+  let fh=`<button class="filter-btn ${trackFilter==='all'?'active':''}" onclick="filtTrack('all',this)">📋 全部</button>`;
+  orderedDepts().forEach(d=>{fh+=`<button class="filter-btn ${trackFilter===d.name?'active':''}" onclick="filtTrack('${d.name}',this)">${d.icon} ${d.name}</button>`;});
+  fb.innerHTML=fh;
+
+  const w=document.getElementById('chartWrap');
+  const allPD=DISPLAY_ORDER.map(n=>PROGRESS_DATA.find(p=>p.dept===n)).filter(Boolean);
+  const list=trackFilter==='all'?allPD:allPD.filter(p=>p.dept===trackFilter);
+  w.innerHTML=list.map(pd=>{
+    const dept=DEPARTMENTS.find(d=>d.name===pd.dept);
+    const c=dept?dept.color:'var(--gray-400)';
+    const tgtLv=pd.target;
+    let h=`<div class="chart-card">`;
+    h+=`<div class="chart-card-head"><div class="dept-icon" style="background:${c}18;color:${c};width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">${dept?dept.icon:'📁'}</div>`;
+    h+=`<h3>${pd.dept}</h3>`;
+    if(tgtLv!==null) h+=`<span class="ch-tag" style="background:${clr(tgtLv)}18;color:${clr(tgtLv)}">🎯 目标 Lv.${tgtLv}</span>`;
+    h+=`</div>`;
+    h+=renderMountainSVG(pd,c);
+    h+=`<div class="chart-legend"><span><span class="dot" style="background:${c}"></span>实际得分</span>`;
+    if(tgtLv!==null) h+=`<span><span class="dash" style="border-color:${clr(tgtLv)}"></span>目标线 Lv.${tgtLv}</span>`;
+    h+=`</div></div>`;
+    return h;
+  }).join('');
+}
+function filtTrack(val,btn){
+  trackFilter=val;
+  btn.parentElement.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCharts();
+}
+
+function renderMountainSVG(pd,color){
+  const W=800,H=260,PAD={t:30,r:40,b:50,l:50};
+  const cw=W-PAD.l-PAD.r, ch=H-PAD.t-PAD.b;
+  const recs=pd.records;
+  const tgt=pd.target;
+
+  // 如果只有一个数据点，生成一个带未来虚线的起始图
+  let svg=`<div class="chart-svg-wrap"><svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;">`;
+  // 背景网格
+  for(let i=0;i<=10;i+=2){
+    const y=PAD.t+ch-ch*(i/10);
+    svg+=`<line x1="${PAD.l}" y1="${y}" x2="${W-PAD.r}" y2="${y}" stroke="var(--gray-200)" stroke-width="1"/>`;
+    svg+=`<text x="${PAD.l-8}" y="${y+4}" text-anchor="end" fill="var(--gray-400)" font-size="12">Lv.${i}</text>`;
+  }
+  // 目标虚线
+  if(tgt!==null){
+    const ty=PAD.t+ch-ch*(tgt/10);
+    svg+=`<line x1="${PAD.l}" y1="${ty}" x2="${W-PAD.r}" y2="${ty}" stroke="${clr(tgt)}" stroke-width="2" stroke-dasharray="8,4" opacity="0.6"/>`;
+    svg+=`<text x="${W-PAD.r+4}" y="${ty+4}" fill="${clr(tgt)}" font-size="12" font-weight="600">Lv.${tgt}</text>`;
+  }
+
+  if(recs.length===1){
+    // 单点：显示一个大圆点 + 渐变区域暗示未来
+    const score=recs[0].score;
+    const x=PAD.l+cw*0.08;
+    const y=PAD.t+ch-ch*(score/10);
+    // 渐变填充区
+    svg+=`<defs><linearGradient id="grad_${pd.dept.replace(/[^a-z]/gi,'')}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${color}" stop-opacity="0.15"/><stop offset="1" stop-color="${color}" stop-opacity="0.03"/></linearGradient></defs>`;
+    const baseY=PAD.t+ch;
+    // 未来延伸虚线（水平保持当前分数）
+    const futureX=PAD.l+cw*0.92;
+    svg+=`<path d="M${x},${y} L${futureX},${y}" stroke="${color}" stroke-width="2" stroke-dasharray="6,4" opacity="0.3"/>`;
+    // 填充区域
+    svg+=`<path d="M${x},${y} L${futureX},${y} L${futureX},${baseY} L${x},${baseY} Z" fill="url(#grad_${pd.dept.replace(/[^a-z]/gi,'')})" />`;
+    // 实心圆点
+    svg+=`<circle cx="${x}" cy="${y}" r="7" fill="${color}" stroke="#fff" stroke-width="3"/>`;
+    svg+=`<text x="${x}" y="${y-14}" text-anchor="middle" fill="${color}" font-size="14" font-weight="700">Lv.${score}</text>`;
+    // 日期标签
+    svg+=`<text x="${x}" y="${H-10}" text-anchor="middle" fill="var(--gray-400)" font-size="12">${recs[0].date.slice(5)}</text>`;
+    // 未来占位
+    svg+=`<text x="${PAD.l+cw*0.5}" y="${H-10}" text-anchor="middle" fill="var(--gray-300)" font-size="12">← 后续评估数据将在此更新 →</text>`;
+  } else {
+    // 多点：绘制折线面积图
+    const step=cw/(recs.length-1);
+    const pts=recs.map((r,i)=>({x:PAD.l+step*i, y:PAD.t+ch-ch*(r.score/10), s:r.score, d:r.date}));
+    // 渐变
+    svg+=`<defs><linearGradient id="grad_${pd.dept.replace(/[^a-z]/gi,'')}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${color}" stop-opacity="0.2"/><stop offset="1" stop-color="${color}" stop-opacity="0.02"/></linearGradient></defs>`;
+    const baseY=PAD.t+ch;
+    let areaPath=`M${pts[0].x},${pts[0].y}`;
+    pts.slice(1).forEach(p=>{areaPath+=` L${p.x},${p.y}`;});
+    areaPath+=` L${pts[pts.length-1].x},${baseY} L${pts[0].x},${baseY} Z`;
+    svg+=`<path d="${areaPath}" fill="url(#grad_${pd.dept.replace(/[^a-z]/gi,'')})" />`;
+    // 折线
+    let linePath=`M${pts[0].x},${pts[0].y}`;
+    pts.slice(1).forEach(p=>{linePath+=` L${p.x},${p.y}`;});
+    svg+=`<path d="${linePath}" stroke="${color}" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+    // 圆点和标签
+    pts.forEach(p=>{
+      svg+=`<circle cx="${p.x}" cy="${p.y}" r="5" fill="${color}" stroke="#fff" stroke-width="2.5"/>`;
+      svg+=`<text x="${p.x}" y="${p.y-12}" text-anchor="middle" fill="${color}" font-size="13" font-weight="700">Lv.${p.s}</text>`;
+      svg+=`<text x="${p.x}" y="${H-10}" text-anchor="middle" fill="var(--gray-400)" font-size="11">${p.d.slice(5)}</text>`;
+    });
+  }
+  svg+=`</svg></div>`;
+  return svg;
+}
+
+/* ── 日志与进度渲染 ── */
+function renderLogs(){
+  const w=document.getElementById('logWrap');
+  let h='';
+
+  // 沟通频率卡片
+  h+=`<div class="freq-card"><h3>📊 沟通频率总览</h3><div class="freq-grid">`;
+  const deptNames=['市场部','人事部','财务部','产品部'];
+  deptNames.forEach(dn=>{
+    const dept=DEPARTMENTS.find(d=>d.name===dn);
+    const logs=COMM_LOGS.filter(l=>l.dept===dn);
+    const lastDate=logs.length?logs[logs.length-1].date:'尚未沟通';
+    const c=dept?dept.color:'var(--gray-400)';
+    h+=`<div class="freq-item"><div class="freq-icon" style="background:${c}18;color:${c}">${dept?dept.icon:'📁'}</div>`;
+    h+=`<div class="freq-info"><h4>${dn}</h4><p>最近沟通：${lastDate}</p><div class="freq-count" style="color:${c}">${logs.length} 次</div></div></div>`;
+  });
+  h+=`</div></div>`;
+
+  // 沟通日志时间线
+  h+=`<div class="log-card"><h3>📋 沟通日志</h3><div class="log-timeline">`;
+  const sorted=[...COMM_LOGS].sort((a,b)=>b.date.localeCompare(a.date));
+  sorted.forEach(log=>{
+    h+=`<div class="log-item" style="border-left-color:${log.color}">`;
+    h+=`<div class="log-date">${log.date}</div>`;
+    h+=`<div class="log-dept">${log.icon} ${log.dept}</div>`;
+    h+=`<div class="log-text">${log.summary}</div>`;
+    if(log.next) h+=`<div class="log-next">⏭ 下一步：${log.next}</div>`;
+    h+=`</div>`;
+  });
+  if(!sorted.length) h+=`<div class="chart-empty">暂无沟通记录</div>`;
+  h+=`</div></div>`;
+  w.innerHTML=h;
+}
 
 renderScale();
 renderFilters('filterBar','d');
