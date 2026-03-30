@@ -328,7 +328,7 @@ const DEPARTMENTS=[
       {cat:'tip',label:'技巧',items:['开头先说"你是海底捞资深HR专家"，回答质量会明显提升']},
       {cat:'track',label:'追踪',items:['建飞书表格"AI使用日志"：日期、场景、效果评分(1-5)']},
     ]},
-  { name:'国内财务部', icon:'📊', color:'#8a9a98', score:2, levelName:'国产大模型对话',
+  { name:'分析组（国内财务部）', icon:'📊', color:'#8a9a98', score:2, levelName:'国产大模型对话',
     range:{min:1,max:4,minName:'入门聊天',maxName:'国产AI介入工作'},
     evidence:['部分员工使用豆包做基础查询','少数成员已尝试用国产大模型辅助文档处理','核心财务工作仍以传统Excel手工为主','对AI处理敏感财务数据存在顾虑','希望AI能帮助自动化重复性报表刷新工作'],
     teams:null,
@@ -410,7 +410,7 @@ const ROADMAPS=[
         {t:'vi',s:'搭建AI辅助招聘全流程：简历解析→条件匹配→排序推荐→面试安排→通知'},
       ]},
     ]},
-  { dept:'国内财务部', cur:2, tgt:10,
+  { dept:'分析组（国内财务部）', cur:2, tgt:10,
     note:'从国产大模型对话出发，目标是自动化工作流并接近多模态与智能体水平，彻底解放重复性报表工作',
     milestones:[
       { from:2,to:3,label:'国产大模型对话 → 国际大模型对话',skills:[
@@ -479,7 +479,7 @@ const REQS=[
     {name:'订阅号文章初筛',desc:'从1000+篇投稿中按规则筛选合格文章',pri:'mid',ai:'硬指标可AI初筛，主观质量判断仍需人工'},
     {name:'大区数据保底差额',desc:'追踪门店人员数据，部分数据不在BI上',pri:'mid',ai:'需先推动BI接入更多数据源'},
   ]},
-  { dept:'国内财务部',icon:'📊',color:'#8a9a98',items:[
+  { dept:'分析组（国内财务部）',icon:'📊',color:'#8a9a98',items:[
     {name:'经营分析报告自动化',desc:'月度/季度经营数据汇总→生成标准格式报告',pri:'high',ai:'AI擅长数据汇总与格式化输出'},
     {name:'多系统报表刷新',desc:'从不同系统下载数据→合并→校验→输出',pri:'high',ai:'固化流程最适合AI全自动处理'},
     {name:'产品盲测数据分析',desc:'用过往成本与销售数据建立分析模型',pri:'mid',ai:'AI可提供建模思路，需精准提示词'},
@@ -507,7 +507,7 @@ const PROGRESS_DATA=[
   { dept:'人事部', target:9, records:[
     {date:'2026-03-30',score:1,note:'初始评估'},
   ]},
-  { dept:'国内财务部', target:10, records:[
+  { dept:'分析组（国内财务部）', target:10, records:[
     {date:'2026-03-30',score:2,note:'初始评估'},
   ]},
   { dept:'SuperHi财务部', target:null, records:[
@@ -525,7 +525,7 @@ const COMM_LOGS=[
   {date:'2026-03-30',dept:'人事部',icon:'👥',color:'#7a8a9e',
    summary:'完成人事部AI使用能力诊断访谈。了解人效看板、店经理档案、贺卡生成等核心场景的现有操作方式，确认部门整体处于入门阶段，识别高优自动化需求。',
    next:'协助开通GPT企业账号，启动入门培训'},
-  {date:'2026-03-30',dept:'国内财务部',icon:'📊',color:'#8a9a98',
+  {date:'2026-03-30',dept:'分析组（国内财务部）',icon:'📊',color:'#8a9a98',
    summary:'完成财务部AI使用能力诊断访谈。梳理经营分析报告、多系统报表刷新、产品盲测分析等场景，确认部门已有国产大模型使用基础，评估提升空间。',
    next:'引导使用国际大模型处理报表合并与校验任务'},
 ];
@@ -610,7 +610,7 @@ const SUB_DEPTS={
     },
   ],
   '人事部':[],
-  '国内财务部':[],
+  '分析组（国内财务部）':[],
   'SuperHi财务部':[],
 };
 
@@ -673,7 +673,7 @@ function renderSummary(){
   w.innerHTML=h;
 }
 
-const DISPLAY_ORDER=['商业分析部','品牌运营中心','人事部','国内财务部','SuperHi财务部','品控部（产品部）'];
+const DISPLAY_ORDER=['商业分析部','品牌运营中心','人事部','分析组（国内财务部）','SuperHi财务部','品控部（产品部）'];
 function orderedDepts(){return DISPLAY_ORDER.map(n=>DEPARTMENTS.find(d=>d.name===n)).filter(Boolean);}
 
 function renderFilters(id,key){
@@ -1097,7 +1097,7 @@ function renderLogs(){
 
   // 沟通频率卡片
   h+=`<div class="freq-card"><h3>📊 沟通频率总览</h3><div class="freq-grid">`;
-  const deptNames=['品牌运营中心','人事部','国内财务部','SuperHi财务部','品控部（产品部）'];
+  const deptNames=['品牌运营中心','人事部','分析组（国内财务部）','SuperHi财务部','品控部（产品部）'];
   deptNames.forEach(dn=>{
     const dept=DEPARTMENTS.find(d=>d.name===dn);
     const logs=COMM_LOGS.filter(l=>l.dept===dn);
