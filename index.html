@@ -169,6 +169,30 @@
     .admin-btn { position:static; margin-top:12px; justify-content:center; }
   }
 
+  /* Milestone Tooltip */
+  .milestone { cursor:pointer; }
+  .ms-tooltip { display:none; position:absolute; bottom:44px; left:50%; transform:translateX(-50%); background:var(--card); border:1px solid var(--gray-200); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.12); padding:12px 14px; z-index:50; min-width:200px; max-width:280px; text-align:left; }
+  .milestone:hover .ms-tooltip { display:block; }
+  .ms-tooltip::after { content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:6px solid transparent; border-top-color:var(--card); }
+  .ms-tooltip-title { font-size:12px; font-weight:600; color:var(--gray-900); margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid var(--gray-100); }
+  .ms-tooltip-item { display:flex; align-items:center; gap:6px; padding:3px 0; font-size:11px; }
+  .ms-tooltip-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .ms-tooltip-name { flex:1; color:var(--gray-700); }
+  .ms-tooltip-st { font-size:10px; font-weight:500; }
+
+  /* Stat Tooltip */
+  .stat-card { position:relative; cursor:default; }
+  .stat-tooltip { display:none; position:absolute; top:calc(100% + 8px); left:50%; transform:translateX(-50%); background:var(--card); border:1px solid var(--gray-200); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.12); padding:14px 16px; z-index:50; min-width:260px; max-width:360px; white-space:normal; }
+  .stat-card:hover .stat-tooltip { display:block; }
+  .stat-tooltip::before { content:''; position:absolute; bottom:100%; left:50%; transform:translateX(-50%); border:6px solid transparent; border-bottom-color:var(--card); }
+  .stat-tooltip-title { font-size:11px; font-weight:600; color:var(--gray-500); margin-bottom:6px; text-transform:uppercase; letter-spacing:.5px; }
+  .stat-tooltip-row { display:flex; justify-content:space-between; align-items:center; padding:4px 0; font-size:12px; border-bottom:1px solid var(--gray-100); }
+  .stat-tooltip-row:last-child { border-bottom:none; }
+  .stat-tooltip-dept { color:var(--gray-700); font-weight:500; }
+  .stat-tooltip-val { color:var(--primary); font-weight:600; }
+  .stat-tooltip-subs { font-size:10px; color:var(--gray-500); margin-top:2px; display:flex; flex-wrap:wrap; gap:3px; }
+  .stat-tooltip-subs span { background:var(--success-light); color:var(--success); padding:1px 6px; border-radius:8px; }
+
   /* Requirements */
   .req-grid { display:flex; flex-direction:column; gap:16px; }
   .req-dept-section { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
@@ -211,10 +235,10 @@
   </div>
 
   <div class="stats-row" style="grid-template-columns:repeat(4,1fr)">
-    <div class="stat-card"><div class="num" id="statDepts">-</div><div class="label">参与部门</div></div>
-    <div class="stat-card"><div class="num" id="statAvg">-</div><div class="label">平均进度</div></div>
-    <div class="stat-card"><div class="num" id="statSubComplete">-</div><div class="label">已完成子步骤</div></div>
-    <div class="stat-card"><div class="num" id="statReqs">-</div><div class="label">需求总数</div></div>
+    <div class="stat-card"><div class="num" id="statDepts">-</div><div class="label">参与部门</div><div class="stat-tooltip" id="tipDepts"></div></div>
+    <div class="stat-card"><div class="num" id="statAvg">-</div><div class="label">平均进度</div><div class="stat-tooltip" id="tipAvg"></div></div>
+    <div class="stat-card"><div class="num" id="statSubComplete">-</div><div class="label">已完成子步骤</div><div class="stat-tooltip" id="tipSubs"></div></div>
+    <div class="stat-card"><div class="num" id="statReqs">-</div><div class="label">需求总数</div><div class="stat-tooltip" id="tipReqs"></div></div>
   </div>
 
   <div class="tabs">
@@ -636,6 +660,41 @@ function render() {
   document.getElementById('statSubComplete').textContent = subComplete;
   document.getElementById('statReqs').textContent = (DATA.requirements||[]).length;
 
+  // === 统计卡片 hover tooltips ===
+  // 1. 参与部门
+  document.getElementById('tipDepts').innerHTML = '<div class="stat-tooltip-title">各部门当前阶段</div>' +
+    departments.map(d => `<div class="stat-tooltip-row"><span class="stat-tooltip-dept">${d.name}</span><span class="stat-tooltip-val">${d.stage||'--'}</span></div>`).join('');
+
+  // 2. 平均进度
+  document.getElementById('tipAvg').innerHTML = '<div class="stat-tooltip-title">各部门进度</div>' +
+    departments.map(d => `<div class="stat-tooltip-row"><span class="stat-tooltip-dept">${d.name}</span><span class="stat-tooltip-val">${d.progress}%</span></div>`).join('');
+
+  // 3. 已完成子步骤
+  const deptCompletedSubs = {};
+  if (subStageProgress && subStageProgress.length) {
+    subStageProgress.forEach(sp => {
+      const key = `${sp.dept}|${sp.stageName}|${sp.subName}`;
+      const es = pendingChanges[key] || sp.status;
+      if (es === '已完成') {
+        if (!deptCompletedSubs[sp.dept]) deptCompletedSubs[sp.dept] = [];
+        deptCompletedSubs[sp.dept].push(sp.subName);
+      }
+    });
+  }
+  document.getElementById('tipSubs').innerHTML = '<div class="stat-tooltip-title">各部门已完成子步骤</div>' +
+    departments.map(d => {
+      const completed = deptCompletedSubs[d.name] || [];
+      const total = (subStageProgress||[]).filter(sp => sp.dept === d.name).length;
+      return `<div class="stat-tooltip-row" style="flex-direction:column;align-items:flex-start"><div style="display:flex;justify-content:space-between;width:100%"><span class="stat-tooltip-dept">${d.name}</span><span class="stat-tooltip-val">${completed.length}/${total}</span></div>${completed.length ? '<div class="stat-tooltip-subs">'+completed.map(n=>'<span>'+n+'</span>').join('')+'</div>' : ''}</div>`;
+    }).join('');
+
+  // 4. 需求总数
+  const reqs0 = DATA.requirements || [];
+  const reqByDept = {};
+  reqs0.forEach(r => { if (!reqByDept[r.dept]) reqByDept[r.dept] = 0; reqByDept[r.dept]++; });
+  document.getElementById('tipReqs').innerHTML = '<div class="stat-tooltip-title">各部门需求数</div>' +
+    Object.entries(reqByDept).map(([d,n]) => `<div class="stat-tooltip-row"><span class="stat-tooltip-dept">${d}</span><span class="stat-tooltip-val">${n}项</span></div>`).join('');
+
   // Build sub-stage lookup
   const subLookup = {};
   if (subStages && subStages.length) {
@@ -710,15 +769,24 @@ function renderDepts(departments, stages, filter, subLookup) {
     const color = DEPT_COLORS[i % DEPT_COLORS.length];
     const icon = DEPT_ICONS[dept.name] || '📋';
 
+    const deptSubs = subLookup[dept.name] || {};
     const msHtml = stages.map((s, si) => {
       const pct = ((si + 1) / stages.length * 100).toFixed(1);
       const stageKey = Object.keys(dept.stages||{}).find(k => k === s || k.includes(s) || s.includes(k));
       const status = stageKey ? dept.stages[stageKey] : '未开始';
       const dotClass = status === '已完成' ? 'completed' : status === '进行中' ? 'current' : '';
-      return `<div class="milestone" style="left:${pct}%"><div class="dot ${dotClass}"></div><div class="name">${s}</div></div>`;
+      // Tooltip content
+      const stageSubs = deptSubs[s] || [];
+      const tooltipItems = stageSubs.map(sub => {
+        const dotColor = sub.status === '已完成' ? 'var(--success)' : sub.status === '进行中' ? 'var(--warning)' : 'var(--gray-300)';
+        const stColor = sub.status === '已完成' ? 'var(--success)' : sub.status === '进行中' ? 'var(--warning)' : 'var(--gray-500)';
+        return `<div class="ms-tooltip-item"><div class="ms-tooltip-dot" style="background:${dotColor}"></div><span class="ms-tooltip-name">${sub.subName}</span><span class="ms-tooltip-st" style="color:${stColor}">${sub.status}</span></div>`;
+      }).join('');
+      const doneN = stageSubs.filter(x=>x.status==='已完成').length;
+      const tooltipHtml = stageSubs.length ? `<div class="ms-tooltip"><div class="ms-tooltip-title">${s}（${doneN}/${stageSubs.length}）</div>${tooltipItems}</div>` : '';
+      return `<div class="milestone" style="left:${pct}%"><div class="dot ${dotClass}"></div><div class="name">${s}</div>${tooltipHtml}</div>`;
     }).join('');
 
-    const deptSubs = subLookup[dept.name] || {};
     const stageGroupsHtml = stages.map((stageName, si) => {
       const subs = deptSubs[stageName] || [];
       if (!subs.length) {
