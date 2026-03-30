@@ -514,55 +514,55 @@ const COMM_LOGS=[
 const SUB_DEPTS={
   '品牌运营中心':[
     { name:'用户运营组', isGroup:true, children:[
-      { name:'公域组', score:1, levelName:'入门聊天',
+      { name:'公域组（李妍妍）', score:1, levelName:'入门聊天',
         range:{min:0,max:2,minName:'零基础',maxName:'国产大模型对话'},
         currentPlan:[
-          {cat:'daily',label:'练习',items:['用AI改写一段抖音视频文案，对比改前改后效果']},
-          {cat:'challenge',label:'目标',items:['让AI整理一份门店周度售卖数据摘要']},
-          {cat:'track',label:'追踪',items:['每周记录AI辅助完成的公域投放任务数量']},
+          {cat:'daily',label:'练习',items:['用AI改写一条抖音短视频脚本，给AI品牌调性+受众画像做上下文，对比改前改后']},
+          {cat:'challenge',label:'目标',items:['让AI把一次手动拉取的美团/抖音售卖数据整理成统一格式周报']},
+          {cat:'track',label:'追踪',items:['每周记录：AI辅助出了几条脚本、整理了几份售卖数据、做了几张宣传图']},
         ],
         milestones:[
           {from:1,to:3,label:'入门聊天 → 国际大模型对话',cur:1,skills:[
-            {t:'sk',s:'学习Prompt三要素：角色设定 + 任务拆解 + 输出格式要求'},
-            {t:'sk',s:'掌握让AI处理表格数据的基本方法'},
-            {t:'ac',s:'开通GPT企业账号，体验AI改写文案和优化短视频脚本'},
-            {t:'ac',s:'用AI辅助整理售卖数据：多平台数据→统一格式→摘要'},
+            {t:'sk',s:'学习给AI完整上下文：品牌调性+受众画像+投放目标，让短视频脚本更贴业务'},
+            {t:'sk',s:'掌握让AI处理售卖数据表格：导入→格式统一→基础汇总'},
+            {t:'ac',s:'开通GPT企业账号，用AI改写3条抖音短视频脚本并对比改前改后投放数据'},
+            {t:'ac',s:'用AI将每小时手动拉取的售卖数据做格式整理和基础汇总'},
           ]},
           {from:3,to:5,label:'国际大模型对话 → 国际AI介入工作',cur:1,skills:[
-            {t:'sk',s:'学习让AI执行模板化批量任务：同模板换参数批量输出'},
-            {t:'ac',s:'用AI批量生成门店宣传图：同模板替换店名'},
-            {t:'ac',s:'将每小时手动拉取售卖数据改为AI辅助整理'},
+            {t:'sk',s:'掌握Skill文档编写：把门店宣传图批量制作流程写成标准化模板规则'},
+            {t:'ac',s:'用AI批量生成15+门店宣传图：同模板替换店名/门店信息/尺寸'},
+            {t:'ac',s:'让AI按投放反馈数据分析短视频脚本表现：哪类风格/时段转化率最高'},
           ]},
           {from:5,to:7,label:'国际AI介入工作 → AI辅助编程',cur:1,skills:[
-            {t:'sk',s:'学习让AI做投放效果分析：ROI计算、渠道对比、归因模型'},
-            {t:'ac',s:'用AI分析抖音投放数据：播放量+互动率+转化率→优化策略'},
-            {t:'vi',s:'让AI编写售卖数据自动抓取脚本：定时从美团/抖音API取数→汇总→推送'},
+            {t:'ac',s:'用AI分析抖音投放数据：播放量+互动率+转化率→找出最优投放策略'},
+            {t:'ac',s:'用AI做售卖数据多维分析：时段×门店×品类→热销趋势→补货建议'},
+            {t:'vi',s:'让AI编写售卖数据自动抓取脚本：定时从美团/抖音/小程序API取数→汇总→推送'},
           ]},
         ],
       },
-      { name:'私域组', score:1, levelName:'入门聊天',
+      { name:'私域组（陈婧仪）', score:1, levelName:'入门聊天',
         range:{min:0,max:2,minName:'零基础',maxName:'国产大模型对话'},
         currentPlan:[
-          {cat:'daily',label:'练习',items:['用AI生成一段企微群发话术，测试不同风格']},
-          {cat:'challenge',label:'目标',items:['让AI梳理私域用户标签体系，输出分层运营建议']},
-          {cat:'track',label:'追踪',items:['每周记录AI辅助完成的私域运维任务数量']},
+          {cat:'daily',label:'练习',items:['用AI整理一份本周企微异动清单：入离职名单→需要开通/注销的账号→操作步骤']},
+          {cat:'challenge',label:'目标',items:['让AI梳理当前私域托管全流程：逐步记录2小时操作→识别哪些步骤是重复的']},
+          {cat:'track',label:'追踪',items:['每周记录：AI辅助处理了几次企微异动、PS档案更新省了多少时间']},
         ],
         milestones:[
           {from:1,to:3,label:'入门聊天 → 国际大模型对话',cur:1,skills:[
-            {t:'sk',s:'学习Prompt三要素：角色设定 + 任务拆解 + 输出格式要求'},
-            {t:'sk',s:'掌握多轮对话技巧：追问、纠偏、让AI自检'},
-            {t:'ac',s:'开通GPT企业账号，体验AI处理会员数据和运营文案'},
-            {t:'ac',s:'用AI辅助企微员工异动运维：入离职→档案调整→通知推送'},
+            {t:'sk',s:'学习让AI理解企微运维规则：什么场景开通、什么场景注销、档案字段对应关系'},
+            {t:'sk',s:'掌握让AI处理结构化数据：员工名单→操作清单→校验'},
+            {t:'ac',s:'开通GPT企业账号，用AI整理一次企微异动清单（入离职名单→操作步骤）'},
+            {t:'ac',s:'让AI梳理私域托管操作流程：逐步记录每店2小时操作→标记可自动化环节'},
           ]},
           {from:3,to:5,label:'国际大模型对话 → 国际AI介入工作',cur:1,skills:[
-            {t:'sk',s:'学习让AI执行模板化批量任务：同模板换参数批量输出'},
-            {t:'ac',s:'用AI批量生成会员关怀消息：按标签分层→个性化话术'},
-            {t:'ac',s:'用AI辅助私域托管流程优化：规则梳理→异常检测→效率提升'},
+            {t:'sk',s:'掌握Skill文档编写：把企微开通/注销/档案调整流程写成标准化规则文档'},
+            {t:'ac',s:'用AI辅助企微异动运维：入离职名单→自动生成操作清单→人工执行→AI校验结果'},
+            {t:'ac',s:'用AI辅助PS档案批量更新：变动数据→匹配字段→生成更新表'},
           ]},
           {from:5,to:7,label:'国际AI介入工作 → AI辅助编程',cur:1,skills:[
-            {t:'sk',s:'学习让AI做会员行为分析：活跃度+复购率+流失预警'},
-            {t:'ac',s:'用AI做私域用户分层分析：消费频次×金额×互动→精准运营'},
-            {t:'vi',s:'搭建AI辅助私域自动化：入群→打标签→推送→效果追踪'},
+            {t:'ac',s:'让AI编写企微运维辅助脚本：读取异动名单→自动生成批量操作指令'},
+            {t:'ac',s:'用AI优化私域托管流程：识别可自动化环节→编写辅助脚本→缩短单店耗时'},
+            {t:'vi',s:'搭建企微运维全自动化流：HR系统推送异动→AI判断操作类型→自动执行→结果通知'},
           ]},
         ],
       },
@@ -706,7 +706,7 @@ function renderCards(){
     h+=`<div class="toggle-wrap"><button class="toggle-btn" onclick="tog(this)">诊断依据（${dept.evidence.length}项）</button><div class="toggle-body"><ul class="evidence-list">`;
     dept.evidence.forEach(e=>{h+=`<li>${e}</li>`;});
     h+=`</ul></div></div>`;
-    const hasSubs=SUB_DEPTS[dept.name]!==undefined;
+    const hasSubs=SUB_DEPTS[dept.name]&&SUB_DEPTS[dept.name].length>0;
     if(!hasSubs){
       // only show plan/teams/roadmap at dept level if no sub-depts
       h+=renderPlan(dept);
@@ -890,9 +890,13 @@ function renderSubDeptContent(s,uidKey){
 }
 
 function togSubDept(id,btn){
-  const p=document.getElementById('sdp_'+id);
-  const isOpen=p.classList.toggle('open');
-  btn.classList.toggle('active',isOpen);
+  const panel=document.getElementById('sdp_'+id);
+  const wasOpen=panel.classList.contains('open');
+  const btnGroup=btn.parentElement;
+  // close all sibling panels + deactivate all sibling buttons (radio behavior)
+  btnGroup.querySelectorAll('.subdept-btn').forEach(b=>b.classList.remove('active'));
+  btnGroup.parentElement.querySelectorAll(':scope > .subdept-panel').forEach(p=>p.classList.remove('open'));
+  if(!wasOpen){panel.classList.add('open');btn.classList.add('active');}
 }
 
 function renderReqs(){
