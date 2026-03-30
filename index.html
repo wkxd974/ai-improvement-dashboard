@@ -33,6 +33,16 @@
   .filter-btn:hover { border-color:var(--primary); color:var(--primary); }
   .filter-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); }
 
+  /* Summary overview */
+  .summary-wrap { background:var(--card); border-radius:var(--radius); padding:22px 26px 18px; box-shadow:var(--shadow); margin-bottom:22px; }
+  .summary-wrap h3 { font-size:16px; font-weight:600; color:var(--gray-700); margin-bottom:14px; }
+  .summary-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .summary-dept { min-width:130px; font-size:14px; font-weight:600; color:var(--gray-700); display:flex; align-items:center; gap:6px; }
+  .summary-bar-wrap { flex:1; position:relative; height:14px; background:var(--gray-100); border-radius:7px; overflow:visible; }
+  .summary-band { position:absolute; height:100%; border-radius:7px; opacity:.35; }
+  .summary-mkr { position:absolute; top:-2px; width:3px; height:18px; border-radius:2px; background:var(--gray-700); z-index:2; transform:translateX(-50%); }
+  .summary-label { font-size:12px; font-weight:600; color:var(--gray-600); min-width:50px; text-align:right; }
+
   .scale-wrap { background:var(--card); border-radius:var(--radius); padding:22px 26px 18px; box-shadow:var(--shadow); margin-bottom:22px; }
   .scale-wrap h3 { font-size:16px; font-weight:600; color:var(--gray-700); margin-bottom:14px; }
   .scale-bar { display:flex; gap:2px; height:36px; border-radius:8px; overflow:hidden; }
@@ -246,6 +256,7 @@
   </div>
   <div id="tab-diag" class="tab-content active">
     <div class="scale-wrap" id="scaleWrap"></div>
+    <div class="summary-wrap" id="summaryWrap"></div>
     <div class="filter-bar" id="filterBar"></div>
     <div class="dept-grid" id="deptGrid"></div>
   </div>
@@ -295,14 +306,14 @@ const DEPARTMENTS=[
       {cat:'challenge',label:'目标',items:['每人将自己最常用的分析流程写成一份Skill文档']},
       {cat:'track',label:'追踪',items:['飞书多维表格记录自动化项目状态（构想/开发/已上线）']},
     ]},
-  { name:'产品部', icon:'🎯', color:'#7a9a99', score:null, levelName:'待完整评估',
+  { name:'品控部', icon:'🎯', color:'#7a9a99', score:null, levelName:'待完整评估',
     range:null,
     evidence:['杨茜团队已达到用国产大模型处理工作的水平（Lv.4）','其余团队情况待补充'],
     teams:[{name:'杨茜团队',score:4}], partialScore:4,
     currentPlan:[
       {cat:'daily',label:'练习',items:['杨茜团队每天用AI处理一项文档工作（PRD整理/竞品摘要/会议纪要）']},
       {cat:'challenge',label:'目标',items:['整理3个AI最佳实践案例，为其他团队评估提供参考']},
-      {cat:'track',label:'待办',items:['安排其余团队访谈评估，补全产品部整体AI使用画像']},
+      {cat:'track',label:'待办',items:['安排其余团队访谈评估，补全品控部整体AI使用画像']},
     ]},
   { name:'人事部', icon:'👥', color:'#7a8a9e', score:1, levelName:'入门聊天',
     range:{min:0,max:2,minName:'零基础',maxName:'国产大模型对话'},
@@ -324,11 +335,15 @@ const DEPARTMENTS=[
       {cat:'tip',label:'技巧',items:['敏感数据用"A公司""B门店"替代真实名称后再给AI处理']},
       {cat:'track',label:'追踪',items:['每周记录一次"AI辅助 vs 手工"同一任务的用时对比']},
     ]},
-  { name:'SuperHi财务部', icon:'💰', color:'#7a9a6d', score:null, levelName:'待完整评估',
-    range:null,
-    evidence:['待完成完整访谈评估'],
+  { name:'SuperHi财务部', icon:'💰', color:'#7a9a6d', score:7.5, levelName:'AI辅助编程 ~ 自动化工作流',
+    range:{min:6,max:8,minName:'深度数据分析',maxName:'自动化工作流'},
+    evidence:['日常使用GPT/Claude进行深度数据分析与报告撰写','已实现部分自动化工作流（飞书机器人+定时推送）','团队内部AI使用水平差距较小，整体处于较高水平'],
     teams:null,
-    currentPlan:[]},
+    currentPlan:[
+      {cat:'daily',label:'练习',items:['将一个重复性分析任务交给AI一步到位生成完整脚本']},
+      {cat:'challenge',label:'目标',items:['每人将自己最常用的分析流程写成一份Skill文档']},
+      {cat:'track',label:'追踪',items:['飞书多维表格记录自动化项目状态（构想/开发/已上线）']},
+    ]},
   { name:'品牌运营中心', icon:'📢', color:'#9a8a8a', score:2, levelName:'国产大模型对话',
     range:{min:1,max:6,minName:'入门聊天',maxName:'深度数据分析'},
     evidence:['李妍妍团队与陈婧仪团队处于入门聊天阶段','申江团队已达到深度数据分析水平（Lv.6）','团队间AI使用水平差异极大（Lv.1~Lv.6）','整体仍有大量手工操作空间可被AI替代'],
@@ -357,7 +372,7 @@ const ROADMAPS=[
         {t:'vi',s:'搭建AI辅助经营决策系统：多维数据实时汇聚→趋势预测→策略推荐'},
       ]},
     ]},
-  { dept:'产品部', cur:null, tgt:null,
+  { dept:'品控部', cur:null, tgt:null,
     note:'待完成完整访谈评估后设定里程碑；杨茜团队当前 Lv.4 可作为基准参考',
     milestones:[] },
   { dept:'人事部', cur:1, tgt:8,
@@ -422,8 +437,8 @@ const ROADMAPS=[
         {t:'vi',s:'搭建费用报销智能审核流：发票OCR→规则校验→异常标记→审批流自动推进'},
       ]},
     ]},
-  { dept:'SuperHi财务部', cur:null, tgt:null,
-    note:'待完成完整访谈评估后设定里程碑',
+  { dept:'SuperHi财务部', cur:7.5, tgt:null,
+    note:'与商业分析部同等水平，分阶段里程碑待后续制定',
     milestones:[] },
   { dept:'品牌运营中心', cur:2, tgt:7,
     note:'用户运营组从入门出发，菜单管理组已达Lv.6；各工种按自身节奏提升，目标AI辅助编程',
@@ -492,8 +507,10 @@ const PROGRESS_DATA=[
   { dept:'国内财务部', target:9, records:[
     {date:'2026-03-30',score:2,note:'初始评估'},
   ]},
-  { dept:'SuperHi财务部', target:null, records:[]},
-  { dept:'产品部', target:null, records:[
+  { dept:'SuperHi财务部', target:null, records:[
+    {date:'2026-03-30',score:7.5,note:'初始评估'},
+  ]},
+  { dept:'品控部', target:null, records:[
     {date:'2026-03-30',score:4,note:'杨茜团队初步评估'},
   ]},
 ];
@@ -610,7 +627,35 @@ function renderScale(){
 }
 function togScale(b){const d=document.getElementById('sdGrid');const c=d.classList.toggle('collapsed');b.textContent=c?'▸ 展开各等级详情':'▾ 收起等级详情';}
 
-const DISPLAY_ORDER=['商业分析部','品牌运营中心','人事部','国内财务部','SuperHi财务部','产品部'];
+function renderSummary(){
+  const w=document.getElementById('summaryWrap');
+  let h='<h3>各部门 AI 能力水平总览</h3>';
+  orderedDepts().forEach(dept=>{
+    const hasRange=dept.range!==null;
+    const dispMax=hasRange?dept.range.max:(dept.partialScore||null);
+    const c=dispMax!==null?clr(dispMax):'var(--gray-300)';
+    h+=`<div class="summary-row">`;
+    h+=`<span class="summary-dept">${dept.icon} ${dept.name}</span>`;
+    h+=`<div class="summary-bar-wrap">`;
+    if(hasRange){
+      const minP=(dept.range.min/10*100).toFixed(1);
+      const maxP=(dept.range.max/10*100).toFixed(1);
+      const bandW=(maxP-minP).toFixed(1);
+      h+=`<div class="summary-band" style="left:${minP}%;width:${bandW}%;background:${c}"></div>`;
+      h+=`<div class="summary-mkr" style="left:${minP}%"></div>`;
+      h+=`<div class="summary-mkr" style="left:${maxP}%"></div>`;
+    } else if(dept.partialScore){
+      const pct=(dept.partialScore/10*100).toFixed(1);
+      h+=`<div class="summary-mkr" style="left:${pct}%"></div>`;
+    }
+    h+=`</div>`;
+    h+=`<span class="summary-label" style="color:${c}">${hasRange?'Lv.'+dept.range.min+'~'+dept.range.max:(dept.partialScore?'~Lv.'+dept.partialScore:'待评估')}</span>`;
+    h+=`</div>`;
+  });
+  w.innerHTML=h;
+}
+
+const DISPLAY_ORDER=['商业分析部','品牌运营中心','人事部','国内财务部','SuperHi财务部','品控部'];
 function orderedDepts(){return DISPLAY_ORDER.map(n=>DEPARTMENTS.find(d=>d.name===n)).filter(Boolean);}
 
 function renderFilters(id,key){
@@ -625,44 +670,36 @@ function filt(key,val,btn){
   btn.classList.add('active');
 }
 
-function miniScale(score,partialScore){
-  const ds=score!==null?score:partialScore;
-  if(ds===undefined||ds===null)return '';
+function miniScale(dept){
+  const ds=dept.range?dept.range.max:(dept.partialScore||null);
+  if(ds===null)return '';
   const pct=(ds/10*100).toFixed(1);
   let h='<div class="mini-scale-wrap"><div class="mini-scale">';
   LEVELS.forEach(lv=>{h+=`<div class="mini-seg" style="background:${lv.color}"></div>`;});
-  h+=`<div class="mini-marker" style="left:${pct}%"><span class="mini-marker-label">${score!==null?'Lv.'+ds:'已知Lv.'+ds}</span></div>`;
+  h+=`<div class="mini-marker" style="left:${pct}%"><span class="mini-marker-label">${dept.range?'Lv.'+ds:'已知Lv.'+ds}</span></div>`;
   h+='</div><div class="mini-names">';
   LEVELS.forEach(lv=>{h+=`<span>${lv.name}</span>`;});
   h+='</div></div>';return h;
 }
 
 function renderRangeBar(dept){
-  const hasS=dept.score!==null;
-  const ds=hasS?dept.score:dept.partialScore;
-  const c=hasS?clr(dept.score):(dept.partialScore?clr(dept.partialScore):'var(--gray-300)');
-  const pct=ds?(ds/10*100).toFixed(1):'0';
-
+  const c=dept.range?clr(dept.range.max):(dept.partialScore?clr(dept.partialScore):'var(--gray-300)');
   let h=`<div class="range-bar">`;
-  // range band
   if(dept.range){
     const minP=(dept.range.min/10*100).toFixed(1);
     const maxP=(dept.range.max/10*100).toFixed(1);
     const bandW=(maxP-minP).toFixed(1);
+    h+=`<div class="range-fill" style="width:${maxP}%;background:${c};opacity:.2"></div>`;
     h+=`<div class="range-band" style="left:${minP}%;width:${bandW}%;background:${c}"></div>`;
-    // min marker
     h+=`<div class="range-mkr" style="left:${minP}%;background:var(--gray-700)"></div>`;
     h+=`<span class="range-mkr-btm" style="left:${minP}%;color:var(--gray-700)">下限 Lv.${dept.range.min} ${dept.range.minName}</span>`;
-    // max marker
     h+=`<div class="range-mkr" style="left:${maxP}%;background:var(--gray-700)"></div>`;
     h+=`<span class="range-mkr-btm" style="left:${maxP}%;color:var(--gray-700)">上限 Lv.${dept.range.max} ${dept.range.maxName}</span>`;
-  }
-  // avg fill
-  h+=`<div class="range-fill" style="width:${pct}%;background:${c}${!hasS?';opacity:.5':''}"></div>`;
-  // avg marker
-  if(ds){
+  } else if(dept.partialScore){
+    const pct=(dept.partialScore/10*100).toFixed(1);
+    h+=`<div class="range-fill" style="width:${pct}%;background:${c};opacity:.5"></div>`;
     h+=`<div class="range-mkr" style="left:${pct}%;background:var(--gray-800)"></div>`;
-    h+=`<span class="range-mkr-label" style="left:${pct}%;color:var(--gray-800)">${hasS?'均值 Lv.'+ds:'已知 Lv.'+ds}</span>`;
+    h+=`<span class="range-mkr-label" style="left:${pct}%;color:var(--gray-800)">已知 Lv.${dept.partialScore}</span>`;
   }
   h+=`</div>`;
   h+=`<div class="score-bar-labels"><span>Lv.0</span><span>Lv.5</span><span>Lv.10</span></div>`;
@@ -692,16 +729,16 @@ function renderCards(){
   const list=deptFilter==='all'?orderedDepts():orderedDepts().filter(d=>d.name===deptFilter);
   g.innerHTML=list.map(dept=>{
     const rm=ROADMAPS.find(r=>r.dept===dept.name);
-    const hasS=dept.score!==null;
-    const c=hasS?clr(dept.score):(dept.partialScore?clr(dept.partialScore):'var(--gray-300)');
+    const dispScore=dept.range?dept.range.max:(dept.partialScore||null);
+    const c=dispScore!==null?clr(dispScore):'var(--gray-300)';
     let h=`<div class="dept-card">`;
     h+=`<div class="dept-header"><div class="dept-name">
       <div class="dept-icon" style="background:${dept.color}18;color:${dept.color}">${dept.icon}</div>
-      <div><h3>${dept.name}</h3><span class="level-tag" style="background:${c}18;color:${c}">${hasS?'Lv.'+dept.score:(dept.partialScore?'部分评估 Lv.'+dept.partialScore:'待评估')} ${dept.levelName}</span></div>
+      <div><h3>${dept.name}</h3><span class="level-tag" style="background:${c}18;color:${c}">${dept.range?'Lv.'+dept.range.max:(dept.partialScore?'部分评估 Lv.'+dept.partialScore:'待评估')} ${dept.range?dept.range.maxName:dept.levelName}</span></div>
     </div>
-    <div class="score-badge" style="color:${c}">${hasS?dept.score:(dept.partialScore?'~'+dept.partialScore:'—')}<span class="score-sub">${(hasS||dept.partialScore)?'/10':''}</span></div></div>`;
+    <div class="score-badge" style="color:${c}">${dispScore!==null?dispScore:'—'}<span class="score-sub">${dispScore!==null?'/10':''}</span></div></div>`;
     h+=renderRangeBar(dept);
-    h+=miniScale(dept.score,dept.partialScore);
+    h+=miniScale(dept);
     // evidence
     h+=`<div class="toggle-wrap"><button class="toggle-btn" onclick="tog(this)">诊断依据（${dept.evidence.length}项）</button><div class="toggle-body"><ul class="evidence-list">`;
     dept.evidence.forEach(e=>{h+=`<li>${e}</li>`;});
@@ -1039,7 +1076,7 @@ function renderLogs(){
 
   // 沟通频率卡片
   h+=`<div class="freq-card"><h3>📊 沟通频率总览</h3><div class="freq-grid">`;
-  const deptNames=['品牌运营中心','人事部','国内财务部','SuperHi财务部','产品部'];
+  const deptNames=['品牌运营中心','人事部','国内财务部','SuperHi财务部','品控部'];
   deptNames.forEach(dn=>{
     const dept=DEPARTMENTS.find(d=>d.name===dn);
     const logs=COMM_LOGS.filter(l=>l.dept===dn);
@@ -1067,6 +1104,7 @@ function renderLogs(){
 }
 
 renderScale();
+renderSummary();
 renderFilters('filterBar','d');
 renderFilters('reqFilterBar','r');
 renderCards();
