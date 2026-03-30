@@ -16,15 +16,19 @@
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background:var(--bg); color:var(--gray-700); line-height:1.6; }
-
   .container { max-width:1280px; margin:0 auto; padding:24px; }
 
   /* Header */
-  .header { text-align:center; padding:40px 0 32px; }
+  .header { text-align:center; padding:40px 0 32px; position:relative; }
   .header h1 { font-size:28px; font-weight:700; color:var(--gray-900); margin-bottom:8px; }
   .header p { color:var(--gray-500); font-size:14px; }
   .header .sync-time { display:inline-flex; align-items:center; gap:6px; background:var(--primary-light); color:var(--primary); padding:4px 12px; border-radius:20px; font-size:12px; margin-top:8px; }
   .header .sync-time::before { content:''; width:6px; height:6px; background:var(--success); border-radius:50%; }
+
+  /* Admin button */
+  .admin-btn { position:absolute; right:0; top:40px; padding:6px 14px; border-radius:20px; border:1px solid var(--gray-200); background:var(--card); cursor:pointer; font-size:12px; color:var(--gray-500); display:flex; align-items:center; gap:5px; transition:all .2s; }
+  .admin-btn:hover { border-color:var(--primary); color:var(--primary); }
+  .admin-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); }
 
   /* Stats Row */
   .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:32px; }
@@ -37,8 +41,6 @@
   .tab { padding:8px 20px; border-radius:8px; border:none; background:transparent; cursor:pointer; font-size:14px; color:var(--gray-500); font-weight:500; transition:all .2s; }
   .tab.active { background:var(--card); color:var(--primary); box-shadow:var(--shadow); }
   .tab:hover { color:var(--gray-900); }
-
-  /* Tab Content */
   .tab-content { display:none; } .tab-content.active { display:block; }
 
   /* Department Cards */
@@ -57,7 +59,7 @@
   .progress-info { display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px; color:var(--gray-500); }
   .progress-info .pct { font-weight:600; color:var(--primary); font-size:15px; }
   .progress-track { position:relative; height:10px; background:var(--gray-200); border-radius:5px; overflow:visible; }
-  .progress-fill { height:100%; border-radius:5px; background:linear-gradient(90deg, #3b82f6, #2563eb); transition:width .6s ease; position:relative; z-index:1; }
+  .progress-fill { height:100%; border-radius:5px; transition:width .6s ease; position:relative; z-index:1; }
   .milestones { position:relative; height:36px; margin-top:4px; }
   .milestone { position:absolute; transform:translateX(-50%); text-align:center; }
   .milestone .dot { width:14px; height:14px; border-radius:50%; border:2px solid var(--gray-300); background:var(--card); margin:0 auto 4px; position:relative; z-index:2; }
@@ -66,44 +68,35 @@
   .milestone .name { font-size:11px; color:var(--gray-500); white-space:nowrap; }
   .milestone .dot.completed + .name { color:var(--success); }
 
-  /* Detail Panel */
   .dept-details { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; padding-top:16px; border-top:1px solid var(--gray-200); }
   .detail-item { display:flex; align-items:center; gap:8px; font-size:13px; }
   .detail-item .label { color:var(--gray-500); }
   .detail-item .value { color:var(--gray-700); font-weight:500; }
 
-  /* Expand Button */
   .expand-btn { width:100%; padding:8px; border:none; background:var(--gray-100); border-radius:8px; cursor:pointer; font-size:13px; color:var(--gray-500); margin-top:12px; transition:background .2s; }
   .expand-btn:hover { background:var(--gray-200); }
 
-  /* Sub-stage detail panel */
   .stage-detail-panel { display:none; margin-top:12px; }
   .stage-detail-panel.show { display:block; }
-
   .stage-group { margin-bottom:16px; border:1px solid var(--gray-200); border-radius:10px; overflow:hidden; }
   .stage-group-header { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; background:var(--gray-100); cursor:pointer; user-select:none; }
   .stage-group-header:hover { background:var(--gray-200); }
   .stage-group-title { font-size:14px; font-weight:600; color:var(--gray-900); display:flex; align-items:center; gap:8px; }
   .stage-group-title .stage-num { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:6px; background:var(--primary); color:#fff; font-size:11px; font-weight:700; }
-  .stage-group-status { font-size:12px; }
   .stage-group-body { padding:0; }
 
   .sub-step { display:flex; align-items:center; gap:12px; padding:10px 16px; border-bottom:1px solid var(--gray-100); transition:background .2s; }
   .sub-step:last-child { border-bottom:none; }
   .sub-step:hover { background:#fafbfd; }
-
   .sub-step-check { width:20px; height:20px; border-radius:50%; border:2px solid var(--gray-300); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:11px; }
   .sub-step-check.done { background:var(--success); border-color:var(--success); color:#fff; }
   .sub-step-check.wip { background:var(--warning); border-color:var(--warning); color:#fff; }
-
   .sub-step-info { flex:1; min-width:0; }
   .sub-step-name { font-size:13px; font-weight:500; color:var(--gray-900); }
   .sub-step-desc { font-size:11px; color:var(--gray-500); margin-top:2px; }
-
   .sub-step-meta { display:flex; gap:8px; align-items:center; flex-shrink:0; }
   .sub-step-status { font-size:11px; padding:2px 8px; border-radius:10px; font-weight:500; }
 
-  /* Mini progress for stage group */
   .stage-mini-progress { display:flex; gap:3px; align-items:center; }
   .stage-mini-dot { width:8px; height:8px; border-radius:50%; background:var(--gray-200); }
   .stage-mini-dot.done { background:var(--success); }
@@ -114,6 +107,32 @@
   .status-wip { background:var(--warning-light); color:var(--warning); }
   .status-todo { background:var(--gray-100); color:var(--gray-500); }
 
+  /* Admin edit button on sub-steps */
+  .sub-step-toggle { display:none; padding:3px 10px; border-radius:8px; border:1px solid var(--gray-200); background:var(--card); cursor:pointer; font-size:11px; color:var(--gray-500); transition:all .15s; white-space:nowrap; }
+  .sub-step-toggle:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-light); }
+  body.admin-mode .sub-step-toggle { display:inline-block; }
+
+  /* Save floating bar */
+  .save-bar { position:fixed; bottom:0; left:0; right:0; background:var(--primary); color:#fff; padding:12px 24px; display:none; align-items:center; justify-content:center; gap:16px; z-index:100; box-shadow:0 -4px 12px rgba(0,0,0,.15); }
+  .save-bar.show { display:flex; }
+  .save-bar .save-msg { font-size:14px; }
+  .save-bar button { padding:8px 24px; border-radius:8px; border:none; font-size:14px; font-weight:600; cursor:pointer; }
+  .save-bar .save-btn { background:#fff; color:var(--primary); }
+  .save-bar .save-btn:hover { background:var(--primary-light); }
+  .save-bar .cancel-btn { background:transparent; color:#fff; border:1px solid rgba(255,255,255,.4); }
+
+  /* Modal */
+  .modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,.4); z-index:200; align-items:center; justify-content:center; }
+  .modal-overlay.show { display:flex; }
+  .modal { background:var(--card); border-radius:var(--radius); padding:32px; width:360px; max-width:90vw; box-shadow:0 20px 60px rgba(0,0,0,.2); }
+  .modal h3 { font-size:18px; color:var(--gray-900); margin-bottom:16px; }
+  .modal input { width:100%; padding:10px 14px; border:1px solid var(--gray-200); border-radius:8px; font-size:14px; margin-bottom:12px; outline:none; }
+  .modal input:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(37,99,235,.1); }
+  .modal .modal-btns { display:flex; gap:8px; justify-content:flex-end; }
+  .modal button { padding:8px 20px; border-radius:8px; border:none; font-size:14px; cursor:pointer; }
+  .modal .btn-primary { background:var(--primary); color:#fff; }
+  .modal .btn-cancel { background:var(--gray-100); color:var(--gray-500); }
+  .modal .error { color:var(--danger); font-size:12px; margin-bottom:8px; display:none; }
 
   /* Log */
   .log-list { display:flex; flex-direction:column; gap:12px; }
@@ -123,50 +142,53 @@
   .log-content { flex:1; font-size:14px; color:var(--gray-700); }
   .log-author { font-size:12px; color:var(--gray-500); min-width:50px; text-align:right; }
 
-  /* Responsive */
-  @media (max-width:768px) {
-    .stats-row { grid-template-columns:repeat(2,1fr); }
-    .dept-details { grid-template-columns:1fr; }
-
-    .header h1 { font-size:22px; }
-  }
-
-  /* Loading */
-  .loading { text-align:center; padding:60px; color:var(--gray-500); }
-  .loading .spinner { width:40px; height:40px; border:3px solid var(--gray-200); border-top-color:var(--primary); border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 16px; }
-  @keyframes spin { to { transform:rotate(360deg); } }
-
   /* Filter */
   .filter-bar { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
   .filter-chip { padding:6px 14px; border-radius:20px; border:1px solid var(--gray-200); background:var(--card); cursor:pointer; font-size:13px; color:var(--gray-500); transition:all .2s; }
   .filter-chip.active { background:var(--primary); color:#fff; border-color:var(--primary); }
   .filter-chip:hover { border-color:var(--primary); color:var(--primary); }
   .filter-chip.active:hover { color:#fff; }
+
+  .loading { text-align:center; padding:60px; color:var(--gray-500); }
+  .loading .spinner { width:40px; height:40px; border:3px solid var(--gray-200); border-top-color:var(--primary); border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 16px; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  @media (max-width:768px) {
+    .stats-row { grid-template-columns:repeat(2,1fr); }
+    .dept-details { grid-template-columns:1fr; }
+    .header h1 { font-size:22px; }
+    .admin-btn { position:static; margin-top:12px; justify-content:center; }
+  }
+
+  /* Toast */
+  .toast { position:fixed; top:20px; right:20px; padding:12px 20px; border-radius:10px; color:#fff; font-size:14px; z-index:300; opacity:0; transform:translateY(-10px); transition:all .3s; }
+  .toast.show { opacity:1; transform:translateY(0); }
+  .toast.success { background:var(--success); }
+  .toast.error { background:var(--danger); }
 </style>
 </head>
 <body>
 <div class="container">
-  <!-- Header -->
   <div class="header">
     <h1 id="boardTitle">各部门AI提效进度看板</h1>
     <p id="companyName">加载中...</p>
     <div class="sync-time">最近同步: <span id="syncTime">--</span></div>
+    <button class="admin-btn" id="adminBtn" onclick="handleAdminClick()">
+      <span id="adminIcon">🔒</span> <span id="adminLabel">管理员</span>
+    </button>
   </div>
 
-  <!-- Stats -->
   <div class="stats-row">
     <div class="stat-card"><div class="num" id="statDepts">-</div><div class="label">参与部门</div></div>
     <div class="stat-card"><div class="num" id="statAvg">-</div><div class="label">平均进度</div></div>
     <div class="stat-card"><div class="num" id="statSubComplete">-</div><div class="label">已完成子步骤</div></div>
   </div>
 
-  <!-- Tabs -->
   <div class="tabs">
     <button class="tab active" data-tab="progress">进度总览</button>
     <button class="tab" data-tab="logs">更新日志</button>
   </div>
 
-  <!-- Tab: Progress -->
   <div class="tab-content active" id="tab-progress">
     <div class="filter-bar" id="deptFilter"></div>
     <div class="dept-grid" id="deptGrid">
@@ -174,124 +196,335 @@
     </div>
   </div>
 
-  <!-- Tab: Logs -->
   <div class="tab-content" id="tab-logs">
     <div class="log-list" id="logList"></div>
   </div>
 </div>
 
+<!-- Save Bar -->
+<div class="save-bar" id="saveBar">
+  <span class="save-msg">有 <strong id="changeCount">0</strong> 项更改未保存</span>
+  <button class="save-btn" onclick="saveChanges()">保存到看板</button>
+  <button class="cancel-btn" onclick="cancelChanges()">撤销</button>
+</div>
+
+<!-- Login Modal -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <h3>管理员登录</h3>
+    <input type="password" id="adminPwd" placeholder="请输入管理员密码" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="error" id="loginError">密码错误</div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('loginModal')">取消</button>
+      <button class="btn-primary" onclick="doLogin()">登录</button>
+    </div>
+  </div>
+</div>
+
+<!-- Token Modal -->
+<div class="modal-overlay" id="tokenModal">
+  <div class="modal">
+    <h3>设置 GitHub Token</h3>
+    <p style="font-size:12px;color:var(--gray-500);margin-bottom:12px">首次保存需要输入 GitHub Personal Access Token（需要 repo 权限）。Token 仅保存在当前浏览器会话中。</p>
+    <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxx" onkeydown="if(event.key==='Enter')saveToken()">
+    <div class="error" id="tokenError">Token 无效</div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('tokenModal')">取消</button>
+      <button class="btn-primary" onclick="saveToken()">确认</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
 <script>
-const DEPT_ICONS = {
-  '市场部':'📢','销售部':'💰','技术部':'💻','人事部':'👥','财务部':'📊',
-  '运营部':'⚙️','客服部':'🎧','产品部':'🎯','研发部':'🔬','设计部':'🎨',
-  '法务部':'⚖️','行政部':'🏢','采购部':'📦','质量部':'✅','商业分析部':'📋'
-};
+// ============ 配置 ============
+const GITHUB_REPO = 'wkxd974/ai-improvement-dashboard';
+const ADMIN_PWD_HASH = ''; // 留空则使用下方默认密码
+const DEFAULT_PWD = 'haidilao2026'; // 默认管理员密码，请修改
+
+// ============ 全局状态 ============
+const DEPT_ICONS = {'市场部':'📢','销售部':'💰','技术部':'💻','人事部':'👥','财务部':'📊','运营部':'⚙️','客服部':'🎧','产品部':'🎯','研发部':'🔬','设计部':'🎨','法务部':'⚖️','行政部':'🏢','采购部':'📦','质量部':'✅','商业分析部':'📋'};
 const DEPT_COLORS = ['#2563eb','#059669','#7c3aed','#dc2626','#d97706','#0891b2','#be185d','#4f46e5','#15803d','#c2410c'];
+const STAGE_WEIGHTS = {'需求调研':10,'模型选择与提示词学习':20,'自动化工作流学习':30,'全面应用':25,'持续优化':15};
+const STATUS_CYCLE = ['未开始','进行中','已完成'];
 
 let DATA = null;
+let isAdmin = false;
+let pendingChanges = {}; // { "dept|stageName|subName": newStatus }
 
+// ============ 数据加载 ============
 async function loadData() {
   try {
     const res = await fetch('data.json?t=' + Date.now());
     DATA = await res.json();
-    render();
   } catch(e) {
-    console.warn('Failed to load data.json, using demo data');
     DATA = getDemoData();
-    render();
   }
+  render();
 }
 
 function getDemoData() {
   return {
-    config: { company: '我的公司', title: '各部门AI提效进度看板', syncTime: new Date().toISOString(),
-      stages: ['需求调研','模型选择与提示词学习','自动化工作流学习','全面应用','持续优化'] },
-    departments: [
-      { name:'商业分析部', stage:'模型选择与提示词学习', progress:35, stages:{'需求调研':'已完成','模型选择与提示词学习':'进行中','自动化工作流学习':'未开始','全面应用':'未开始','持续优化':'未开始'}, owner:'张三', updated:'2026-03-30', note:'正在学习提示词技巧' },
-      { name:'市场部', stage:'需求调研', progress:10, stages:{'需求调研':'进行中','模型选择与提示词学习':'未开始','自动化工作流学习':'未开始','全面应用':'未开始','持续优化':'未开始'}, owner:'李四', updated:'2026-03-28', note:'部门需求收集中' }
-    ],
-    subStages: [
-      { stageId:'阶段1', stageName:'需求调研', subName:'部门需求收集', description:'与部门沟通，收集现有痛点和业务需求' },
-      { stageId:'阶段1', stageName:'需求调研', subName:'AI场景挖掘', description:'主动为部门识别可用AI赋能的新场景' },
-      { stageId:'阶段2', stageName:'模型选择与提示词学习', subName:'模型选型', description:'确定适合业务的AI模型与工具' },
-      { stageId:'阶段2', stageName:'模型选择与提示词学习', subName:'提示词入门', description:'学习基础提示词写法、常用模板' },
-      { stageId:'阶段2', stageName:'模型选择与提示词学习', subName:'提示词进阶', description:'掌握角色设定、Few-shot、思维链等高级技巧' },
-      { stageId:'阶段3', stageName:'自动化工作流学习', subName:'单步自动化', description:'单一AI工具完成独立任务（如AI写邮件、整理数据）' },
-      { stageId:'阶段3', stageName:'自动化工作流学习', subName:'多步工作流', description:'串联多步骤自动化（如数据采集→分析→生成报告）' },
-      { stageId:'阶段3', stageName:'自动化工作流学习', subName:'系统集成', description:'与现有业务系统对接，实现端到端自动化' },
-      { stageId:'阶段4', stageName:'全面应用', subName:'业务全覆盖', description:'AI工具融入日常核心业务流程' },
-      { stageId:'阶段4', stageName:'全面应用', subName:'智能体应用', description:'使用AI Agent（GPTs、Claude、Coze等）处理复杂任务' },
-      { stageId:'阶段5', stageName:'持续优化', subName:'效果评估', description:'量化AI提效成果，收集使用反馈' },
-      { stageId:'阶段5', stageName:'持续优化', subName:'迭代优化', description:'优化提示词与工作流，沉淀最佳实践' }
-    ],
-    subStageProgress: [],
-    milestones: [],
-    guides: [],
-    logs: []
+    config: { company: '', title: '各部门AI提效进度看板', syncTime: new Date().toISOString(), stages: ['需求调研','模型选择与提示词学习','自动化工作流学习','全面应用','持续优化'] },
+    departments: [], subStages: [], subStageProgress: [], milestones: [], logs: []
   };
 }
 
+// ============ 管理员 ============
+function handleAdminClick() {
+  if (isAdmin) {
+    isAdmin = false;
+    document.body.classList.remove('admin-mode');
+    document.getElementById('adminBtn').classList.remove('active');
+    document.getElementById('adminIcon').textContent = '🔒';
+    document.getElementById('adminLabel').textContent = '管理员';
+    cancelChanges();
+    showToast('已退出管理员模式', 'success');
+  } else {
+    document.getElementById('loginModal').classList.add('show');
+    document.getElementById('adminPwd').value = '';
+    document.getElementById('adminPwd').focus();
+  }
+}
+
+function doLogin() {
+  const pwd = document.getElementById('adminPwd').value;
+  if (pwd === DEFAULT_PWD || (ADMIN_PWD_HASH && sha256(pwd) === ADMIN_PWD_HASH)) {
+    isAdmin = true;
+    document.body.classList.add('admin-mode');
+    document.getElementById('adminBtn').classList.add('active');
+    document.getElementById('adminIcon').textContent = '🔓';
+    document.getElementById('adminLabel').textContent = '编辑中';
+    closeModal('loginModal');
+    render(); // Re-render with edit buttons
+    showToast('管理员模式已开启，点击子步骤状态可切换', 'success');
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+    setTimeout(() => document.getElementById('loginError').style.display = 'none', 2000);
+  }
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+// ============ 状态切换 ============
+function toggleSubStatus(dept, stageName, subName) {
+  if (!isAdmin) return;
+  const key = `${dept}|${stageName}|${subName}`;
+
+  // Find current effective status
+  const sp = (DATA.subStageProgress||[]).find(p => p.dept===dept && p.stageName===stageName && p.subName===subName);
+  let currentStatus = pendingChanges[key] || (sp ? sp.status : '未开始');
+  let idx = STATUS_CYCLE.indexOf(currentStatus);
+  let newStatus = STATUS_CYCLE[(idx + 1) % 3];
+
+  // If reverting to original, remove from pending
+  const origStatus = sp ? sp.status : '未开始';
+  if (newStatus === origStatus) {
+    delete pendingChanges[key];
+  } else {
+    pendingChanges[key] = newStatus;
+  }
+
+  updateSaveBar();
+  render();
+}
+
+function updateSaveBar() {
+  const count = Object.keys(pendingChanges).length;
+  document.getElementById('changeCount').textContent = count;
+  document.getElementById('saveBar').classList.toggle('show', count > 0);
+}
+
+function cancelChanges() {
+  pendingChanges = {};
+  updateSaveBar();
+  render();
+}
+
+// ============ 保存到 GitHub ============
+async function saveChanges() {
+  const token = sessionStorage.getItem('gh_token');
+  if (!token) {
+    document.getElementById('tokenModal').classList.add('show');
+    document.getElementById('ghToken').value = '';
+    document.getElementById('ghToken').focus();
+    return;
+  }
+  await doSave(token);
+}
+
+function saveToken() {
+  const token = document.getElementById('ghToken').value.trim();
+  if (!token || !token.startsWith('ghp_')) {
+    document.getElementById('tokenError').style.display = 'block';
+    setTimeout(() => document.getElementById('tokenError').style.display = 'none', 2000);
+    return;
+  }
+  sessionStorage.setItem('gh_token', token);
+  closeModal('tokenModal');
+  doSave(token);
+}
+
+async function doSave(token) {
+  const saveBtn = document.querySelector('.save-btn');
+  saveBtn.textContent = '保存中...';
+  saveBtn.disabled = true;
+
+  try {
+    // 1. Apply pending changes to DATA
+    for (const [key, newStatus] of Object.entries(pendingChanges)) {
+      const [dept, stageName, subName] = key.split('|');
+      const sp = DATA.subStageProgress.find(p => p.dept===dept && p.stageName===stageName && p.subName===subName);
+      if (sp) {
+        sp.status = newStatus;
+        if (newStatus === '已完成') sp.completedDate = new Date().toISOString().slice(0,10);
+      }
+    }
+
+    // 2. Recalculate department progress
+    recalcProgress();
+
+    // 3. Update syncTime
+    DATA.config.syncTime = new Date().toISOString();
+
+    // 4. Get current file SHA
+    const metaRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/data.json`, {
+      headers: { 'Authorization': `token ${token}` }
+    });
+    if (!metaRes.ok) throw new Error('无法获取仓库文件信息，请检查Token权限');
+    const meta = await metaRes.json();
+
+    // 5. Push updated data.json
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(DATA, null, 2))));
+    const pushRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/data.json`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: `看板更新: ${new Date().toLocaleString('zh-CN')}`,
+        content: content,
+        sha: meta.sha
+      })
+    });
+
+    if (!pushRes.ok) {
+      const err = await pushRes.json();
+      throw new Error(err.message || '推送失败');
+    }
+
+    pendingChanges = {};
+    updateSaveBar();
+    render();
+    showToast('保存成功！看板将在1-2分钟内更新', 'success');
+  } catch(e) {
+    showToast('保存失败: ' + e.message, 'error');
+    if (e.message.includes('Token') || e.message.includes('401')) {
+      sessionStorage.removeItem('gh_token');
+    }
+  } finally {
+    saveBtn.textContent = '保存到看板';
+    saveBtn.disabled = false;
+  }
+}
+
+function recalcProgress() {
+  const stages = DATA.config.stages || [];
+  const deptSubs = {};
+  DATA.subStageProgress.forEach(sp => {
+    if (!deptSubs[sp.dept]) deptSubs[sp.dept] = {};
+    if (!deptSubs[sp.dept][sp.stageName]) deptSubs[sp.dept][sp.stageName] = [];
+    deptSubs[sp.dept][sp.stageName].push(sp.status);
+  });
+
+  DATA.departments.forEach(dept => {
+    const subs = deptSubs[dept.name] || {};
+    let totalProgress = 0;
+    let currentStage = stages[0] || '';
+
+    stages.forEach(stage => {
+      const statuses = subs[stage] || [];
+      const done = statuses.filter(s => s==='已完成').length;
+      const wip = statuses.filter(s => s==='进行中').length;
+
+      if (done === statuses.length && statuses.length > 0) {
+        dept.stages[stage] = '已完成';
+      } else if (done > 0 || wip > 0) {
+        dept.stages[stage] = '进行中';
+      } else {
+        dept.stages[stage] = '未开始';
+      }
+
+      const weight = STAGE_WEIGHTS[stage] || (100/stages.length);
+      totalProgress += weight * (statuses.length ? done/statuses.length : 0);
+    });
+
+    // Determine current stage
+    for (const stage of stages) {
+      if (dept.stages[stage] === '进行中') { currentStage = stage; break; }
+      if (dept.stages[stage] === '未开始') { currentStage = stage; break; }
+    }
+
+    dept.progress = Math.min(Math.round(totalProgress), 100);
+    dept.stage = currentStage;
+    dept.updated = new Date().toISOString().slice(0,10);
+  });
+}
+
+// ============ 渲染 ============
 function render() {
   if (!DATA) return;
   const { config, departments, logs, subStages, subStageProgress } = DATA;
   const stages = config.stages || ['需求调研','模型选择与提示词学习','自动化工作流学习','全面应用','持续优化'];
 
-  // Header
   document.getElementById('boardTitle').textContent = config.title || '各部门AI提效进度看板';
   document.getElementById('companyName').textContent = config.company || '';
   document.getElementById('syncTime').textContent = config.syncTime ? new Date(config.syncTime).toLocaleString('zh-CN') : '--';
-
-  // Stats
   document.getElementById('statDepts').textContent = departments.length;
   const avg = departments.length ? departments.reduce((s,d) => s + d.progress, 0) / departments.length : 0;
   document.getElementById('statAvg').textContent = Math.round(avg) + '%';
 
-  // Count completed sub-steps
   let subComplete = 0;
   if (subStageProgress && subStageProgress.length) {
-    subStageProgress.forEach(sp => { if(sp.status === '已完成') subComplete++; });
-  } else {
-    // Fallback: count from main stages
-    departments.forEach(d => { Object.values(d.stages||{}).forEach(v => { if(v==='已完成') subComplete++; }); });
+    subStageProgress.forEach(sp => {
+      const key = `${sp.dept}|${sp.stageName}|${sp.subName}`;
+      const effectiveStatus = pendingChanges[key] || sp.status;
+      if(effectiveStatus === '已完成') subComplete++;
+    });
   }
   document.getElementById('statSubComplete').textContent = subComplete;
 
-  // Build sub-stage lookup: { dept: { stageName: [ {subName, status, desc, ...} ] } }
+  // Build sub-stage lookup
   const subLookup = {};
   if (subStages && subStages.length) {
-    // First build definitions
     const defs = {};
     subStages.forEach(ss => {
       if (!defs[ss.stageName]) defs[ss.stageName] = [];
       defs[ss.stageName].push({ subName: ss.subName, description: ss.description });
     });
-
-    // Then overlay progress data
     departments.forEach(dept => {
       subLookup[dept.name] = {};
       Object.keys(defs).forEach(stageName => {
         subLookup[dept.name][stageName] = defs[stageName].map(d => {
-          // Find matching progress entry
-          const prog = (subStageProgress||[]).find(p =>
-            p.dept === dept.name && p.stageName === stageName && p.subName === d.subName
-          );
+          const prog = (subStageProgress||[]).find(p => p.dept === dept.name && p.stageName === stageName && p.subName === d.subName);
+          const key = `${dept.name}|${stageName}|${d.subName}`;
           return {
-            subName: d.subName,
-            description: d.description,
-            status: prog ? prog.status : '未开始',
-            completedDate: prog ? prog.completedDate : '',
-            owner: prog ? prog.owner : '',
-            note: prog ? prog.note : ''
+            subName: d.subName, description: d.description,
+            status: pendingChanges[key] || (prog ? prog.status : '未开始'),
+            isPending: key in pendingChanges
           };
         });
       });
     });
   }
 
-  // Dept filter
   const deptNames = departments.map(d => d.name);
   renderFilter('deptFilter', deptNames, (sel) => renderDepts(departments, stages, sel, subLookup));
-
   renderDepts(departments, stages, null, subLookup);
   renderLogs(logs||[]);
 }
@@ -316,7 +549,6 @@ function renderDepts(departments, stages, filter, subLookup) {
     const color = DEPT_COLORS[i % DEPT_COLORS.length];
     const icon = DEPT_ICONS[dept.name] || '📋';
 
-    // Main milestone dots
     const msHtml = stages.map((s, si) => {
       const pct = ((si + 1) / stages.length * 100).toFixed(1);
       const stageKey = Object.keys(dept.stages||{}).find(k => k === s || k.includes(s) || s.includes(k));
@@ -325,30 +557,21 @@ function renderDepts(departments, stages, filter, subLookup) {
       return `<div class="milestone" style="left:${pct}%"><div class="dot ${dotClass}"></div><div class="name">${s}</div></div>`;
     }).join('');
 
-    // Sub-stage detail groups
     const deptSubs = subLookup[dept.name] || {};
     const stageGroupsHtml = stages.map((stageName, si) => {
       const subs = deptSubs[stageName] || [];
       if (!subs.length) {
-        // No sub-stages defined, show simple row
         const stageKey = Object.keys(dept.stages||{}).find(k => k === stageName || k.includes(stageName) || stageName.includes(k));
         const st = stageKey ? dept.stages[stageKey] : '未开始';
         const cls = st === '已完成' ? 'status-done' : st === '进行中' ? 'status-wip' : 'status-todo';
-        return `<div class="stage-group">
-          <div class="stage-group-header">
-            <div class="stage-group-title"><span class="stage-num">${si+1}</span>${stageName}</div>
-            <span class="status-tag ${cls}">${st}</span>
-          </div>
-        </div>`;
+        return `<div class="stage-group"><div class="stage-group-header"><div class="stage-group-title"><span class="stage-num">${si+1}</span>${stageName}</div><span class="status-tag ${cls}">${st}</span></div></div>`;
       }
 
-      // Mini dots for stage header
       const miniDots = subs.map(sub => {
         const dc = sub.status === '已完成' ? 'done' : sub.status === '进行中' ? 'wip' : '';
         return `<div class="stage-mini-dot ${dc}"></div>`;
       }).join('');
 
-      // Count completed
       const doneCount = subs.filter(s => s.status === '已完成').length;
       const stageKey = Object.keys(dept.stages||{}).find(k => k === stageName || k.includes(stageName) || stageName.includes(k));
       const stageSt = stageKey ? dept.stages[stageKey] : '未开始';
@@ -358,61 +581,40 @@ function renderDepts(departments, stages, filter, subLookup) {
         const checkClass = sub.status === '已完成' ? 'done' : sub.status === '进行中' ? 'wip' : '';
         const checkIcon = sub.status === '已完成' ? '✓' : sub.status === '进行中' ? '◐' : '';
         const stCls = sub.status === '已完成' ? 'status-done' : sub.status === '进行中' ? 'status-wip' : 'status-todo';
-        return `<div class="sub-step">
+        const pendingMark = sub.isPending ? ' style="outline:2px solid var(--warning);outline-offset:-2px;border-radius:4px"' : '';
+        const eDept = dept.name.replace(/'/g,"\\'");
+        const eStageName = stageName.replace(/'/g,"\\'");
+        const eSubName = sub.subName.replace(/'/g,"\\'");
+        return `<div class="sub-step"${pendingMark}>
           <div class="sub-step-check ${checkClass}">${checkIcon}</div>
-          <div class="sub-step-info">
-            <div class="sub-step-name">${sub.subName}</div>
-            <div class="sub-step-desc">${sub.description}</div>
-          </div>
+          <div class="sub-step-info"><div class="sub-step-name">${sub.subName}</div><div class="sub-step-desc">${sub.description}</div></div>
           <div class="sub-step-meta">
             <span class="sub-step-status ${stCls}">${sub.status}</span>
+            <button class="sub-step-toggle" onclick="toggleSubStatus('${eDept}','${eStageName}','${eSubName}')">切换</button>
           </div>
         </div>`;
       }).join('');
 
       return `<div class="stage-group">
-        <div class="stage-group-header" onclick="this.parentElement.querySelector('.stage-group-body').classList.toggle('show');this.parentElement.classList.toggle('expanded')">
-          <div class="stage-group-title">
-            <span class="stage-num">${si+1}</span>${stageName}
-            <span style="font-size:11px;color:var(--gray-500);font-weight:400;margin-left:4px">(${doneCount}/${subs.length})</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div class="stage-mini-progress">${miniDots}</div>
-            <span class="status-tag ${cls}">${stageSt}</span>
-          </div>
-        </div>
+        <div class="stage-group-header"><div class="stage-group-title"><span class="stage-num">${si+1}</span>${stageName}<span style="font-size:11px;color:var(--gray-500);font-weight:400;margin-left:4px">(${doneCount}/${subs.length})</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><div class="stage-mini-progress">${miniDots}</div><span class="status-tag ${cls}">${stageSt}</span></div></div>
         <div class="stage-group-body" style="display:none">${subsHtml}</div>
       </div>`;
     }).join('');
 
-    return `
-    <div class="dept-card">
-      <div class="dept-header">
-        <div class="dept-name">
-          <div class="icon" style="background:${color}15;color:${color}">${icon}</div>
-          ${dept.name}
-        </div>
-        <span class="dept-badge ${dept.progress >= 100 ? 'badge-done' : 'badge-progress'}">${dept.stage}</span>
-      </div>
-      <div class="progress-section">
-        <div class="progress-info"><span>总进度</span><span class="pct">${dept.progress}%</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:${dept.progress}%;background:linear-gradient(90deg,${color}88,${color})"></div></div>
-        <div class="milestones">${msHtml}</div>
-      </div>
-      <div class="dept-details">
-        <div class="detail-item"><span class="label">负责人:</span><span class="value">${dept.owner||'--'}</span></div>
-        <div class="detail-item"><span class="label">更新日期:</span><span class="value">${dept.updated||'--'}</span></div>
-        <div class="detail-item" style="grid-column:1/-1"><span class="label">当前情况:</span><span class="value">${dept.note||'--'}</span></div>
-      </div>
+    return `<div class="dept-card">
+      <div class="dept-header"><div class="dept-name"><div class="icon" style="background:${color}15;color:${color}">${icon}</div>${dept.name}</div>
+      <span class="dept-badge ${dept.progress >= 100 ? 'badge-done' : 'badge-progress'}">${dept.stage}</span></div>
+      <div class="progress-section"><div class="progress-info"><span>总进度</span><span class="pct">${dept.progress}%</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:${dept.progress}%;background:linear-gradient(90deg,${color}88,${color})"></div></div>
+      <div class="milestones">${msHtml}</div></div>
+      <div class="dept-details"><div class="detail-item"><span class="label">负责人:</span><span class="value">${dept.owner||'--'}</span></div>
+      <div class="detail-item"><span class="label">更新日期:</span><span class="value">${dept.updated||'--'}</span></div>
+      <div class="detail-item" style="grid-column:1/-1"><span class="label">当前情况:</span><span class="value">${dept.note||'--'}</span></div></div>
       <button class="expand-btn" onclick="toggleDetail(this)">展开阶段详情 ▼</button>
       <div class="stage-detail-panel">${stageGroupsHtml}</div>
     </div>`;
   }).join('');
-
-  // Initialize stage-group-body toggle via CSS
-  document.querySelectorAll('.stage-group-header').forEach(h => {
-    h.style.cursor = 'pointer';
-  });
 }
 
 function toggleDetail(btn) {
@@ -422,26 +624,27 @@ function toggleDetail(btn) {
   btn.textContent = show ? '收起阶段详情 ▲' : '展开阶段详情 ▼';
 }
 
-// Toggle stage group body
 document.addEventListener('click', function(e) {
   const header = e.target.closest('.stage-group-header');
   if (!header) return;
   const body = header.nextElementSibling;
   if (!body) return;
-  const isShown = body.style.display !== 'none';
-  body.style.display = isShown ? 'none' : 'block';
+  body.style.display = body.style.display === 'none' ? 'block' : 'none';
 });
 
 function renderLogs(logs) {
   const list = document.getElementById('logList');
   list.innerHTML = logs.length ? logs.map(l => `
-    <div class="log-item">
-      <div class="log-date">${l.date}</div>
-      <div class="log-dept-tag">${l.dept}</div>
-      <div class="log-content">${l.content}</div>
-      <div class="log-author">${l.author||''}</div>
-    </div>
+    <div class="log-item"><div class="log-date">${l.date}</div><div class="log-dept-tag">${l.dept}</div>
+    <div class="log-content">${l.content}</div><div class="log-author">${l.author||''}</div></div>
   `).join('') : '<div style="text-align:center;color:var(--gray-500);padding:40px">暂无更新日志</div>';
+}
+
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
 
 // Tab switching
@@ -454,7 +657,6 @@ document.querySelectorAll('.tab').forEach(tab => {
   };
 });
 
-// Init
 loadData();
 </script>
 </body>
