@@ -2,7 +2,7 @@
   "config": {
     "company": "海底捞",
     "title": "各部门AI提效进度看板",
-    "syncTime": "2026-03-30T07:59:46.864Z",
+    "syncTime": "2026-03-30T08:03:45.363Z",
     "stages": [
       "需求调研",
       "模型选择与提示词学习",
@@ -14,13 +14,13 @@
   "departments": [
     {
       "name": "商业分析部",
-      "stage": "自动化工作流学习",
-      "progress": 30,
+      "stage": "全面应用",
+      "progress": 60,
       "stages": {
         "需求调研": "已完成",
         "模型选择与提示词学习": "已完成",
-        "自动化工作流学习": "未开始",
-        "全面应用": "未开始",
+        "自动化工作流学习": "已完成",
+        "全面应用": "进行中",
         "持续优化": "未开始"
       },
       "owner": "孙遮缘",
@@ -199,8 +199,8 @@
       "dept": "商业分析部",
       "stageName": "自动化工作流学习",
       "subName": "单步自动化",
-      "status": "未开始",
-      "completedDate": "",
+      "status": "已完成",
+      "completedDate": "2026-03-30",
       "owner": "",
       "note": ""
     },
@@ -208,8 +208,8 @@
       "dept": "商业分析部",
       "stageName": "自动化工作流学习",
       "subName": "多步工作流",
-      "status": "未开始",
-      "completedDate": "",
+      "status": "已完成",
+      "completedDate": "2026-03-30",
       "owner": "",
       "note": ""
     },
@@ -217,8 +217,8 @@
       "dept": "商业分析部",
       "stageName": "自动化工作流学习",
       "subName": "系统集成",
-      "status": "未开始",
-      "completedDate": "",
+      "status": "已完成",
+      "completedDate": "2026-03-30",
       "owner": "",
       "note": ""
     },
@@ -226,7 +226,7 @@
       "dept": "商业分析部",
       "stageName": "全面应用",
       "subName": "业务全覆盖",
-      "status": "未开始",
+      "status": "进行中",
       "completedDate": "",
       "owner": "",
       "note": ""
@@ -235,7 +235,7 @@
       "dept": "商业分析部",
       "stageName": "全面应用",
       "subName": "智能体应用",
-      "status": "未开始",
+      "status": "进行中",
       "completedDate": "",
       "owner": "",
       "note": ""
