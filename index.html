@@ -170,6 +170,21 @@
   .tooltip { position:absolute; background:var(--gray-800); color:#fff; padding:8px 14px; border-radius:8px; font-size:14px; line-height:1.5; z-index:100; pointer-events:none; white-space:nowrap; box-shadow:var(--shadow-md); }
   .tooltip::after { content:''; position:absolute; bottom:-5px; left:50%; transform:translateX(-50%); border-left:5px solid transparent; border-right:5px solid transparent; border-top:5px solid var(--gray-800); }
 
+  /* Sub-department (工种) */
+  .subdept-section { margin-top:18px; padding-top:16px; border-top:1px solid var(--gray-100); }
+  .subdept-title { font-size:16px; font-weight:600; color:var(--gray-700); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+  .subdept-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .subdept-btn { padding:10px 22px; border-radius:12px; border:2px solid var(--gray-200); background:var(--card); cursor:pointer; font-size:15px; font-weight:600; color:var(--gray-500); transition:all .2s; display:flex; align-items:center; gap:8px; }
+  .subdept-btn:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-light); }
+  .subdept-btn.active { border-color:var(--primary); color:#fff; background:var(--primary); }
+  .subdept-panel { display:none; padding:16px 18px; background:var(--gray-50); border-radius:12px; border:1px solid var(--gray-200); margin-bottom:12px; }
+  .subdept-panel.open { display:block; }
+  .subdept-panel h4 { font-size:17px; font-weight:600; color:var(--gray-800); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+  .subdept-placeholder { text-align:center; padding:24px; color:var(--gray-400); font-size:15px; }
+  .subdept-score-row { display:flex; align-items:center; gap:14px; margin-bottom:12px; }
+  .subdept-score-badge { font-size:28px; font-weight:700; letter-spacing:-1px; }
+  .subdept-score-sub { font-size:14px; font-weight:400; color:var(--gray-400); }
+
   /* Track tab */
   .track-mod-btns { display:flex; gap:4px; margin-bottom:18px; background:var(--gray-100); padding:4px; border-radius:10px; width:fit-content; }
   .track-mod-btn { padding:8px 22px; border-radius:8px; border:none; background:transparent; cursor:pointer; font-size:15px; color:var(--gray-500); font-weight:500; transition:all .2s; }
@@ -255,7 +270,7 @@
 <div class="tooltip" id="tooltip" style="display:none;"></div>
 
 <script>
-const M=['#b0b8b4','#8e9a98','#7a9a99','#6d8a9a','#7a8a9e','#8a7f9a','#9a8a8a','#9a7a7a','#8a6a6a','#7a5a5a','#6a4a4a'];
+const M=['#c25454','#c46a4e','#c48048','#c89648','#c0a44a','#a0a85a','#80a862','#60a46c','#4c9a68','#3c8a60','#2e7a52'];
 const LEVELS=[
   {level:0,name:'零基础',desc:'完全不使用任何AI工具',color:M[0]},
   {level:1,name:'入门聊天',desc:'使用飞书内置豆包，仅限基础聊天问答',color:M[1]},
@@ -299,7 +314,7 @@ const DEPARTMENTS=[
       {cat:'tip',label:'技巧',items:['开头先说"你是海底捞资深HR专家"，回答质量会明显提升']},
       {cat:'track',label:'追踪',items:['建飞书表格"AI使用日志"：日期、场景、效果评分(1-5)']},
     ]},
-  { name:'财务部', icon:'📊', color:'#8a9a98', score:2, levelName:'国产大模型对话',
+  { name:'国内财务部', icon:'📊', color:'#8a9a98', score:2, levelName:'国产大模型对话',
     range:{min:1,max:4,minName:'入门聊天',maxName:'国产AI介入工作'},
     evidence:['部分员工使用豆包做基础查询','少数成员已尝试用国产大模型辅助文档处理','核心财务工作仍以传统Excel手工为主','对AI处理敏感财务数据存在顾虑','希望AI能帮助自动化重复性报表刷新工作'],
     teams:null,
@@ -309,6 +324,11 @@ const DEPARTMENTS=[
       {cat:'tip',label:'技巧',items:['敏感数据用"A公司""B门店"替代真实名称后再给AI处理']},
       {cat:'track',label:'追踪',items:['每周记录一次"AI辅助 vs 手工"同一任务的用时对比']},
     ]},
+  { name:'SuperHi财务部', icon:'💰', color:'#7a9a6d', score:null, levelName:'待完整评估',
+    range:null,
+    evidence:['待完成完整访谈评估'],
+    teams:null,
+    currentPlan:[]},
   { name:'市场部', icon:'📢', color:'#9a8a8a', score:2, levelName:'国产大模型对话',
     range:{min:1,max:6,minName:'入门聊天',maxName:'深度数据分析'},
     evidence:['李妍妍团队与陈婧仪团队处于入门聊天阶段','申江团队已达到深度数据分析水平（Lv.6）','团队间AI使用水平差异极大（Lv.1~Lv.6）','整体仍有大量手工操作空间可被AI替代'],
@@ -372,7 +392,7 @@ const ROADMAPS=[
         {t:'vi',s:'搭建AI辅助招聘全流程：简历解析→条件匹配→排序推荐→面试安排→通知'},
       ]},
     ]},
-  { dept:'财务部', cur:2, tgt:9,
+  { dept:'国内财务部', cur:2, tgt:9,
     note:'从国产大模型对话出发，目标是自动化工作流并接近多模态与智能体水平，彻底解放重复性报表工作',
     milestones:[
       { from:2,to:3,label:'国产大模型对话 → 国际大模型对话',skills:[
@@ -402,6 +422,9 @@ const ROADMAPS=[
         {t:'vi',s:'搭建费用报销智能审核流：发票OCR→规则校验→异常标记→审批流自动推进'},
       ]},
     ]},
+  { dept:'SuperHi财务部', cur:null, tgt:null,
+    note:'待完成完整访谈评估后设定里程碑',
+    milestones:[] },
   { dept:'市场部', cur:2, tgt:7,
     note:'李妍妍&陈婧仪团队从入门出发，申江团队已达Lv.6；各团队按自身节奏提升，目标AI辅助编程',
     milestones:[
@@ -438,11 +461,12 @@ const REQS=[
     {name:'订阅号文章初筛',desc:'从1000+篇投稿中按规则筛选合格文章',pri:'mid',ai:'硬指标可AI初筛，主观质量判断仍需人工'},
     {name:'大区数据保底差额',desc:'追踪门店人员数据，部分数据不在BI上',pri:'mid',ai:'需先推动BI接入更多数据源'},
   ]},
-  { dept:'财务部',icon:'📊',color:'#8a9a98',items:[
+  { dept:'国内财务部',icon:'📊',color:'#8a9a98',items:[
     {name:'经营分析报告自动化',desc:'月度/季度经营数据汇总→生成标准格式报告',pri:'high',ai:'AI擅长数据汇总与格式化输出'},
     {name:'多系统报表刷新',desc:'从不同系统下载数据→合并→校验→输出',pri:'high',ai:'固化流程最适合AI全自动处理'},
     {name:'产品盲测数据分析',desc:'用过往成本与销售数据建立分析模型',pri:'mid',ai:'AI可提供建模思路，需精准提示词'},
   ]},
+  { dept:'SuperHi财务部',icon:'💰',color:'#7a9a6d',items:[]},
   { dept:'市场部',icon:'📢',color:'#9a8a8a',items:[
     {name:'售卖数据自动抓取',desc:'每小时从美团/抖音/小程序后台拉取售卖数据并汇总',pri:'high',ai:'小程序和抖音可API对接；美团需确认'},
     {name:'三方平台商品上下架',desc:'在美团/抖音后台批量上下架商品',pri:'high',ai:'需确认平台权限；可先从自有小程序试点'},
@@ -465,9 +489,10 @@ const PROGRESS_DATA=[
   { dept:'人事部', target:8, records:[
     {date:'2026-03-30',score:1,note:'初始评估'},
   ]},
-  { dept:'财务部', target:9, records:[
+  { dept:'国内财务部', target:9, records:[
     {date:'2026-03-30',score:2,note:'初始评估'},
   ]},
+  { dept:'SuperHi财务部', target:null, records:[]},
   { dept:'产品部', target:null, records:[
     {date:'2026-03-30',score:4,note:'杨茜团队初步评估'},
   ]},
@@ -480,10 +505,21 @@ const COMM_LOGS=[
   {date:'2026-03-30',dept:'人事部',icon:'👥',color:'#7a8a9e',
    summary:'完成人事部AI使用能力诊断访谈。了解人效看板、店经理档案、贺卡生成等核心场景的现有操作方式，确认部门整体处于入门阶段，识别高优自动化需求。',
    next:'协助开通GPT企业账号，启动入门培训'},
-  {date:'2026-03-30',dept:'财务部',icon:'📊',color:'#8a9a98',
+  {date:'2026-03-30',dept:'国内财务部',icon:'📊',color:'#8a9a98',
    summary:'完成财务部AI使用能力诊断访谈。梳理经营分析报告、多系统报表刷新、产品盲测分析等场景，确认部门已有国产大模型使用基础，评估提升空间。',
    next:'引导使用国际大模型处理报表合并与校验任务'},
 ];
+
+/* ── 工种细分数据 ── */
+const SUB_DEPTS={
+  '市场部':[
+    {name:'会员部', score:null, levelName:'待评估', range:null, currentPlan:[], milestones:[]},
+    {name:'品运部', score:null, levelName:'待评估', range:null, currentPlan:[], milestones:[]},
+  ],
+  '人事部':[],
+  '国内财务部':[],
+  'SuperHi财务部':[],
+};
 
 let deptFilter='all',reqFilter='all',trackFilter='all';
 function clr(s){return s===null?'var(--gray-300)':LEVELS[Math.min(Math.round(s),10)].color;}
@@ -501,7 +537,7 @@ function renderScale(){
 }
 function togScale(b){const d=document.getElementById('sdGrid');const c=d.classList.toggle('collapsed');b.textContent=c?'▸ 展开各等级详情':'▾ 收起等级详情';}
 
-const DISPLAY_ORDER=['商业分析部','市场部','人事部','财务部','产品部'];
+const DISPLAY_ORDER=['商业分析部','市场部','人事部','国内财务部','SuperHi财务部','产品部'];
 function orderedDepts(){return DISPLAY_ORDER.map(n=>DEPARTMENTS.find(d=>d.name===n)).filter(Boolean);}
 
 function renderFilters(id,key){
@@ -654,8 +690,89 @@ function renderCards(){
       }
       h+=`</div>`;
     }
+    // sub-departments
+    h+=renderSubDepts(dept);
     h+=`</div>`;return h;
   }).join('');
+}
+
+function renderSubDepts(dept){
+  const subs=SUB_DEPTS[dept.name];
+  if(!subs)return '';
+  const uid=dept.name.replace(/[^a-zA-Z\u4e00-\u9fa5]/g,'');
+  let h=`<div class="subdept-section"><div class="subdept-title">🏷️ 工种细分</div>`;
+  if(subs.length===0){
+    h+=`<div class="subdept-placeholder">工种分类待补充 — 后续访谈后添加</div>`;
+  } else {
+    h+=`<div class="subdept-btns">`;
+    subs.forEach((s,i)=>{
+      h+=`<button class="subdept-btn" onclick="togSubDept('${uid}_${i}',this)">${s.name}</button>`;
+    });
+    h+=`</div>`;
+    subs.forEach((s,i)=>{
+      h+=`<div class="subdept-panel" id="sdp_${uid}_${i}">`;
+      h+=`<h4>${s.name}</h4>`;
+      if(s.score!==null){
+        const sc=clr(s.score);
+        h+=`<div class="subdept-score-row"><span class="subdept-score-badge" style="color:${sc}">Lv.${s.score}</span><span class="subdept-score-sub">${s.levelName}</span></div>`;
+        // mini range bar
+        const pct=(s.score/10*100).toFixed(1);
+        h+=`<div class="range-bar"><div class="range-fill" style="width:${pct}%;background:${sc}"></div>`;
+        h+=`<div class="range-mkr" style="left:${pct}%;background:var(--gray-800)"></div>`;
+        h+=`<span class="range-mkr-label" style="left:${pct}%;color:var(--gray-800)">Lv.${s.score}</span>`;
+        if(s.range){
+          const minP=(s.range.min/10*100).toFixed(1),maxP=(s.range.max/10*100).toFixed(1);
+          h+=`<div class="range-band" style="left:${minP}%;width:${(maxP-minP).toFixed(1)}%;background:${sc}"></div>`;
+          h+=`<div class="range-mkr" style="left:${minP}%;background:var(--gray-700)"></div>`;
+          h+=`<span class="range-mkr-btm" style="left:${minP}%;color:var(--gray-700)">下限 Lv.${s.range.min}</span>`;
+          h+=`<div class="range-mkr" style="left:${maxP}%;background:var(--gray-700)"></div>`;
+          h+=`<span class="range-mkr-btm" style="left:${maxP}%;color:var(--gray-700)">上限 Lv.${s.range.max}</span>`;
+        }
+        h+=`</div><div class="score-bar-labels"><span>Lv.0</span><span>Lv.5</span><span>Lv.10</span></div>`;
+      } else {
+        h+=`<div class="subdept-placeholder">📋 待评估 — 具体评分将在访谈后补充</div>`;
+      }
+      // plan
+      if(s.currentPlan&&s.currentPlan.length){
+        h+=`<div class="plan-section" style="margin-top:12px"><div class="plan-title">当前阶段提效方案</div><div class="plan-grid">`;
+        const icons={daily:'🔄',challenge:'🎯',tip:'💡',track:'📊'};
+        const labels={daily:'每日练习',challenge:'阶段挑战',tip:'实用技巧',track:'进度管理'};
+        s.currentPlan.forEach(p=>{
+          h+=`<div class="plan-card ${p.cat}"><div class="plan-cat ${p.cat}">${icons[p.cat]} ${labels[p.cat]||p.label}</div>`;
+          p.items.forEach(item=>{h+=`<div class="plan-check"><label>${item}</label></div>`;});
+          h+=`</div>`;
+        });
+        h+=`</div></div>`;
+      }
+      // milestones
+      if(s.milestones&&s.milestones.length){
+        h+=`<div style="margin-top:12px"><div class="plan-title">分阶段里程碑</div><div class="milestones" style="padding-left:22px">`;
+        s.milestones.forEach(ms=>{
+          const msC=clr(ms.to);
+          h+=`<div class="ms"><div class="ms-dot later" style="background:var(--gray-300)"></div>`;
+          h+=`<div class="ms-level" style="color:${msC}">${ms.label}</div>`;
+          h+=`<div class="ms-status">⏳ 待启动</div>`;
+          h+=`<div class="ms-items">`;
+          ms.skills.forEach(sk=>{
+            const cls=sk.t==='sk'?'skill':(sk.t==='ac'?'action':'vision');
+            const tag=sk.t==='sk'?'能力':(sk.t==='ac'?'行动':'愿景');
+            h+=`<div class="ms-item ${cls}"><span class="ms-tag ${sk.t==='vi'?'vi':sk.t}">${tag}</span>${sk.s}</div>`;
+          });
+          h+=`</div></div>`;
+        });
+        h+=`</div></div>`;
+      }
+      h+=`</div>`;
+    });
+  }
+  h+=`</div>`;
+  return h;
+}
+
+function togSubDept(id,btn){
+  const p=document.getElementById('sdp_'+id);
+  const isOpen=p.classList.toggle('open');
+  btn.classList.toggle('active',isOpen);
 }
 
 function renderReqs(){
@@ -798,7 +915,7 @@ function renderLogs(){
 
   // 沟通频率卡片
   h+=`<div class="freq-card"><h3>📊 沟通频率总览</h3><div class="freq-grid">`;
-  const deptNames=['市场部','人事部','财务部','产品部'];
+  const deptNames=['市场部','人事部','国内财务部','SuperHi财务部','产品部'];
   deptNames.forEach(dn=>{
     const dept=DEPARTMENTS.find(d=>d.name===dn);
     const logs=COMM_LOGS.filter(l=>l.dept===dn);
