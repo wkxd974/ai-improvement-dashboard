@@ -2,7 +2,7 @@
   "config": {
     "company": "海底捞",
     "title": "各部门AI提效进度看板",
-    "syncTime": "2026-03-30T08:03:45.363Z",
+    "syncTime": "2026-03-30T16:05:28.470720",
     "stages": [
       "需求调研",
       "模型选择与提示词学习",
@@ -14,13 +14,13 @@
   "departments": [
     {
       "name": "商业分析部",
-      "stage": "全面应用",
-      "progress": 60,
+      "stage": "需求调研",
+      "progress": 0,
       "stages": {
-        "需求调研": "已完成",
-        "模型选择与提示词学习": "已完成",
-        "自动化工作流学习": "已完成",
-        "全面应用": "进行中",
+        "需求调研": "未开始",
+        "模型选择与提示词学习": "未开始",
+        "自动化工作流学习": "未开始",
+        "全面应用": "未开始",
         "持续优化": "未开始"
       },
       "owner": "孙遮缘",
@@ -154,8 +154,8 @@
       "dept": "商业分析部",
       "stageName": "需求调研",
       "subName": "部门需求收集",
-      "status": "已完成",
-      "completedDate": "2026-03-30",
+      "status": "未开始",
+      "completedDate": "",
       "owner": "",
       "note": ""
     },
@@ -163,8 +163,8 @@
       "dept": "商业分析部",
       "stageName": "需求调研",
       "subName": "AI场景挖掘",
-      "status": "已完成",
-      "completedDate": "2026-03-30",
+      "status": "未开始",
+      "completedDate": "",
       "owner": "",
       "note": ""
     },
@@ -172,8 +172,8 @@
       "dept": "商业分析部",
       "stageName": "模型选择与提示词学习",
       "subName": "模型选型",
-      "status": "已完成",
-      "completedDate": "2026-03-30",
+      "status": "未开始",
+      "completedDate": "",
       "owner": "",
       "note": ""
     },
@@ -181,8 +181,8 @@
       "dept": "商业分析部",
       "stageName": "模型选择与提示词学习",
       "subName": "提示词入门",
-      "status": "已完成",
-      "completedDate": "2026-03-30",
+      "status": "未开始",
+      "completedDate": "",
       "owner": "",
       "note": ""
     },
@@ -190,8 +190,8 @@
       "dept": "商业分析部",
       "stageName": "模型选择与提示词学习",
       "subName": "提示词进阶",
-      "status": "已完成",
-      "completedDate": "2026-03-30",
+      "status": "未开始",
+      "completedDate": "",
       "owner": "",
       "note": ""
     },
@@ -199,8 +199,8 @@
       "dept": "商业分析部",
       "stageName": "自动化工作流学习",
       "subName": "单步自动化",
-      "status": "已完成",
-      "completedDate": "2026-03-30",
+      "status": "未开始",
+      "completedDate": "",
       "owner": "",
       "note": ""
     },
@@ -208,8 +208,8 @@
       "dept": "商业分析部",
       "stageName": "自动化工作流学习",
       "subName": "多步工作流",
-      "status": "已完成",
-      "completedDate": "2026-03-30",
+      "status": "未开始",
+      "completedDate": "",
       "owner": "",
       "note": ""
     },
@@ -217,8 +217,8 @@
       "dept": "商业分析部",
       "stageName": "自动化工作流学习",
       "subName": "系统集成",
-      "status": "已完成",
-      "completedDate": "2026-03-30",
+      "status": "未开始",
+      "completedDate": "",
       "owner": "",
       "note": ""
     },
@@ -226,7 +226,7 @@
       "dept": "商业分析部",
       "stageName": "全面应用",
       "subName": "业务全覆盖",
-      "status": "进行中",
+      "status": "未开始",
       "completedDate": "",
       "owner": "",
       "note": ""
@@ -235,7 +235,7 @@
       "dept": "商业分析部",
       "stageName": "全面应用",
       "subName": "智能体应用",
-      "status": "进行中",
+      "status": "未开始",
       "completedDate": "",
       "owner": "",
       "note": ""
@@ -581,6 +581,188 @@
       "completedDate": "",
       "owner": "",
       "note": ""
+    }
+  ],
+  "requirements": [
+    {
+      "dept": "人事部",
+      "name": "门店人效数据自动化",
+      "description": "日度打卡数据→人均看台→月度累计→大区累计，含合理值预警规则，自动输出Excel",
+      "priority": "高",
+      "feasibility": "可直接实现",
+      "analysis": "规则明确、数据来自BI，可用AI自动化处理数万行数据",
+      "stage": "需求调研",
+      "note": "需要BI数仓API接口"
+    },
+    {
+      "dept": "人事部",
+      "name": "店经理全档案更新",
+      "description": "多系统取数（家族数据、金融数据、基本信息、奖惩、商学院等），月度汇总为一张大表",
+      "priority": "高",
+      "feasibility": "需技术验证",
+      "analysis": "数据源分散（PS/OA/BI/云文档），需逐一对接；可用Skill固化规则",
+      "stage": "需求调研",
+      "note": "数据来源涉及多个系统，需IT配合"
+    },
+    {
+      "dept": "人事部",
+      "name": "HR指标自动化计算",
+      "description": "保底差额人数、各维度离职率、工龄分布等十几个人事指标自动计算",
+      "priority": "中",
+      "feasibility": "可直接实现",
+      "analysis": "规则固定，从BI取数后用AI自动计算并输出",
+      "stage": "需求调研",
+      "note": "与门店人效类似，需BI数据接口"
+    },
+    {
+      "dept": "人事部",
+      "name": "张大哥送祝福贺卡批量制作",
+      "description": "季度/年度贺卡，统一模板换照片和姓名，涉及ToC和冲A人员",
+      "priority": "低",
+      "feasibility": "需技术验证",
+      "analysis": "模板统一，批量替换可行；图片版权和AI生图工具需进一步探索",
+      "stage": "需求调研",
+      "note": "AI生图版权问题待确认"
+    },
+    {
+      "dept": "人事部",
+      "name": "订阅号文章初筛",
+      "description": "从1000+篇员工投稿中按规则初筛（篇幅、重复、基本质量），减少人工筛选量",
+      "priority": "中",
+      "feasibility": "需技术验证",
+      "analysis": "客观规则（字数/重复）AI可做；主观判断（情感/新意）AI较难",
+      "stage": "需求调研",
+      "note": "主观判断部分仍需人工复审"
+    },
+    {
+      "dept": "财务部",
+      "name": "经营分析报告自动化",
+      "description": "同环比报表自动化+AI撰写经营分析报告，支持模板参考和重点方向调整",
+      "priority": "高",
+      "feasibility": "可直接实现",
+      "analysis": "Claude写经分效果好，可喂历史模板；AI可压缩一周工作到一两天",
+      "stage": "需求调研",
+      "note": "需提前准备报告模板和分析维度"
+    },
+    {
+      "dept": "财务部",
+      "name": "数据报表自动刷新",
+      "description": "从多系统下载数据→整理→VLOOKUP→透视→输出，固化为自动化工作流",
+      "priority": "高",
+      "feasibility": "需技术验证",
+      "analysis": "适合Skill固化；需确认各系统是否允许AI抓取/下载",
+      "stage": "需求调研",
+      "note": "部分系统可能需接口而非页面抓取"
+    },
+    {
+      "dept": "财务部",
+      "name": "产品信息审核自动化",
+      "description": "Pad展示信息与产品库比对一致性，检查长尾/同质化等产品规则",
+      "priority": "中",
+      "feasibility": "可直接实现",
+      "analysis": "编码对齐类审核AI准确率高，可规则化实现",
+      "stage": "需求调研",
+      "note": "需整理审核规则清单"
+    },
+    {
+      "dept": "财务部",
+      "name": "套餐组品测算",
+      "description": "基于菜品库+覆盖率/毛利/点击率等规则，AI穷举并推荐最优套餐组合",
+      "priority": "中",
+      "feasibility": "可直接实现",
+      "analysis": "规则明确时AI可穷举所有组合并筛选最优，计算能力强",
+      "stage": "需求调研",
+      "note": "需提供菜品库和组合规则"
+    },
+    {
+      "dept": "财务部",
+      "name": "异常数据监测与预警",
+      "description": "经营数据同比环比波动自动监测，含节假日修正和同店逻辑",
+      "priority": "高",
+      "feasibility": "可直接实现",
+      "analysis": "已验证节假日识别可行；需数仓标记停业/翻新状态",
+      "stage": "需求调研",
+      "note": "需明确异常阈值规则和数仓字段"
+    },
+    {
+      "dept": "市场部",
+      "name": "第三方平台售卖数据抓取",
+      "description": "美团/抖音/小程序后台每小时售卖数自动采集→多维表",
+      "priority": "高",
+      "feasibility": "需第三方配合",
+      "analysis": "小程序可自行抓取；美团/抖音需确认API接口或爬虫许可",
+      "stage": "需求调研",
+      "note": "需确认各平台API/爬虫政策"
+    },
+    {
+      "dept": "市场部",
+      "name": "第三方平台商品上下架",
+      "description": "美团/抖音后台批量配置上下架操作",
+      "priority": "中",
+      "feasibility": "需第三方配合",
+      "analysis": "需平台允许AI操控页面；小程序可先试点",
+      "stage": "需求调研",
+      "note": "需确认平台是否允许自动化操作"
+    },
+    {
+      "dept": "市场部",
+      "name": "套餐配置穿插复核",
+      "description": "1000+门店SKU配置正确性检查：荤素搭配、售卖日期、使用规则",
+      "priority": "高",
+      "feasibility": "需第三方配合",
+      "analysis": "规则明确可审核，但数据在第三方后台，需确认导出/API方式",
+      "stage": "需求调研",
+      "note": "美团后台暂不支持导出，需探索方案"
+    },
+    {
+      "dept": "市场部",
+      "name": "抖音短视频脚本优化",
+      "description": "AI辅助写拍摄脚本+根据数据反馈调优内容策略",
+      "priority": "中",
+      "feasibility": "可直接实现",
+      "analysis": "AI写脚本已成熟，可直接使用；调优需定期喂入数据",
+      "stage": "需求调研",
+      "note": "服务商可能已在使用AI"
+    },
+    {
+      "dept": "市场部",
+      "name": "批量设计物料制作",
+      "description": "同一模板批量替换门店名/尺寸/文字，覆盖15+门店×多点位",
+      "priority": "低",
+      "feasibility": "可直接实现",
+      "analysis": "模板化替换AI完全可做，属于立刻可实现的需求",
+      "stage": "需求调研",
+      "note": "需统一模板和门店信息清单"
+    },
+    {
+      "dept": "市场部",
+      "name": "企微账号运维自动化",
+      "description": "员工入离职→企微开通/注销/PS档案调整，含异动排查",
+      "priority": "中",
+      "feasibility": "需第三方配合",
+      "analysis": "企微是否允许AI操作需确认；建议人做选择、AI执行模板化动作",
+      "stage": "需求调研",
+      "note": "需确认企微API权限；操作风险需评估"
+    },
+    {
+      "dept": "市场部",
+      "name": "私域托管流程自动化",
+      "description": "门店企微托管配置，每店约2小时重复性操作",
+      "priority": "中",
+      "feasibility": "需第三方配合",
+      "analysis": "高度重复性工作，适合自动化；但需银时平台配合",
+      "stage": "需求调研",
+      "note": "需确认银时/供应商配合程度"
+    },
+    {
+      "dept": "市场部",
+      "name": "日报数据自动推送",
+      "description": "各品牌经营数据日报自动生成+推送飞书群",
+      "priority": "高",
+      "feasibility": "可直接实现",
+      "analysis": "已有如意寿司自动化先例，可复制到其他品牌",
+      "stage": "需求调研",
+      "note": "需对接BI数据源+飞书机器人"
     }
   ]
 }
