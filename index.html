@@ -36,11 +36,12 @@
   /* Summary overview */
   .summary-wrap { background:var(--card); border-radius:var(--radius); padding:22px 26px 18px; box-shadow:var(--shadow); margin-bottom:22px; }
   .summary-wrap h3 { font-size:16px; font-weight:600; color:var(--gray-700); margin-bottom:14px; }
-  .summary-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .summary-row { display:flex; align-items:center; gap:12px; margin-bottom:26px; }
   .summary-dept { min-width:130px; font-size:14px; font-weight:600; color:var(--gray-700); display:flex; align-items:center; gap:6px; }
   .summary-bar-wrap { flex:1; position:relative; height:14px; background:var(--gray-100); border-radius:7px; overflow:visible; }
   .summary-band { position:absolute; height:100%; border-radius:7px; opacity:.35; }
   .summary-mkr { position:absolute; top:-2px; width:3px; height:18px; border-radius:2px; background:var(--gray-700); z-index:2; transform:translateX(-50%); }
+  .summary-mkr-txt { position:absolute; top:18px; font-size:11px; color:var(--gray-500); white-space:nowrap; transform:translateX(-50%); z-index:2; }
   .summary-label { font-size:12px; font-weight:600; color:var(--gray-600); min-width:50px; text-align:right; }
 
   .scale-wrap { background:var(--card); border-radius:var(--radius); padding:22px 26px 18px; box-shadow:var(--shadow); margin-bottom:22px; }
@@ -308,14 +309,14 @@ const DEPARTMENTS=[
       {cat:'challenge',label:'目标',items:['每人将自己最常用的分析流程写成一份Skill文档']},
       {cat:'track',label:'追踪',items:['飞书多维表格记录自动化项目状态（构想/开发/已上线）']},
     ]},
-  { name:'品控部', icon:'🎯', color:'#7a9a99', score:null, levelName:'待完整评估',
+  { name:'品控部（产品部）', icon:'🎯', color:'#7a9a99', score:null, levelName:'待完整评估',
     range:{min:3,max:5,minName:'国际大模型对话',maxName:'国际AI介入工作'},
     evidence:['杨茜团队已达到用国产大模型处理工作的水平（Lv.4）','其余团队情况待补充'],
     teams:[{name:'杨茜团队',score:4}], partialScore:4,
     currentPlan:[
       {cat:'daily',label:'练习',items:['杨茜团队每天用AI处理一项文档工作（PRD整理/竞品摘要/会议纪要）']},
       {cat:'challenge',label:'目标',items:['整理3个AI最佳实践案例，为其他团队评估提供参考']},
-      {cat:'track',label:'待办',items:['安排其余团队访谈评估，补全品控部整体AI使用画像']},
+      {cat:'track',label:'待办',items:['安排其余团队访谈评估，补全品控部（产品部）整体AI使用画像']},
     ]},
   { name:'人事部', icon:'👥', color:'#7a8a9e', score:1, levelName:'入门聊天',
     range:{min:0,max:2,minName:'零基础',maxName:'国产大模型对话'},
@@ -347,8 +348,8 @@ const DEPARTMENTS=[
       {cat:'track',label:'追踪',items:['飞书多维表格记录自动化项目状态（构想/开发/已上线）']},
     ]},
   { name:'品牌运营中心', icon:'📢', color:'#9a8a8a', score:2, levelName:'国产大模型对话',
-    range:{min:1,max:7,minName:'入门聊天',maxName:'深度数据分析'},
-    evidence:['李妍妍团队与陈婧仪团队处于入门聊天阶段','申江团队已达到深度数据分析水平（Lv.7）','团队间AI使用水平差异极大（Lv.1~Lv.7）','整体仍有大量手工操作空间可被AI替代'],
+    range:{min:1,max:8,minName:'入门聊天',maxName:'AI辅助编程'},
+    evidence:['李妍妍团队与陈婧仪团队处于入门聊天阶段','申江团队已达到深度数据分析水平（Lv.7）','团队间AI使用水平差异极大（Lv.1~Lv.8）','整体仍有大量手工操作空间可被AI替代'],
     teams:[{name:'用户运营组·公域',score:1},{name:'用户运营组·私域',score:1},{name:'菜单管理组',score:7}],
     currentPlan:[
       {cat:'daily',label:'练习',items:['用AI改写一段营销文案，尝试3种风格（正式/活泼/种草）']},
@@ -374,7 +375,7 @@ const ROADMAPS=[
         {t:'vi',s:'搭建AI辅助经营决策系统：多维数据实时汇聚→趋势预测→策略推荐'},
       ]},
     ]},
-  { dept:'品控部', cur:null, tgt:null,
+  { dept:'品控部（产品部）', cur:null, tgt:null,
     note:'待完成完整访谈评估后设定里程碑；杨茜团队当前 Lv.4 可作为基准参考',
     milestones:[] },
   { dept:'人事部', cur:1, tgt:9,
@@ -512,7 +513,7 @@ const PROGRESS_DATA=[
   { dept:'SuperHi财务部', target:null, records:[
     {date:'2026-03-30',score:8.5,note:'初始评估'},
   ]},
-  { dept:'品控部', target:null, records:[
+  { dept:'品控部（产品部）', target:null, records:[
     {date:'2026-03-30',score:4,note:'杨茜团队初步评估'},
   ]},
 ];
@@ -615,6 +616,7 @@ const SUB_DEPTS={
 
 let deptFilter='all',reqFilter='all',trackFilter='all';
 function clr(s){return s===null?'var(--gray-300)':LEVELS[Math.min(Math.round(s),MAX_LV)].color;}
+function lvTxt(n){return n===MAX_LV?'∞':'Lv.'+n;}
 
 function renderScale(){
   const w=document.getElementById('scaleWrap');
@@ -638,7 +640,12 @@ function togScale(b){const d=document.getElementById('sdGrid');const c=d.classLi
 function renderSummary(){
   const w=document.getElementById('summaryWrap');
   let h='<h3>各部门 AI 能力水平总览</h3>';
-  orderedDepts().forEach(dept=>{
+  const sorted=[...orderedDepts()].sort((a,b)=>{
+    const aMax=a.range?a.range.max:(a.partialScore||0);
+    const bMax=b.range?b.range.max:(b.partialScore||0);
+    return bMax-aMax;
+  });
+  sorted.forEach(dept=>{
     const hasRange=dept.range!==null;
     const dispMax=hasRange?dept.range.max:(dept.partialScore||null);
     const c=dispMax!==null?clr(dispMax):'var(--gray-300)';
@@ -651,19 +658,22 @@ function renderSummary(){
       const bandW=(maxP-minP).toFixed(1);
       h+=`<div class="summary-band" style="left:${minP}%;width:${bandW}%;background:${c}"></div>`;
       h+=`<div class="summary-mkr" style="left:${minP}%"></div>`;
+      h+=`<span class="summary-mkr-txt" style="left:${minP}%">下限 ${lvTxt(dept.range.min)}</span>`;
       h+=`<div class="summary-mkr" style="left:${maxP}%"></div>`;
+      h+=`<span class="summary-mkr-txt" style="left:${maxP}%">上限 ${lvTxt(dept.range.max)}</span>`;
     } else if(dept.partialScore){
       const pct=(dept.partialScore/MAX_LV*100).toFixed(1);
       h+=`<div class="summary-mkr" style="left:${pct}%"></div>`;
+      h+=`<span class="summary-mkr-txt" style="left:${pct}%">~Lv.${dept.partialScore}</span>`;
     }
     h+=`</div>`;
-    h+=`<span class="summary-label" style="color:${c}">${hasRange?'Lv.'+dept.range.min+'~'+dept.range.max:(dept.partialScore?'~Lv.'+dept.partialScore:'待评估')}</span>`;
+    h+=`<span class="summary-label" style="color:${c}">${hasRange?lvTxt(dept.range.min)+'~'+lvTxt(dept.range.max):(dept.partialScore?'~Lv.'+dept.partialScore:'待评估')}</span>`;
     h+=`</div>`;
   });
   w.innerHTML=h;
 }
 
-const DISPLAY_ORDER=['商业分析部','品牌运营中心','人事部','国内财务部','SuperHi财务部','品控部'];
+const DISPLAY_ORDER=['商业分析部','品牌运营中心','人事部','国内财务部','SuperHi财务部','品控部（产品部）'];
 function orderedDepts(){return DISPLAY_ORDER.map(n=>DEPARTMENTS.find(d=>d.name===n)).filter(Boolean);}
 
 function renderFilters(id,key){
@@ -684,7 +694,7 @@ function miniScale(dept){
   const pct=(ds/MAX_LV*100).toFixed(1);
   let h='<div class="mini-scale-wrap"><div class="mini-scale">';
   LEVELS.forEach(lv=>{h+=`<div class="mini-seg" style="background:${lv.color}"></div>`;});
-  h+=`<div class="mini-marker" style="left:${pct}%"><span class="mini-marker-label">${dept.range?'Lv.'+ds:'已知Lv.'+ds}</span></div>`;
+  h+=`<div class="mini-marker" style="left:${pct}%"><span class="mini-marker-label">${dept.range?lvTxt(ds):'已知'+lvTxt(ds)}</span></div>`;
   h+='</div><div class="mini-names">';
   LEVELS.forEach(lv=>{h+=`<span>${lv.name}</span>`;});
   h+='</div></div>';return h;
@@ -700,9 +710,9 @@ function renderRangeBar(dept){
     h+=`<div class="range-fill" style="width:${maxP}%;background:${c};opacity:.2"></div>`;
     h+=`<div class="range-band" style="left:${minP}%;width:${bandW}%;background:${c}"></div>`;
     h+=`<div class="range-mkr" style="left:${minP}%;background:var(--gray-700)"></div>`;
-    h+=`<span class="range-mkr-btm" style="left:${minP}%;color:var(--gray-700)">下限 Lv.${dept.range.min} ${dept.range.minName}</span>`;
+    h+=`<span class="range-mkr-btm" style="left:${minP}%;color:var(--gray-700)">下限 ${lvTxt(dept.range.min)} ${dept.range.minName}</span>`;
     h+=`<div class="range-mkr" style="left:${maxP}%;background:var(--gray-700)"></div>`;
-    h+=`<span class="range-mkr-btm" style="left:${maxP}%;color:var(--gray-700)">上限 Lv.${dept.range.max} ${dept.range.maxName}</span>`;
+    h+=`<span class="range-mkr-btm" style="left:${maxP}%;color:var(--gray-700)">上限 ${lvTxt(dept.range.max)} ${dept.range.maxName}</span>`;
   } else if(dept.partialScore){
     const pct=(dept.partialScore/MAX_LV*100).toFixed(1);
     h+=`<div class="range-fill" style="width:${pct}%;background:${c};opacity:.5"></div>`;
@@ -710,7 +720,7 @@ function renderRangeBar(dept){
     h+=`<span class="range-mkr-label" style="left:${pct}%;color:var(--gray-800)">已知 Lv.${dept.partialScore}</span>`;
   }
   h+=`</div>`;
-  h+=`<div class="score-bar-labels"><span>Lv.0</span><span>Lv.5</span><span>Lv.11</span></div>`;
+  h+=`<div class="score-bar-labels"><span>Lv.0</span><span>Lv.5</span><span>∞</span></div>`;
   return h;
 }
 
@@ -742,9 +752,9 @@ function renderCards(){
     let h=`<div class="dept-card">`;
     h+=`<div class="dept-header"><div class="dept-name">
       <div class="dept-icon" style="background:${dept.color}18;color:${dept.color}">${dept.icon}</div>
-      <div><h3>${dept.name}</h3><span class="level-tag" style="background:${c}18;color:${c}">${dept.range?'Lv.'+dept.range.max:(dept.partialScore?'部分评估 Lv.'+dept.partialScore:'待评估')} ${dept.range?dept.range.maxName:dept.levelName}</span></div>
+      <div><h3>${dept.name}</h3><span class="level-tag" style="background:${c}18;color:${c}">${dept.range?lvTxt(dept.range.max):(dept.partialScore?'部分评估 Lv.'+dept.partialScore:'待评估')} ${dept.range?dept.range.maxName:dept.levelName}</span></div>
     </div>
-    <div class="score-badge" style="color:${c}">${dispScore!==null?dispScore:'—'}<span class="score-sub">${dispScore!==null?'/11':''}</span></div></div>`;
+    <div class="score-badge" style="color:${c}">${dispScore!==null?dispScore:'—'}<span class="score-sub">${dispScore!==null?'/∞':''}</span></div></div>`;
     h+=renderRangeBar(dept);
     h+=miniScale(dept);
     // evidence
@@ -770,7 +780,7 @@ function renderCards(){
         const curPct=hasCur?(rm.cur/MAX_LV*100).toFixed(1):'0';
         const tgtPct=hasTgt?(rm.tgt/MAX_LV*100).toFixed(1):'0';
         h+=`<div class="roadmap"><div class="roadmap-head"><span class="label">🚀 提升路径</span>`;
-        h+=hasTgt?`<span class="target-tag" style="background:${tgtC}18;color:${tgtC}">🎯 目标 Lv.${rm.tgt} ${LEVELS[rm.tgt].name}</span>`
+        h+=hasTgt?`<span class="target-tag" style="background:${tgtC}18;color:${tgtC}">🎯 目标 ${lvTxt(rm.tgt)} ${LEVELS[rm.tgt].name}</span>`
                  :`<span class="target-tag" style="background:var(--gray-100);color:var(--gray-400)">🎯 目标待定</span>`;
         h+=`</div><div class="target-note"><strong>说明：</strong>${rm.note}</div>`;
         if(hasCur&&hasTgt){
@@ -779,9 +789,9 @@ function renderCards(){
             <div class="journey-fill" style="width:${curPct}%;background:${curC}"></div>
             <div class="journey-dot" style="left:${curPct}%;background:${curC}"></div>
             <div class="journey-dot" style="left:${tgtPct}%;background:${tgtC};border-style:dashed;opacity:.7"></div>
-            <span class="journey-label" style="left:${curPct}%;color:${curC}">当前 Lv.${rm.cur}</span>
-            <span class="journey-label" style="left:${tgtPct}%;color:${tgtC}">目标 Lv.${rm.tgt}</span>
-          </div></div><div class="journey-end-labels"><span>Lv.0</span><span>Lv.5</span><span>Lv.11</span></div>`;
+            <span class="journey-label" style="left:${curPct}%;color:${curC}">当前 ${lvTxt(rm.cur)}</span>
+            <span class="journey-label" style="left:${tgtPct}%;color:${tgtC}">目标 ${lvTxt(rm.tgt)}</span>
+          </div></div><div class="journey-end-labels"><span>Lv.0</span><span>Lv.5</span><span>∞</span></div>`;
         }
         if(rm.milestones.length){
           h+=`<div class="toggle-wrap" style="margin-top:12px"><button class="toggle-btn" onclick="tog(this)">分阶段里程碑（${rm.milestones.length}阶段）</button><div class="toggle-body"><div class="milestones">`;
@@ -870,24 +880,27 @@ function renderSubDeptContent(s,uidKey){
   let h=`<h4>${s.name}</h4>`;
   if(s.score!==null){
     const sc=clr(s.score);
-    h+=`<div class="subdept-score-row"><span class="subdept-score-badge" style="color:${sc}">Lv.${s.score}</span><span class="subdept-score-sub">${s.levelName}</span></div>`;
+    h+=`<div class="subdept-score-row"><span class="subdept-score-badge" style="color:${sc}">${lvTxt(s.score)}</span><span class="subdept-score-sub">${s.levelName}</span></div>`;
     const pct=(s.score/MAX_LV*100).toFixed(1);
-    h+=`<div class="range-bar"><div class="range-fill" style="width:${pct}%;background:${sc}"></div>`;
-    h+=`<div class="range-mkr" style="left:${pct}%;background:var(--gray-800)"></div>`;
-    h+=`<span class="range-mkr-label" style="left:${pct}%;color:var(--gray-800)">Lv.${s.score}</span>`;
     if(s.range){
       const minP=(s.range.min/MAX_LV*100).toFixed(1),maxP=(s.range.max/MAX_LV*100).toFixed(1);
+      h+=`<div class="range-bar">`;
+      h+=`<div class="range-fill" style="width:${maxP}%;background:${sc};opacity:.2"></div>`;
       h+=`<div class="range-band" style="left:${minP}%;width:${(maxP-minP).toFixed(1)}%;background:${sc}"></div>`;
       h+=`<div class="range-mkr" style="left:${minP}%;background:var(--gray-700)"></div>`;
-      h+=`<span class="range-mkr-btm" style="left:${minP}%;color:var(--gray-700)">下限 Lv.${s.range.min} ${s.range.minName}</span>`;
+      h+=`<span class="range-mkr-btm" style="left:${minP}%;color:var(--gray-700)">下限 ${lvTxt(s.range.min)} ${s.range.minName}</span>`;
       h+=`<div class="range-mkr" style="left:${maxP}%;background:var(--gray-700)"></div>`;
-      h+=`<span class="range-mkr-btm" style="left:${maxP}%;color:var(--gray-700)">上限 Lv.${s.range.max} ${s.range.maxName}</span>`;
+      h+=`<span class="range-mkr-btm" style="left:${maxP}%;color:var(--gray-700)">上限 ${lvTxt(s.range.max)} ${s.range.maxName}</span>`;
+    } else {
+      h+=`<div class="range-bar"><div class="range-fill" style="width:${pct}%;background:${sc}"></div>`;
+      h+=`<div class="range-mkr" style="left:${pct}%;background:var(--gray-800)"></div>`;
+      h+=`<span class="range-mkr-label" style="left:${pct}%;color:var(--gray-800)">${lvTxt(s.score)}</span>`;
     }
-    h+=`</div><div class="score-bar-labels"><span>Lv.0</span><span>Lv.5</span><span>Lv.11</span></div>`;
+    h+=`</div><div class="score-bar-labels"><span>Lv.0</span><span>Lv.5</span><span>∞</span></div>`;
     // mini color scale
     h+=`<div class="mini-scale-wrap"><div class="mini-scale">`;
     LEVELS.forEach(lv=>{h+=`<div class="mini-seg" style="background:${lv.color}"></div>`;});
-    h+=`<div class="mini-marker" style="left:${pct}%"><span class="mini-marker-label">Lv.${s.score}</span></div>`;
+    h+=`<div class="mini-marker" style="left:${pct}%"><span class="mini-marker-label">${lvTxt(s.score)}</span></div>`;
     h+=`</div><div class="mini-names">`;
     LEVELS.forEach(lv=>{h+=`<span>${lv.name}</span>`;});
     h+=`</div></div>`;
@@ -994,11 +1007,11 @@ function renderCharts(){
     let h=`<div class="chart-card">`;
     h+=`<div class="chart-card-head"><div class="dept-icon" style="background:${c}18;color:${c};width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">${dept?dept.icon:'📁'}</div>`;
     h+=`<h3>${pd.dept}</h3>`;
-    if(tgtLv!==null) h+=`<span class="ch-tag" style="background:${clr(tgtLv)}18;color:${clr(tgtLv)}">🎯 目标 Lv.${tgtLv}</span>`;
+    if(tgtLv!==null) h+=`<span class="ch-tag" style="background:${clr(tgtLv)}18;color:${clr(tgtLv)}">🎯 目标 ${lvTxt(tgtLv)}</span>`;
     h+=`</div>`;
     h+=renderMountainSVG(pd,c);
     h+=`<div class="chart-legend"><span><span class="dot" style="background:${c}"></span>实际得分</span>`;
-    if(tgtLv!==null) h+=`<span><span class="dash" style="border-color:${clr(tgtLv)}"></span>目标线 Lv.${tgtLv}</span>`;
+    if(tgtLv!==null) h+=`<span><span class="dash" style="border-color:${clr(tgtLv)}"></span>目标线 ${lvTxt(tgtLv)}</span>`;
     h+=`</div></div>`;
     return h;
   }).join('');
@@ -1022,13 +1035,13 @@ function renderMountainSVG(pd,color){
   for(let i=0;i<=MAX_LV;i+=2){
     const y=PAD.t+ch-ch*(i/MAX_LV);
     svg+=`<line x1="${PAD.l}" y1="${y}" x2="${W-PAD.r}" y2="${y}" stroke="var(--gray-200)" stroke-width="1"/>`;
-    svg+=`<text x="${PAD.l-8}" y="${y+4}" text-anchor="end" fill="var(--gray-400)" font-size="12">Lv.${i}</text>`;
+    svg+=`<text x="${PAD.l-8}" y="${y+4}" text-anchor="end" fill="var(--gray-400)" font-size="12">${lvTxt(i)}</text>`;
   }
   // 目标虚线
   if(tgt!==null){
     const ty=PAD.t+ch-ch*(tgt/MAX_LV);
     svg+=`<line x1="${PAD.l}" y1="${ty}" x2="${W-PAD.r}" y2="${ty}" stroke="${clr(tgt)}" stroke-width="2" stroke-dasharray="8,4" opacity="0.6"/>`;
-    svg+=`<text x="${W-PAD.r+4}" y="${ty+4}" fill="${clr(tgt)}" font-size="12" font-weight="600">Lv.${tgt}</text>`;
+    svg+=`<text x="${W-PAD.r+4}" y="${ty+4}" fill="${clr(tgt)}" font-size="12" font-weight="600">${lvTxt(tgt)}</text>`;
   }
 
   if(recs.length===1){
@@ -1046,7 +1059,7 @@ function renderMountainSVG(pd,color){
     svg+=`<path d="M${x},${y} L${futureX},${y} L${futureX},${baseY} L${x},${baseY} Z" fill="url(#grad_${pd.dept.replace(/[^a-z]/gi,'')})" />`;
     // 实心圆点
     svg+=`<circle cx="${x}" cy="${y}" r="7" fill="${color}" stroke="#fff" stroke-width="3"/>`;
-    svg+=`<text x="${x}" y="${y-14}" text-anchor="middle" fill="${color}" font-size="14" font-weight="700">Lv.${score}</text>`;
+    svg+=`<text x="${x}" y="${y-14}" text-anchor="middle" fill="${color}" font-size="14" font-weight="700">${lvTxt(score)}</text>`;
     // 日期标签
     svg+=`<text x="${x}" y="${H-10}" text-anchor="middle" fill="var(--gray-400)" font-size="12">${recs[0].date.slice(5)}</text>`;
     // 未来占位
@@ -1069,7 +1082,7 @@ function renderMountainSVG(pd,color){
     // 圆点和标签
     pts.forEach(p=>{
       svg+=`<circle cx="${p.x}" cy="${p.y}" r="5" fill="${color}" stroke="#fff" stroke-width="2.5"/>`;
-      svg+=`<text x="${p.x}" y="${p.y-12}" text-anchor="middle" fill="${color}" font-size="13" font-weight="700">Lv.${p.s}</text>`;
+      svg+=`<text x="${p.x}" y="${p.y-12}" text-anchor="middle" fill="${color}" font-size="13" font-weight="700">${lvTxt(p.s)}</text>`;
       svg+=`<text x="${p.x}" y="${H-10}" text-anchor="middle" fill="var(--gray-400)" font-size="11">${p.d.slice(5)}</text>`;
     });
   }
@@ -1084,7 +1097,7 @@ function renderLogs(){
 
   // 沟通频率卡片
   h+=`<div class="freq-card"><h3>📊 沟通频率总览</h3><div class="freq-grid">`;
-  const deptNames=['品牌运营中心','人事部','国内财务部','SuperHi财务部','品控部'];
+  const deptNames=['品牌运营中心','人事部','国内财务部','SuperHi财务部','品控部（产品部）'];
   deptNames.forEach(dn=>{
     const dept=DEPARTMENTS.find(d=>d.name===dn);
     const logs=COMM_LOGS.filter(l=>l.dept===dn);
