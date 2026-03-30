@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>各部门AI提效进度看板</title>
+<style>
+  :root {
+    --bg: #f8fafc; --card: #ffffff; --primary: #2563eb; --primary-light: #dbeafe;
+    --success: #059669; --success-light: #d1fae5; --warning: #d97706; --warning-light: #fef3c7;
+    --danger: #dc2626; --gray-100: #f1f5f9; --gray-200: #e2e8f0; --gray-300: #cbd5e1;
+    --gray-500: #64748b; --gray-700: #334155; --gray-900: #0f172a;
+    --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+    --shadow-md: 0 4px 6px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.05);
+    --radius: 12px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background:var(--bg); color:var(--gray-700); line-height:1.6; }
+  .container { max-width:1280px; margin:0 auto; padding:24px; }
+  .header { text-align:center; padding:40px 0 32px; }
+  .header h1 { font-size:28px; font-weight:700; color:var(--gray-900); margin-bottom:8px; }
+  .header p { color:var(--gray-500); font-size:14px; }
+  .header .sync-time { display:inline-flex; align-items:center; gap:6px; background:var(--primary-light); color:var(--primary); padding:4px 12px; border-radius:20px; font-size:12px; margin-top:8px; }
+  .header .sync-time::before { content:''; width:6px; height:6px; background:var(--success); border-radius:50%; }
+  .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:32px; }
+  .stat-card { background:var(--card); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); text-align:center; }
+  .stat-card .num { font-size:32px; font-weight:700; color:var(--primary); }
+  .stat-card .label { font-size:13px; color:var(--gray-500); margin-top:4px; }
+  .tabs { display:flex; gap:4px; margin-bottom:24px; background:var(--gray-100); padding:4px; border-radius:10px; width:fit-content; }
+  .tab { padding:8px 20px; border-radius:8px; border:none; background:transparent; cursor:pointer; font-size:14px; color:var(--gray-500); font-weight:500; transition:all .2s; }
+  .tab.active { background:var(--card); color:var(--primary); box-shadow:var(--shadow); }
+  .tab:hover { color:var(--gray-900); }
+  .tab-content { display:none; } .tab-content.active { display:block; }
+  .dept-grid { display:grid; gap:20px; }
+  .dept-card { background:var(--card); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); transition:box-shadow .2s; }
+  .dept-card:hover { box-shadow:var(--shadow-md); }
+  .dept-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .dept-name { font-size:18px; font-weight:600; color:var(--gray-900); display:flex; align-items:center; gap:8px; }
+  .dept-name .icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; }
+  .dept-badge { padding:4px 12px; border-radius:20px; font-size:12px; font-weight:500; }
+  .badge-progress { background:var(--warning-light); color:var(--warning); }
+  .badge-done { background:var(--success-light); color:var(--success); }
+  .progress-section { margin-bottom:12px; }
+  .progress-info { display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px; color:var(--gray-500); }
+  .progress-info .pct { font-weight:600; color:var(--primary); font-size:15px; }
+  .progress-track { position:relative; height:10px; background:var(--gray-200); border-radius:5px; overflow:visible; }
+  .progress-fill { height:100%; border-radius:5px; background:linear-gradient(90deg, #3b82f6, #2563eb); transition:width .6s ease; position:relative; z-index:1; }
+  .milestones { position:relative; height:36px; margin-top:4px; }
+  .milestone { position:absolute; transform:translateX(-50%); text-align:center; }
+  .milestone .dot { width:14px; height:14px; border-radius:50%; border:2px solid var(--gray-300); background:var(--card); margin:0 auto 4px; position:relative; z-index:2; }
+  .milestone .dot.completed { background:var(--success); border-color:var(--success); }
+  .milestone .dot.current { background:var(--warning); border-color:var(--warning); box-shadow:0 0 0 4px rgba(217,119,6,.2); }
+  .milestone .name { font-size:11px; color:var(--gray-500); white-space:nowrap; }
+  .milestone .dot.completed + .name { color:var(--success); }
+  .dept-details { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; padding-top:16px; border-top:1px solid var(--gray-200); }
+  .detail-item { display:flex; align-items:center; gap:8px; font-size:13px; }
+  .detail-item .label { color:var(--gray-500); }
+  .detail-item .value { color:var(--gray-700); font-weight:500; }
+  .expand-btn { width:100%; padding:8px; border:none; background:var(--gray-100); border-radius:8px; cursor:pointer; font-size:13px; color:var(--gray-500); margin-top:12px; transition:background .2s; }
+  .expand-btn:hover { background:var(--gray-200); }
+  .ms-table { width:100%; border-collapse:collapse; margin-top:12px; display:none; }
+  .ms-table.show { display:table; }
+  .ms-table th { background:var(--gray-100); padding:10px 12px; text-align:left; font-size:12px; color:var(--gray-500); font-weight:600; }
+  .ms-table td { padding:10px 12px; border-bottom:1px solid var(--gray-100); font-size:13px; }
+  .status-tag { display:inline-block; padding:2px 10px; border-radius:12px; font-size:11px; font-weight:500; }
+  .status-done { background:var(--success-light); color:var(--success); }
+  .status-wip { background:var(--warning-light); color:var(--warning); }
+  .status-todo { background:var(--gray-100); color:var(--gray-500); }
+  .guide-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(340px,1fr)); gap:16px; }
+  .guide-card { background:var(--card); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); border-left:4px solid var(--primary); }
+  .guide-card h4 { font-size:15px; color:var(--gray-900); margin-bottom:8px; }
+  .guide-card .tool-name { font-size:13px; color:var(--primary); font-weight:600; margin-bottom:6px; }
+  .guide-card .scene { font-size:13px; color:var(--gray-500); margin-bottom:8px; }
+  .guide-card .efficiency { display:inline-flex; align-items:center; gap:4px; background:var(--success-light); color:var(--success); padding:2px 10px; border-radius:12px; font-size:12px; font-weight:500; }
+  .log-list { display:flex; flex-direction:column; gap:12px; }
+  .log-item { background:var(--card); border-radius:var(--radius); padding:16px 20px; box-shadow:var(--shadow); display:flex; gap:16px; align-items:flex-start; }
+  .log-date { min-width:90px; font-size:13px; color:var(--gray-500); font-weight:500; }
+  .log-dept-tag { padding:2px 10px; border-radius:12px; font-size:11px; font-weight:500; background:var(--primary-light); color:var(--primary); min-width:56px; text-align:center; }
+  .log-content { flex:1; font-size:14px; color:var(--gray-700); }
+  .log-author { font-size:12px; color:var(--gray-500); min-width:50px; text-align:right; }
+  @media (max-width:768px) { .stats-row { grid-template-columns:repeat(2,1fr); } .dept-details { grid-template-columns:1fr; } .guide-grid { grid-template-columns:1fr; } .header h1 { font-size:22px; } }
+  .loading { text-align:center; padding:60px; color:var(--gray-500); }
+  .loading .spinner { width:40px; height:40px; border:3px solid var(--gray-200); border-top-color:var(--primary); border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 16px; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .filter-bar { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .filter-chip { padding:6px 14px; border-radius:20px; border:1px solid var(--gray-200); background:var(--card); cursor:pointer; font-size:13px; color:var(--gray-500); transition:all .2s; }
+  .filter-chip.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+  .filter-chip:hover { border-color:var(--primary); color:var(--primary); }
+  .filter-chip.active:hover { color:#fff; }
+</style>
+</head><body>
+<div class="container">
+  <div class="header">
+    <h1 id="boardTitle">各部门AI提效进度看板</h1>
+    <p id="companyName">加载中...</p>
+    <div class="sync-time">最近同步: <span id="syncTime">--</span></div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="num" id="statDepts">-</div><div class="label">参与部门</div></div>
+    <div class="stat-card"><div class="num" id="statAvg">-</div><div class="label">平均进度</div></div>
+    <div class="stat-card"><div class="num" id="statMsComplete">-</div><div class="label">已完成里程碑</div></div>
+    <div class="stat-card"><div class="num" id="statTools">-</div><div class="label">推荐AI工具</div></div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" data-tab="progress">进度总览</button>
+    <button class="tab" data-tab="guides">AI手册与建议</button>
+    <button class="tab" data-tab="logs">更新日志</button>
+  </div>
+  <div class="tab-content active" id="tab-progress">
+    <div class="filter-bar" id="deptFilter"></div>
+    <div class="dept-grid" id="deptGrid"><div class="loading"><div class="spinner"></div>加载数据中...</div></div>
+  </div>
+  <div class="tab-content" id="tab-guides">
+    <div class="filter-bar" id="guideFilter"></div>
+    <div class="guide-grid" id="guideGrid"></div>
+  </div>
+  <div class="tab-content" id="tab-logs">
+    <div class="log-list" id="logList"></div>
+  </div>
+</div>
+<script>
+const DEPT_ICONS={'市场部':'📢','销售部':'💰','技术部':'💻','人事部':'👥','财务部':'📊','运营部':'⚙️','客服部':'🎧','产品部':'🎯','研发部':'🔬','设计部':'🎨','法务部':'⚖️','行政部':'🏢'};
+const DEPT_COLORS=['#2563eb','#059669','#7c3aed','#dc2626','#d97706','#0891b2','#be185d','#4f46e5','#15803d','#c2410c'];
+let DATA=null;
+async function loadData(){try{const r=await fetch('data.json?t='+Date.now());DATA=await r.json();render();}catch(e){DATA=getDemoData();render();}}
+function getDemoData(){return{config:{company:'我的公司',title:'各部门AI提效进度看板',syncTime:new Date().toISOString(),stages:['需求调研','工具选型','试点测试','培训推广','全面应用','持续优化']},departments:[{name:'市场部',stage:'工具选型',progress:25,stages:{需求调研:'已完成',工具选型:'进行中',试点测试:'未开始',培训推广:'未开始',全面应用:'未开始',持续优化:'未开始'},owner:'张三',updated:'2026-03-30',note:'正在评估AI内容生成工具'},{name:'销售部',stage:'需求调研',progress:10,stages:{需求调研:'进行中',工具选型:'未开始',试点测试:'未开始',培训推广:'未开始',全面应用:'未开始',持续优化:'未开始'},owner:'李四',updated:'2026-03-28',note:'梳理销售流程中的AI应用场景'},{name:'技术部',stage:'试点测试',progress:45,stages:{需求调研:'已完成',工具选型:'已完成',试点测试:'进行中',培训推广:'未开始',全面应用:'未开始',持续优化:'未开始'},owner:'王五',updated:'2026-03-30',note:'Copilot代码辅助测试中'},{name:'人事部',stage:'需求调研',progress:8,stages:{需求调研:'进行中',工具选型:'未开始',试点测试:'未开始',培训推广:'未开始',全面应用:'未开始',持续优化:'未开始'},owner:'赵六',updated:'2026-03-25',note:'调研AI简历筛选工具'},{name:'财务部',stage:'工具选型',progress:20,stages:{需求调研:'已完成',工具选型:'进行中',试点测试:'未开始',培训推广:'未开始',全面应用:'未开始',持续优化:'未开始'},owner:'孙七',updated:'2026-03-29',note:'评估AI财务分析工具'},{name:'运营部',stage:'试点测试',progress:40,stages:{需求调研:'已完成',工具选型:'已完成',试点测试:'进行中',培训推广:'未开始',全面应用:'未开始',持续优化:'未开始'},owner:'周八',updated:'2026-03-30',note:'AI数据分析工具试点'},{name:'客服部',stage:'培训推广',progress:60,stages:{需求调研:'已完成',工具选型:'已完成',试点测试:'已完成',培训推广:'进行中',全面应用:'未开始',持续优化:'未开始'},owner:'吴九',updated:'2026-03-30',note:'AI客服机器人培训推广中'},{name:'产品部',stage:'工具选型',progress:22,stages:{需求调研:'已完成',工具选型:'进行中',试点测试:'未开始',培训推广:'未开始',全面应用:'未开始',持续优化:'未开始'},owner:'郑十',updated:'2026-03-27',note:'评估AI原型设计工具'}],milestones:[],guides:[{dept:'市场部',tool:'ChatGPT / Claude',scene:'内容生成、文案撰写、市场分析',efficiency:'30-40%',note:'建议优先用于社交媒体内容生成'},{dept:'市场部',tool:'Midjourney / DALL-E',scene:'营销素材设计、广告图片生成',efficiency:'20-30%',note:'适合快速产出创意视觉内容'},{dept:'销售部',tool:'ChatGPT / Claude',scene:'客户邮件撰写、销售话术优化',efficiency:'25-35%',note:'可结合CRM系统使用'},{dept:'技术部',tool:'GitHub Copilot',scene:'代码编写、代码审查辅助',efficiency:'30-50%',note:'已在试点测试中'},{dept:'技术部',tool:'Claude Code',scene:'API开发、技术文档编写',efficiency:'25-40%',note:'适合复杂编程任务'},{dept:'人事部',tool:'AI简历筛选工具',scene:'简历初筛、人才匹配',efficiency:'40-60%',note:'需评估准确性和公平性'},{dept:'财务部',tool:'AI财务分析工具',scene:'财报分析、预算预测',efficiency:'20-35%',note:'需确保数据安全性'},{dept:'运营部',tool:'AI数据分析平台',scene:'运营数据分析、异常检测',efficiency:'30-45%',note:'已在试点阶段'},{dept:'客服部',tool:'AI客服机器人',scene:'常见问题自动回复、工单分类',efficiency:'50-70%',note:'培训推广中，效果显著'},{dept:'产品部',tool:'AI原型设计工具',scene:'产品原型快速生成、需求分析',efficiency:'20-30%',note:'正在评估中'}],logs:[{date:'2026-03-30',dept:'客服部',content:'AI客服机器人通过测试，进入培训推广阶段',author:'吴九'},{date:'2026-03-30',dept:'技术部',content:'GitHub Copilot试点测试启动，首批5人参与',author:'王五'},{date:'2026-03-30',dept:'运营部',content:'AI数据分析工具试点开始，覆盖核心指标监控',author:'周八'},{date:'2026-03-29',dept:'财务部',content:'完成3款AI财务分析工具对比评估',author:'孙七'},{date:'2026-03-28',dept:'销售部',content:'启动销售流程AI应用场景调研',author:'李四'}]};}
+function render(){if(!DATA)return;const{config,departments,guides,logs}=DATA;const stages=config.stages||['需求调研','工具选型','试点测试','培训推广','全面应用','持续优化'];
+document.getElementById('boardTitle').textContent=config.title||'各部门AI提效进度看板';
+document.getElementById('companyName').textContent=config.company||'';
+document.getElementById('syncTime').textContent=config.syncTime?new Date(config.syncTime).toLocaleString('zh-CN'):'--';
+document.getElementById('statDepts').textContent=departments.length;
+const avg=departments.reduce((s,d)=>s+d.progress,0)/departments.length;
+document.getElementById('statAvg').textContent=Math.round(avg)+'%';
+let msComplete=0;departments.forEach(d=>{Object.values(d.stages).forEach(v=>{if(v==='已完成')msComplete++;});});
+document.getElementById('statMsComplete').textContent=msComplete;
+const toolSet=new Set();guides.forEach(g=>toolSet.add(g.tool));
+document.getElementById('statTools').textContent=toolSet.size;
+const deptNames=departments.map(d=>d.name);
+renderFilter('deptFilter',deptNames,(sel)=>renderDepts(departments,stages,sel));
+renderFilter('guideFilter',[...new Set(guides.map(g=>g.dept))],(sel)=>renderGuides(guides,sel));
+renderDepts(departments,stages,null);renderGuides(guides,null);renderLogs(logs);}
+function renderFilter(containerId,items,onChange){const el=document.getElementById(containerId);el.innerHTML='<button class="filter-chip active" data-dept="all">全部</button>'+items.map(n=>'<button class="filter-chip" data-dept="'+n+'">'+n+'</button>').join('');el.querySelectorAll('.filter-chip').forEach(btn=>{btn.onclick=()=>{el.querySelectorAll('.filter-chip').forEach(b=>b.classList.remove('active'));btn.classList.add('active');onChange(btn.dataset.dept==='all'?null:btn.dataset.dept);};});}
+function renderDepts(departments,stages,filter){const grid=document.getElementById('deptGrid');const depts=filter?departments.filter(d=>d.name===filter):departments;grid.innerHTML=depts.map((dept,i)=>{const color=DEPT_COLORS[i%DEPT_COLORS.length];const icon=DEPT_ICONS[dept.name]||'📋';const msHtml=stages.map((s,si)=>{const pct=((si+1)/stages.length*100).toFixed(1);const status=dept.stages[s]||'未开始';const dotClass=status==='已完成'?'completed':status==='进行中'?'current':'';return '<div class="milestone" style="left:'+pct+'%"><div class="dot '+dotClass+'"></div><div class="name">'+s+'</div></div>';}).join('');const stageTableHtml=stages.map(s=>{const st=dept.stages[s]||'未开始';const cls=st==='已完成'?'status-done':st==='进行中'?'status-wip':'status-todo';return '<tr><td>'+s+'</td><td><span class="status-tag '+cls+'">'+st+'</span></td><td>--</td></tr>';}).join('');return '<div class="dept-card"><div class="dept-header"><div class="dept-name"><div class="icon" style="background:'+color+'15;color:'+color+'">'+icon+'</div>'+dept.name+'</div><span class="dept-badge '+(dept.progress>=100?'badge-done':'badge-progress')+'">'+dept.stage+'</span></div><div class="progress-section"><div class="progress-info"><span>总进度</span><span class="pct">'+dept.progress+'%</span></div><div class="progress-track"><div class="progress-fill" style="width:'+dept.progress+'%;background:linear-gradient(90deg,'+color+'88,'+color+')"></div></div><div class="milestones">'+msHtml+'</div></div><div class="dept-details"><div class="detail-item"><span class="label">负责人:</span><span class="value">'+(dept.owner||'--')+'</span></div><div class="detail-item"><span class="label">更新日期:</span><span class="value">'+(dept.updated||'--')+'</span></div><div class="detail-item" style="grid-column:1/-1"><span class="label">当前情况:</span><span class="value">'+(dept.note||'--')+'</span></div></div><button class="expand-btn" onclick="toggleTable(this)">展开里程碑详情 ▼</button><table class="ms-table"><thead><tr><th>里程碑</th><th>状态</th><th>目标日期</th></tr></thead><tbody>'+stageTableHtml+'</tbody></table></div>';}).join('');}
+function toggleTable(btn){const table=btn.nextElementSibling;const show=!table.classList.contains('show');table.classList.toggle('show');btn.textContent=show?'收起里程碑详情 ▲':'展开里程碑详情 ▼';}
+function renderGuides(guides,filter){const grid=document.getElementById('guideGrid');const items=filter?guides.filter(g=>g.dept===filter):guides;grid.innerHTML=items.map(g=>'<div class="guide-card"><h4>'+g.dept+'</h4><div class="tool-name">'+g.tool+'</div><div class="scene">'+g.scene+'</div><div class="efficiency">效率提升预估 '+g.efficiency+'</div><p style="margin-top:8px;font-size:12px;color:var(--gray-500)">'+(g.note||'')+'</p></div>').join('');}
+function renderLogs(logs){const list=document.getElementById('logList');list.innerHTML=logs.map(l=>'<div class="log-item"><div class="log-date">'+l.date+'</div><div class="log-dept-tag">'+l.dept+'</div><div class="log-content">'+l.content+'</div><div class="log-author">'+(l.author||'')+'</div></div>').join('');}
+document.querySelectorAll('.tab').forEach(tab=>{tab.onclick=()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));tab.classList.add('active');document.getElementById('tab-'+tab.dataset.tab).classList.add('active');};});
+loadData();
+</script>
+</body>
+</html>
