@@ -20,38 +20,54 @@
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background:var(--bg); color:var(--gray-700); line-height:1.6; }
   .container { max-width:1100px; margin:0 auto; padding:24px; }
 
-  /* Header */
   .header { text-align:center; padding:40px 0 24px; }
   .header h1 { font-size:26px; font-weight:700; color:var(--gray-900); margin-bottom:6px; letter-spacing:-.5px; }
   .header p { color:var(--gray-500); font-size:14px; }
   .header .meta { display:inline-flex; align-items:center; gap:6px; background:var(--gray-100); color:var(--gray-500); padding:4px 14px; border-radius:20px; font-size:12px; margin-top:10px; }
 
   /* Tabs */
-  .tabs { display:flex; gap:4px; margin-bottom:28px; background:var(--gray-100); padding:4px; border-radius:10px; width:fit-content; }
+  .tabs { display:flex; gap:4px; margin-bottom:20px; background:var(--gray-100); padding:4px; border-radius:10px; width:fit-content; }
   .tab { padding:8px 22px; border-radius:8px; border:none; background:transparent; cursor:pointer; font-size:14px; color:var(--gray-500); font-weight:500; transition:all .2s; }
   .tab.active { background:var(--card); color:var(--primary); box-shadow:var(--shadow); }
   .tab:hover { color:var(--gray-900); }
   .tab-content { display:none; } .tab-content.active { display:block; }
 
-  /* ===== Scale Bar ===== */
-  .scale-bar-wrap { background:var(--card); border-radius:var(--radius); padding:24px 28px 20px; box-shadow:var(--shadow); margin-bottom:28px; }
-  .scale-bar-wrap h3 { font-size:15px; font-weight:600; color:var(--gray-800); margin-bottom:16px; }
-  .scale-bar { display:flex; gap:2px; height:36px; border-radius:8px; overflow:hidden; }
-  .scale-seg { flex:1; display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; font-weight:600; cursor:pointer; transition:filter .15s,transform .15s; position:relative; }
+  /* Filter buttons */
+  .filter-bar { display:flex; gap:6px; margin-bottom:20px; flex-wrap:wrap; }
+  .filter-btn { padding:6px 16px; border-radius:20px; border:1.5px solid var(--gray-200); background:var(--card); cursor:pointer; font-size:13px; color:var(--gray-500); font-weight:500; transition:all .2s; display:flex; align-items:center; gap:5px; }
+  .filter-btn:hover { border-color:var(--primary); color:var(--primary); }
+  .filter-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+  .filter-btn .f-icon { font-size:14px; }
+
+  /* Scale bar */
+  .scale-bar-wrap { background:var(--card); border-radius:var(--radius); padding:20px 24px 16px; box-shadow:var(--shadow); margin-bottom:20px; }
+  .scale-bar-wrap h3 { font-size:14px; font-weight:600; color:var(--gray-800); margin-bottom:12px; }
+  .scale-bar { display:flex; gap:2px; height:32px; border-radius:8px; overflow:hidden; }
+  .scale-seg { flex:1; display:flex; align-items:center; justify-content:center; color:#fff; font-size:10px; font-weight:600; cursor:pointer; transition:filter .15s,transform .15s; position:relative; }
   .scale-seg:hover { filter:brightness(1.15); transform:scaleY(1.12); z-index:1; }
-  .scale-labels { display:flex; gap:2px; margin-top:4px; }
-  .scale-labels span { flex:1; text-align:center; font-size:10px; color:var(--gray-400); }
+  .scale-labels { display:flex; gap:2px; margin-top:3px; }
+  .scale-labels span { flex:1; text-align:center; font-size:9px; color:var(--gray-400); }
+  .scale-expand { margin-top:10px; }
+  .scale-expand-btn { font-size:12px; color:var(--primary); cursor:pointer; border:none; background:none; padding:2px 0; }
+  .scale-expand-btn:hover { text-decoration:underline; }
+  .scale-detail-inline { display:none; margin-top:10px; display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:6px; }
+  .scale-detail-inline.collapsed { display:none; }
+  .scale-mini-item { display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:6px; background:var(--gray-50); }
+  .scale-mini-num { width:24px; height:24px; border-radius:5px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px; font-weight:700; flex-shrink:0; }
+  .scale-mini-info { font-size:11px; }
+  .scale-mini-info strong { color:var(--gray-800); }
+  .scale-mini-info span { color:var(--gray-400); display:block; font-size:10px; line-height:1.3; }
 
   /* Reference Band */
-  .ref-band { margin-top:18px; padding:16px 0 0; border-top:1px solid var(--gray-100); }
-  .ref-title { font-size:13px; color:var(--gray-500); margin-bottom:10px; display:flex; align-items:center; gap:6px; }
-  .ref-bar-wrap { position:relative; height:28px; background:var(--gray-100); border-radius:6px; overflow:visible; }
+  .ref-band { margin-top:12px; padding:12px 0 0; border-top:1px solid var(--gray-100); }
+  .ref-title { font-size:12px; color:var(--gray-500); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+  .ref-bar-wrap { position:relative; height:24px; background:var(--gray-100); border-radius:6px; overflow:visible; }
   .ref-range { position:absolute; top:0; height:100%; border-radius:6px; opacity:.25; }
-  .ref-marker { position:absolute; top:-4px; width:3px; height:36px; border-radius:2px; z-index:2; }
-  .ref-marker-label { position:absolute; top:-22px; font-size:10px; font-weight:600; white-space:nowrap; transform:translateX(-50%); }
-  .ref-legend { display:flex; gap:20px; margin-top:10px; font-size:12px; color:var(--gray-500); }
+  .ref-marker { position:absolute; top:-4px; width:3px; height:32px; border-radius:2px; z-index:2; }
+  .ref-marker-label { position:absolute; top:-20px; font-size:10px; font-weight:600; white-space:nowrap; transform:translateX(-50%); }
+  .ref-legend { display:flex; gap:16px; margin-top:8px; font-size:11px; color:var(--gray-500); flex-wrap:wrap; }
 
-  /* ===== Department Cards ===== */
+  /* Dept cards */
   .dept-grid { display:grid; gap:20px; }
   .dept-card { background:var(--card); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); transition:box-shadow .2s; }
   .dept-card:hover { box-shadow:var(--shadow-md); }
@@ -61,27 +77,24 @@
   .dept-name h3 { font-size:17px; font-weight:600; color:var(--gray-900); }
   .score-badge { font-size:28px; font-weight:700; letter-spacing:-1px; }
   .score-sub { font-size:12px; font-weight:400; color:var(--gray-400); margin-left:2px; }
-
-  /* Score Bar */
   .score-bar-wrap { margin-bottom:14px; }
-  .score-bar-bg { height:12px; background:var(--gray-100); border-radius:6px; overflow:hidden; position:relative; }
+  .score-bar-bg { height:12px; background:var(--gray-100); border-radius:6px; overflow:hidden; }
   .score-bar-fill { height:100%; border-radius:6px; transition:width .6s ease; }
   .score-bar-labels { display:flex; justify-content:space-between; margin-top:4px; font-size:11px; color:var(--gray-400); }
-
-  /* Level tag */
   .level-tag { display:inline-block; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:500; }
 
   /* Evidence */
   .evidence { margin-top:12px; }
-  .evidence-title { font-size:12px; color:var(--gray-400); margin-bottom:6px; display:flex; align-items:center; gap:4px; cursor:pointer; user-select:none; }
-  .evidence-title::before { content:'▸'; font-size:10px; transition:transform .2s; display:inline-block; }
-  .evidence-title.open::before { transform:rotate(90deg); }
-  .evidence-list { display:none; padding-left:16px; }
-  .evidence-list.open { display:block; }
+  .toggle-title { font-size:12px; color:var(--gray-400); margin-bottom:6px; display:flex; align-items:center; gap:4px; cursor:pointer; user-select:none; }
+  .toggle-title::before { content:'▸'; font-size:10px; transition:transform .2s; display:inline-block; }
+  .toggle-title.open::before { transform:rotate(90deg); }
+  .toggle-body { display:none; }
+  .toggle-body.open { display:block; }
+  .evidence-list { padding-left:16px; }
   .evidence-list li { font-size:13px; color:var(--gray-600); margin-bottom:4px; list-style:none; position:relative; padding-left:12px; }
   .evidence-list li::before { content:'·'; position:absolute; left:0; color:var(--gray-300); font-weight:bold; }
 
-  /* Teams sub-rows */
+  /* Teams */
   .teams-wrap { margin-top:14px; padding-top:12px; border-top:1px dashed var(--gray-200); }
   .teams-title { font-size:12px; color:var(--gray-400); margin-bottom:8px; }
   .team-row { display:flex; align-items:center; gap:12px; padding:6px 0; }
@@ -90,22 +103,14 @@
   .team-bar-fill { height:100%; border-radius:4px; transition:width .6s ease; }
   .team-score { font-size:13px; font-weight:600; min-width:28px; text-align:right; }
 
-  /* ===== Scale Detail ===== */
-  .scale-detail { display:grid; gap:12px; }
-  .scale-item { display:flex; align-items:stretch; gap:14px; background:var(--card); border-radius:var(--radius); padding:16px 20px; box-shadow:var(--shadow); }
-  .scale-num { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; color:#fff; font-size:18px; font-weight:700; flex-shrink:0; }
-  .scale-info h4 { font-size:15px; font-weight:600; color:var(--gray-800); margin-bottom:2px; }
-  .scale-info p { font-size:13px; color:var(--gray-500); }
+  /* ===== Roadmap section inside dept card ===== */
+  .roadmap-section { margin-top:16px; padding-top:14px; border-top:1px solid var(--gray-100); }
+  .roadmap-header { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+  .roadmap-header .target-tag { font-size:12px; padding:3px 10px; border-radius:20px; font-weight:500; }
+  .target-reason { font-size:12px; color:var(--gray-500); margin-bottom:14px; padding:6px 10px; background:var(--gray-50); border-radius:6px; border-left:3px solid var(--gray-300); }
+  .target-reason strong { color:var(--gray-700); }
 
-  /* ===== Roadmap (提升路径 Tab) ===== */
-  .roadmap-dept { background:var(--card); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); margin-bottom:20px; }
-  .roadmap-dept-header { display:flex; align-items:center; gap:12px; margin-bottom:18px; }
-  .roadmap-dept-header .dept-icon { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px; }
-  .roadmap-dept-header h3 { font-size:16px; font-weight:600; color:var(--gray-900); }
-  .roadmap-dept-header .target-tag { font-size:12px; padding:3px 10px; border-radius:20px; font-weight:500; margin-left:auto; }
-
-  /* Journey bar */
-  .journey-bar { position:relative; display:flex; align-items:center; margin:0 0 20px; padding:0 4px; }
+  .journey-bar { position:relative; display:flex; align-items:center; margin:0 0 18px; padding:0 4px; }
   .journey-track { flex:1; height:6px; background:var(--gray-200); border-radius:3px; position:relative; }
   .journey-fill { height:100%; border-radius:3px; position:absolute; left:0; top:0; }
   .journey-target-fill { height:100%; border-radius:3px; position:absolute; top:0; opacity:.18; }
@@ -113,9 +118,8 @@
   .journey-label { position:absolute; top:14px; transform:translateX(-50%); font-size:10px; font-weight:600; white-space:nowrap; }
   .journey-end-labels { display:flex; justify-content:space-between; margin-top:2px; font-size:10px; color:var(--gray-400); padding:0 4px; }
 
-  /* Milestones */
   .milestones { display:grid; gap:0; position:relative; padding-left:20px; }
-  .milestone { position:relative; padding:0 0 18px 20px; }
+  .milestone { position:relative; padding:0 0 16px 20px; }
   .milestone:last-child { padding-bottom:0; }
   .milestone::before { content:''; position:absolute; left:-20px; top:7px; bottom:-4px; width:2px; background:var(--gray-200); }
   .milestone:last-child::before { display:none; }
@@ -125,10 +129,7 @@
   .milestone-dot.future { opacity:.6; }
   @keyframes pulse { 0%,100%{box-shadow:0 0 0 2px var(--primary);} 50%{box-shadow:0 0 0 4px rgba(37,99,235,.25);} }
   .milestone-level { font-size:11px; font-weight:600; color:var(--gray-400); margin-bottom:2px; }
-  .milestone-title { font-size:14px; font-weight:600; color:var(--gray-800); margin-bottom:4px; }
-  .milestone-desc { font-size:12px; color:var(--gray-500); margin-bottom:6px; }
-
-  /* Actions inside milestones */
+  .milestone-title { font-size:13px; font-weight:600; color:var(--gray-800); margin-bottom:4px; }
   .ms-actions { display:flex; flex-direction:column; gap:4px; }
   .ms-action { display:flex; align-items:flex-start; gap:6px; font-size:12px; color:var(--gray-600); padding:3px 8px; background:var(--gray-50); border-radius:6px; border-left:3px solid var(--gray-200); }
   .ms-action.generic { border-left-color:var(--primary); color:var(--gray-500); }
@@ -137,15 +138,15 @@
   .ms-action-tag.g { background:var(--primary-light); color:var(--primary); }
   .ms-action-tag.s { background:var(--success-light); color:var(--success); }
 
-  /* Requirements */
-  .dept-reqs { margin-top:16px; padding-top:14px; border-top:1px solid var(--gray-100); }
-  .dept-reqs-title { font-size:13px; font-weight:600; color:var(--gray-700); margin-bottom:10px; display:flex; align-items:center; gap:6px; cursor:pointer; user-select:none; }
-  .dept-reqs-title::before { content:'▸'; font-size:10px; transition:transform .2s; display:inline-block; }
-  .dept-reqs-title.open::before { transform:rotate(90deg); }
-  .dept-reqs-list { display:none; }
-  .dept-reqs-list.open { display:block; }
-  .req-card { display:flex; gap:10px; padding:10px 12px; background:var(--gray-50); border-radius:8px; margin-bottom:8px; }
-  .req-card:last-child { margin-bottom:0; }
+  /* ===== Requirements Tab ===== */
+  .req-filter-bar { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
+  .req-dept-section { margin-bottom:24px; }
+  .req-dept-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; padding-bottom:8px; border-bottom:2px solid var(--gray-100); }
+  .req-dept-header .dept-icon { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; }
+  .req-dept-header h3 { font-size:16px; font-weight:600; color:var(--gray-900); }
+  .req-dept-header .req-count { font-size:12px; color:var(--gray-400); margin-left:auto; }
+  .req-grid { display:grid; gap:10px; }
+  .req-card { display:flex; gap:10px; padding:12px 14px; background:var(--card); border-radius:10px; box-shadow:var(--shadow); }
   .req-pri { font-size:10px; font-weight:600; padding:2px 8px; border-radius:4px; white-space:nowrap; height:fit-content; margin-top:2px; }
   .req-pri.high { background:#fef2f2; color:#dc2626; }
   .req-pri.mid { background:#fef3c7; color:#d97706; }
@@ -161,8 +162,9 @@
   @media(max-width:640px){
     .container { padding:16px; }
     .header h1 { font-size:22px; }
-    .dept-card, .roadmap-dept { padding:16px; }
+    .dept-card { padding:16px; }
     .scale-seg { font-size:9px; }
+    .scale-detail-inline { grid-template-columns:1fr; }
   }
 </style>
 </head>
@@ -176,21 +178,20 @@
 
   <div class="tabs">
     <button class="tab active" onclick="switchTab('diag')">能力诊断</button>
-    <button class="tab" onclick="switchTab('road')">提升路径</button>
-    <button class="tab" onclick="switchTab('scale')">评分体系</button>
+    <button class="tab" onclick="switchTab('reqs')">部门需求</button>
   </div>
 
+  <!-- Tab 1: 诊断 + 提升路径合并 -->
   <div id="tab-diag" class="tab-content active">
     <div class="scale-bar-wrap" id="scaleBarWrap"></div>
+    <div class="filter-bar" id="filterBar"></div>
     <div class="dept-grid" id="deptGrid"></div>
   </div>
 
-  <div id="tab-road" class="tab-content">
-    <div id="roadmapWrap"></div>
-  </div>
-
-  <div id="tab-scale" class="tab-content">
-    <div class="scale-detail" id="scaleDetail"></div>
+  <!-- Tab 2: 部门需求 -->
+  <div id="tab-reqs" class="tab-content">
+    <div class="filter-bar" id="reqFilterBar"></div>
+    <div id="reqWrap"></div>
   </div>
 </div>
 
@@ -219,386 +220,295 @@ const DEPARTMENTS = [
   {
     name:'人事部', icon:'👥', color:'#2E75B6', score:1,
     levelName:'入门聊天',
-    evidence:[
-      '主要使用飞书内置豆包进行基础问答',
-      '未接触过Kimi/DeepSeek等独立AI产品',
-      '没有将AI应用于日常HR工作流程',
-      '对AI能力边界认知有限，需要系统性引导',
-    ],
+    evidence:['主要使用飞书内置豆包进行基础问答','未接触过Kimi/DeepSeek等独立AI产品','没有将AI应用于日常HR工作流程','对AI能力边界认知有限，需要系统性引导'],
     teams:null,
   },
   {
     name:'财务部', icon:'📊', color:'#548235', score:1.5,
     levelName:'入门聊天 ~ 国产对话',
-    evidence:[
-      '部分员工使用豆包做基础查询',
-      '有个别人尝试过Kimi但未深入使用',
-      '核心财务工作仍以传统Excel手工为主',
-      '对AI处理敏感财务数据存在顾虑',
-    ],
+    evidence:['部分员工使用豆包做基础查询','有个别人尝试过Kimi但未深入使用','核心财务工作仍以传统Excel手工为主','对AI处理敏感财务数据存在顾虑'],
     teams:null,
   },
   {
     name:'市场部', icon:'📢', color:'#BF8F00', score:2.3,
     levelName:'入门聊天 ~ 国产对话',
-    evidence:[
-      '李妍妍团队与陈婧仪团队处于入门聊天阶段，主要使用豆包做基础问答',
-      '申江团队已达到使用国外大模型处理文件的水平（Lv.5）',
-      '团队间AI使用水平差异较大',
-      '整体仍有大量手工操作空间可被AI替代',
-    ],
-    teams:[
-      { name:'李妍妍团队', score:1 },
-      { name:'陈婧仪团队', score:1 },
-      { name:'申江团队', score:5 },
-    ],
+    evidence:['李妍妍团队与陈婧仪团队处于入门聊天阶段，主要使用豆包做基础问答','申江团队已达到使用国外大模型处理文件的水平（Lv.5）','团队间AI使用水平差异较大','整体仍有大量手工操作空间可被AI替代'],
+    teams:[{name:'李妍妍团队',score:1},{name:'陈婧仪团队',score:1},{name:'申江团队',score:5}],
   },
 ];
 
-// ============ 提升路径数据 ============
-
-// 通用阶段性建议（每个等级升级需要做什么）
 const GENERIC_STEPS = {
-  '0→1': '开通飞书豆包，安排1次AI基础认知培训，让团队了解AI能做什么',
-  '1→2': '引入Kimi或DeepSeek，培训基本对话技巧和提示词方法',
-  '2→3': '开通GPT/Claude企业账号，对比国产与国际模型效果差异',
-  '3→4': '用国产AI处理日常文档：总结会议纪要、生成报告初稿、修改文案',
-  '4→5': '用GPT/Claude处理文件：数据整理、分析报告撰写、多文件汇总',
-  '5→6': '学习让AI做深度数据分析：建模、交叉验证、统计检验',
-  '6→7': '让AI编写Python/SQL脚本，搭建自动化数据处理管道',
-  '7→8': '配置定时任务、API取数、飞书机器人推送，形成自动化工作流',
-  '8→9': '引入AI Agent操控电脑、图像视频生成、多Agent协作',
-  '9→10': '全业务链AI闭环：采集→清洗→分析→决策→执行→监控',
+  '0→1':'开通飞书豆包，安排1次AI基础认知培训，让团队了解AI能做什么',
+  '1→2':'引入Kimi或DeepSeek，培训基本对话技巧和提示词方法',
+  '2→3':'开通GPT/Claude企业账号，对比国产与国际模型效果差异',
+  '3→4':'用国产AI处理日常文档：总结会议纪要、生成报告初稿、修改文案',
+  '4→5':'用GPT/Claude处理文件：数据整理、分析报告撰写、多文件汇总',
+  '5→6':'学习让AI做深度数据分析：建模、交叉验证、统计检验',
+  '6→7':'让AI编写Python/SQL脚本，搭建自动化数据处理管道',
+  '7→8':'配置定时任务、API取数、飞书机器人推送，形成自动化工作流',
+  '8→9':'引入AI Agent操控电脑、图像视频生成、多Agent协作',
+  '9→10':'全业务链AI闭环：采集→清洗→分析→决策→执行→监控',
 };
 
-// 各部门提升路径（分阶段里程碑 + 个性化行动 + 部门需求）
 const ROADMAPS = [
   {
-    dept: '人事部',
-    icon: '👥',
-    color: '#2E75B6',
-    currentScore: 1,
-    targetScore: 5,
-    targetReason: '人事部核心需求为数据报表、信息整合和模板化输出，Lv.5可覆盖绝大部分场景',
-    milestones: [
-      { from:1, to:2, actions:[
-        '让团队试用Kimi处理简单HR咨询问题（请假政策、制度解答）',
-        '用DeepSeek汇总每日常用问答，形成HR知识库初稿',
-      ]},
-      { from:2, to:3, actions:[
-        '开通GPT企业账号（公司已有企业合作），分发给关键岗位',
-        '对比豆包与GPT在文档生成（如贺卡模板）上的效果差异',
-      ]},
-      { from:3, to:4, actions:[
-        '用Kimi/DeepSeek生成张大哥送祝福贺卡模板（换照片+姓名批量输出）',
-        '用AI辅助筛选订阅号文章初稿（按字数、格式等硬指标初筛）',
-      ]},
-      { from:4, to:5, actions:[
-        '用GPT/Claude处理人效看板日数据：门店打卡→汇总→合理值对比→预警输出',
-        '用AI整合店经理全档案（从多个数据源合并，按Skill规则自动填表）',
-        '建立标准化Skill文档：定义数据来源、取数字段、输出格式',
-      ]},
+    dept:'人事部', icon:'👥', color:'#2E75B6', currentScore:1, targetScore:5,
+    targetReason:'人事部核心需求为数据报表、信息整合和模板化输出，Lv.5可覆盖绝大部分场景',
+    milestones:[
+      {from:1,to:2,actions:['让团队试用Kimi处理简单HR咨询问题（请假政策、制度解答）','用DeepSeek汇总每日常用问答，形成HR知识库初稿']},
+      {from:2,to:3,actions:['开通GPT企业账号（公司已有企业合作），分发给关键岗位','对比豆包与GPT在文档生成（如贺卡模板）上的效果差异']},
+      {from:3,to:4,actions:['用Kimi/DeepSeek生成张大哥送祝福贺卡模板（换照片+姓名批量输出）','用AI辅助筛选订阅号文章初稿（按字数、格式等硬指标初筛）']},
+      {from:4,to:5,actions:['用GPT/Claude处理人效看板日数据：门店打卡→汇总→合理值对比→预警输出','用AI整合店经理全档案（从多个数据源合并，按Skill规则自动填表）','建立标准化Skill文档：定义数据来源、取数字段、输出格式']},
     ],
-    requirements: [
-      { name:'人效看板自动化', desc:'每日从BI取门店打卡数据，自动计算人均看台、合理值对比并预警输出', priority:'high', aiNote:'需对接BI数仓接口，AI可实现全流程自动化' },
-      { name:'张大哥送祝福贺卡', desc:'季度/年度批量生成数百张贺卡，仅需替换姓名和照片', priority:'high', aiNote:'模板化输出，AI一步即可完成' },
-      { name:'店经理全档案更新', desc:'从PS、智能人事、OA、财务等多系统汇总，按月更新店经理全维度数据表', priority:'high', aiNote:'编写Skill规则文档，AI按规则从各数据源整合填表' },
-      { name:'订阅号文章初筛', desc:'从1000+篇投稿中按规则筛选合格文章', priority:'mid', aiNote:'硬指标（字数、格式）可AI初筛，主观质量判断仍需人工' },
-      { name:'大区数据保底差额', desc:'追踪门店人员数据，但部分数据不在BI上（PS等系统）', priority:'mid', aiNote:'需先推动BI接入更多数据源，再用AI处理' },
+    requirements:[
+      {name:'人效看板自动化',desc:'每日从BI取门店打卡数据，自动计算人均看台、合理值对比并预警输出',priority:'high',aiNote:'需对接BI数仓接口，AI可实现全流程自动化'},
+      {name:'张大哥送祝福贺卡',desc:'季度/年度批量生成数百张贺卡，仅需替换姓名和照片',priority:'high',aiNote:'模板化输出，AI一步即可完成'},
+      {name:'店经理全档案更新',desc:'从PS、智能人事、OA、财务等多系统汇总，按月更新店经理全维度数据表',priority:'high',aiNote:'编写Skill规则文档，AI按规则从各数据源整合填表'},
+      {name:'订阅号文章初筛',desc:'从1000+篇投稿中按规则筛选合格文章',priority:'mid',aiNote:'硬指标（字数、格式）可AI初筛，主观质量判断仍需人工'},
+      {name:'大区数据保底差额',desc:'追踪门店人员数据，但部分数据不在BI上（PS等系统）',priority:'mid',aiNote:'需先推动BI接入更多数据源，再用AI处理'},
     ],
   },
   {
-    dept: '财务部',
-    icon: '📊',
-    color: '#548235',
-    currentScore: 1.5,
-    targetScore: 5,
-    targetReason: '财务核心工作为报表整理、数据比对和格式化输出，Lv.5足以覆盖日常场景',
-    milestones: [
-      { from:1.5, to:2, actions:[
-        '安排Kimi体验session，用AI回答财务制度类常见问题',
-        '试用DeepSeek整理会议纪要，降低文字工作负担',
-      ]},
-      { from:2, to:3, actions:[
-        '申请GPT企业账号，让核心岗位人员体验国际模型的数据处理能力',
-        '对比Kimi与GPT在Excel公式推荐、数据校验场景的表现',
-      ]},
-      { from:3, to:4, actions:[
-        '用Kimi辅助生成月度经营分析报告初稿',
-        '用AI检查报表中的常见错误（数据一致性、公式引用）',
-      ]},
-      { from:4, to:5, actions:[
-        '用GPT/Claude处理繁琐数据报表：从多系统下载→汇总→校验→输出',
-        '让AI生成带公式的Excel（检查几次确认后可信赖产出）',
-        '建立标准化经营分析Skill：定义取数逻辑、计算规则、输出模板',
-      ]},
+    dept:'财务部', icon:'📊', color:'#548235', currentScore:1.5, targetScore:5,
+    targetReason:'财务核心工作为报表整理、数据比对和格式化输出，Lv.5足以覆盖日常场景',
+    milestones:[
+      {from:1.5,to:2,actions:['安排Kimi体验session，用AI回答财务制度类常见问题','试用DeepSeek整理会议纪要，降低文字工作负担']},
+      {from:2,to:3,actions:['申请GPT企业账号，让核心岗位人员体验国际模型的数据处理能力','对比Kimi与GPT在Excel公式推荐、数据校验场景的表现']},
+      {from:3,to:4,actions:['用Kimi辅助生成月度经营分析报告初稿','用AI检查报表中的常见错误（数据一致性、公式引用）']},
+      {from:4,to:5,actions:['用GPT/Claude处理繁琐数据报表：从多系统下载→汇总→校验→输出','让AI生成带公式的Excel（检查几次确认后可信赖产出）','建立标准化经营分析Skill：定义取数逻辑、计算规则、输出模板']},
     ],
-    requirements: [
-      { name:'经营分析报告自动化', desc:'月度/季度经营数据汇总分析，生成标准格式报告', priority:'high', aiNote:'AI擅长数据汇总与格式化输出，可大幅减少手工制表时间' },
-      { name:'多系统报表刷新', desc:'从不同系统下载数据后合并刷新报表，检查错误', priority:'high', aiNote:'固化流程最适合AI，下载→校验→合并→输出可全自动' },
-      { name:'产品盲测数据分析', desc:'用过往成本与销售数据建立分析模型', priority:'mid', aiNote:'AI可提供建模思路（如双重差分），但需精准的提示词拆解任务' },
+    requirements:[
+      {name:'经营分析报告自动化',desc:'月度/季度经营数据汇总分析，生成标准格式报告',priority:'high',aiNote:'AI擅长数据汇总与格式化输出，可大幅减少手工制表时间'},
+      {name:'多系统报表刷新',desc:'从不同系统下载数据后合并刷新报表，检查错误',priority:'high',aiNote:'固化流程最适合AI，下载→校验→合并→输出可全自动'},
+      {name:'产品盲测数据分析',desc:'用过往成本与销售数据建立分析模型',priority:'mid',aiNote:'AI可提供建模思路（如双重差分），但需精准的提示词拆解任务'},
     ],
   },
   {
-    dept: '市场部',
-    icon: '📢',
-    color: '#BF8F00',
-    currentScore: 2.3,
-    targetScore: 4,
-    targetReason: '市场部需求偏向内容、设计和运维操作，Lv.4可满足核心提效场景；申江团队已达Lv.5，可作为部门内标杆',
-    milestones: [
-      { from:0.5, to:2, label:'李妍妍团队 & 陈婧仪团队', actions:[
-        '开通Kimi账号，先用AI处理简单文案改写和数据查询',
-        '将每小时手动拉取的美团/抖音/小程序售卖数据改为AI辅助整理',
-      ]},
-      { from:2, to:3, actions:[
-        '申请GPT企业账号，让关键岗位体验国际模型的内容生成能力',
-        '用AI优化抖音短视频脚本，根据数据反馈调优内容方向',
-      ]},
-      { from:3, to:4, actions:[
-        '用AI批量生成门店宣传图：同一模板批量替换店名和文字',
-        '用AI辅助套餐/代金券配置复核（按规则校验荤素搭配、价格、日期等）',
-        '用AI自动整理企业微信员工异动：入离职→PS档案调整→通知推送',
-      ]},
+    dept:'市场部', icon:'📢', color:'#BF8F00', currentScore:2.3, targetScore:4,
+    targetReason:'市场部需求偏向内容、设计和运维操作，Lv.4可满足核心提效场景；申江团队已达Lv.5，可作为部门内标杆',
+    milestones:[
+      {from:0.5,to:2,label:'李妍妍团队 & 陈婧仪团队',actions:['开通Kimi账号，先用AI处理简单文案改写和数据查询','将每小时手动拉取的美团/抖音/小程序售卖数据改为AI辅助整理']},
+      {from:2,to:3,actions:['申请GPT企业账号，让关键岗位体验国际模型的内容生成能力','用AI优化抖音短视频脚本，根据数据反馈调优内容方向']},
+      {from:3,to:4,actions:['用AI批量生成门店宣传图：同一模板批量替换店名和文字','用AI辅助套餐/代金券配置复核（按规则校验荤素搭配、价格、日期等）','用AI自动整理企业微信员工异动：入离职→PS档案调整→通知推送']},
     ],
-    requirements: [
-      { name:'售卖数据自动抓取', desc:'每小时从美团/抖音/小程序后台拉取售卖数据并汇总到多维表', priority:'high', aiNote:'小程序和抖音可API对接；美团需确认是否允许自动抓取（曾有封号风险）' },
-      { name:'三方平台商品上下架', desc:'根据门店经营需求在美团/抖音后台批量上下架商品', priority:'high', aiNote:'需确认平台是否允许AI操控；可先从自有小程序试点' },
-      { name:'套餐配置复核', desc:'校验套餐荤素搭配、售卖日期、使用规则等是否正确配置', priority:'high', aiNote:'规则明确可AI自动校验；但平台后台不支持导出，需看能否用AI读取页面' },
-      { name:'抖音短视频脚本优化', desc:'基于投放数据反馈，AI辅助优化拍摄脚本和内容方向', priority:'mid', aiNote:'AI改脚本已非常成熟，可直接使用' },
-      { name:'门店宣传图批量制作', desc:'同模板15+门店，仅换店名，目前逐个手改', priority:'mid', aiNote:'AI可一步完成批量文字替换出图' },
-      { name:'企微员工异动运维', desc:'入离职员工的企业微信账号开通/调整、PS档案更新', priority:'mid', aiNote:'需确认企微API权限；操作需模板化且不让AI做"选择"类判断' },
-      { name:'私域托管自动化', desc:'每家门店托管需2小时，掉线后需重跑流程，占用大量客服人力', priority:'low', aiNote:'机械化流程理论可自动化，但需评估AI操作稳定性与客服场景容错' },
+    requirements:[
+      {name:'售卖数据自动抓取',desc:'每小时从美团/抖音/小程序后台拉取售卖数据并汇总到多维表',priority:'high',aiNote:'小程序和抖音可API对接；美团需确认是否允许自动抓取（曾有封号风险）'},
+      {name:'三方平台商品上下架',desc:'根据门店经营需求在美团/抖音后台批量上下架商品',priority:'high',aiNote:'需确认平台是否允许AI操控；可先从自有小程序试点'},
+      {name:'套餐配置复核',desc:'校验套餐荤素搭配、售卖日期、使用规则等是否正确配置',priority:'high',aiNote:'规则明确可AI自动校验；但平台后台不支持导出，需看能否用AI读取页面'},
+      {name:'抖音短视频脚本优化',desc:'基于投放数据反馈，AI辅助优化拍摄脚本和内容方向',priority:'mid',aiNote:'AI改脚本已非常成熟，可直接使用'},
+      {name:'门店宣传图批量制作',desc:'同模板15+门店，仅换店名，目前逐个手改',priority:'mid',aiNote:'AI可一步完成批量文字替换出图'},
+      {name:'企微员工异动运维',desc:'入离职员工的企业微信账号开通/调整、PS档案更新',priority:'mid',aiNote:'需确认企微API权限；操作需模板化且不让AI做"选择"类判断'},
+      {name:'私域托管自动化',desc:'每家门店托管需2小时，掉线后需重跑流程，占用大量客服人力',priority:'low',aiNote:'机械化流程理论可自动化，但需评估AI操作稳定性与客服场景容错'},
     ],
   },
 ];
 
-// ============ RENDER ============
+// ============ STATE ============
+let activeDeptFilter = 'all'; // 'all' or dept name
+let activeReqFilter = 'all';
 
-function getColorForScore(score) {
-  const idx = Math.min(Math.round(score), 10);
-  return LEVELS[idx].color;
-}
+// ============ RENDER ============
+function getColorForScore(s) { return LEVELS[Math.min(Math.round(s),10)].color; }
 
 function renderScaleBar() {
-  const wrap = document.getElementById('scaleBarWrap');
-  let barHtml = '<h3>AI 使用能力等级标尺（0-10）</h3><div class="scale-bar">';
+  const w = document.getElementById('scaleBarWrap');
+  let h = '<h3>AI 使用能力 10 级评分体系</h3><div class="scale-bar">';
   LEVELS.forEach(lv => {
-    barHtml += `<div class="scale-seg" style="background:${lv.color}" data-level="${lv.level}"
-      onmouseenter="showTip(event, 'Lv.${lv.level} ${lv.name}\\n${lv.desc}')"
-      onmouseleave="hideTip()">${lv.level}</div>`;
+    h += `<div class="scale-seg" style="background:${lv.color}" onmouseenter="showTip(event,'Lv.${lv.level} ${lv.name}\\n${lv.desc}')" onmouseleave="hideTip()">${lv.level}</div>`;
   });
-  barHtml += '</div><div class="scale-labels">';
-  LEVELS.forEach(lv => { barHtml += `<span>${lv.name}</span>`; });
-  barHtml += '</div>';
-  barHtml += renderRefBand();
-  wrap.innerHTML = barHtml;
+  h += '</div><div class="scale-labels">';
+  LEVELS.forEach(lv => { h += `<span>${lv.name}</span>`; });
+  h += '</div>';
+  // Inline expandable detail
+  h += `<div class="scale-expand"><button class="scale-expand-btn" onclick="toggleScaleDetail(this)">▸ 展开各等级详情</button></div>`;
+  h += `<div class="scale-detail-inline collapsed" id="scaleDetailInline">`;
+  LEVELS.forEach(lv => {
+    h += `<div class="scale-mini-item"><div class="scale-mini-num" style="background:${lv.color}">${lv.level}</div><div class="scale-mini-info"><strong>${lv.name}</strong><span>${lv.desc}</span></div></div>`;
+  });
+  h += `</div>`;
+  // Reference band
+  h += renderRefBand();
+  w.innerHTML = h;
+}
+
+function toggleScaleDetail(btn) {
+  const d = document.getElementById('scaleDetailInline');
+  const open = d.classList.toggle('collapsed');
+  btn.textContent = open ? '▸ 展开各等级详情' : '▾ 收起等级详情';
 }
 
 function renderRefBand() {
-  const pct = v => (v / 10 * 100);
-  const left = pct(REF.lower);
-  const width = pct(REF.upper) - left;
-  let html = `<div class="ref-band"><div class="ref-title">📐 ${REF.name}（参考基准带）</div>`;
-  html += `<div class="ref-bar-wrap">`;
-  html += `<div class="ref-range" style="left:${left}%;width:${width}%;background:linear-gradient(90deg,${LEVELS[REF.lower].color},${LEVELS[REF.upper].color})"></div>`;
-  html += `<div class="ref-marker" style="left:${left}%;background:${LEVELS[REF.lower].color}"><span class="ref-marker-label" style="color:${LEVELS[REF.lower].color}">下限 Lv.${REF.lower}</span></div>`;
-  html += `<div class="ref-marker" style="left:${pct(REF.upper)}%;background:${LEVELS[REF.upper].color}"><span class="ref-marker-label" style="color:${LEVELS[REF.upper].color}">上限 Lv.${REF.upper}</span></div>`;
-  if (REF.avg !== null) {
-    html += `<div class="ref-marker" style="left:${pct(REF.avg)}%;background:var(--primary);width:4px;"><span class="ref-marker-label" style="color:var(--primary)">均值 Lv.${REF.avg}</span></div>`;
-  }
-  html += `</div>`;
-  html += `<div class="ref-legend">
+  const pct = v => (v/10*100);
+  const l = pct(REF.lower), wd = pct(REF.upper)-l;
+  let h = `<div class="ref-band"><div class="ref-title">📐 ${REF.name}（参考基准带）</div>`;
+  h += `<div class="ref-bar-wrap">`;
+  h += `<div class="ref-range" style="left:${l}%;width:${wd}%;background:linear-gradient(90deg,${LEVELS[REF.lower].color},${LEVELS[REF.upper].color})"></div>`;
+  h += `<div class="ref-marker" style="left:${l}%;background:${LEVELS[REF.lower].color}"><span class="ref-marker-label" style="color:${LEVELS[REF.lower].color}">下限 Lv.${REF.lower}</span></div>`;
+  h += `<div class="ref-marker" style="left:${pct(REF.upper)}%;background:${LEVELS[REF.upper].color}"><span class="ref-marker-label" style="color:${LEVELS[REF.upper].color}">上限 Lv.${REF.upper}</span></div>`;
+  if (REF.avg!==null) h += `<div class="ref-marker" style="left:${pct(REF.avg)}%;background:var(--primary);width:4px;"><span class="ref-marker-label" style="color:var(--primary)">均值 Lv.${REF.avg}</span></div>`;
+  h += `</div><div class="ref-legend">
     <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${LEVELS[REF.lower].color};margin-right:5px;vertical-align:middle;"></span>下限 Lv.${REF.lower}（${LEVELS[REF.lower].name}）</span>
     <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${LEVELS[REF.upper].color};margin-right:5px;vertical-align:middle;"></span>上限 Lv.${REF.upper}（${LEVELS[REF.upper].name}）</span>`;
-  if (REF.avg !== null) {
-    html += `<span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--primary);margin-right:5px;vertical-align:middle;"></span>部门均值 Lv.${REF.avg}</span>`;
-  } else {
-    html += `<span style="color:var(--gray-400);">均值：待评估</span>`;
-  }
-  html += `</div></div>`;
-  return html;
+  h += REF.avg!==null
+    ? `<span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--primary);margin-right:5px;vertical-align:middle;"></span>均值 Lv.${REF.avg}</span>`
+    : `<span style="color:var(--gray-400);">均值：待评估</span>`;
+  h += `</div></div>`;
+  return h;
 }
 
-function renderDepts() {
+// ===== Filter bar =====
+function renderFilterBar(containerId, stateKey) {
+  const bar = document.getElementById(containerId);
+  let h = `<button class="filter-btn active" onclick="setFilter('${stateKey}','all',this)"><span class="f-icon">📋</span>全部显示</button>`;
+  DEPARTMENTS.forEach(d => {
+    h += `<button class="filter-btn" onclick="setFilter('${stateKey}','${d.name}',this)"><span class="f-icon">${d.icon}</span>${d.name}</button>`;
+  });
+  bar.innerHTML = h;
+}
+
+function setFilter(stateKey, val, btn) {
+  if (stateKey === 'dept') { activeDeptFilter = val; renderDeptCards(); }
+  else { activeReqFilter = val; renderReqs(); }
+  btn.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ===== Merged dept + roadmap cards =====
+function renderDeptCards() {
   const grid = document.getElementById('deptGrid');
-  grid.innerHTML = DEPARTMENTS.map(dept => {
-    const pct = (dept.score / 10 * 100).toFixed(1);
+  const filtered = activeDeptFilter === 'all' ? DEPARTMENTS : DEPARTMENTS.filter(d => d.name === activeDeptFilter);
+  grid.innerHTML = filtered.map(dept => {
+    const rm = ROADMAPS.find(r => r.dept === dept.name);
+    const pct = (dept.score/10*100).toFixed(1);
     const clr = getColorForScore(dept.score);
-    let html = `<div class="dept-card">
-      <div class="dept-header">
-        <div class="dept-name">
-          <div class="dept-icon" style="background:${dept.color}15;color:${dept.color}">${dept.icon}</div>
-          <div>
-            <h3>${dept.name}</h3>
-            <span class="level-tag" style="background:${clr}18;color:${clr}">Lv.${dept.score} ${dept.levelName}</span>
-          </div>
-        </div>
-        <div class="score-badge" style="color:${clr}">${dept.score}<span class="score-sub">/10</span></div>
-      </div>
-      <div class="score-bar-wrap">
-        <div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:linear-gradient(90deg,${clr}88,${clr})"></div></div>
-        <div class="score-bar-labels"><span>0</span><span>5</span><span>10</span></div>
-      </div>`;
-    html += `<div class="evidence">
-      <div class="evidence-title" onclick="toggleEvidence(this)">诊断依据（${dept.evidence.length}项）</div>
-      <ul class="evidence-list">`;
-    dept.evidence.forEach(e => { html += `<li>${e}</li>`; });
-    html += `</ul></div>`;
-    if (dept.teams && dept.teams.length) {
-      html += `<div class="teams-wrap"><div class="teams-title">团队细分</div>`;
-      dept.teams.forEach(t => {
-        const tp = (t.score / 10 * 100).toFixed(1);
-        const tc = getColorForScore(t.score);
-        html += `<div class="team-row">
-          <span class="team-name">${t.name}</span>
-          <div class="team-bar-bg"><div class="team-bar-fill" style="width:${tp}%;background:${tc}"></div></div>
-          <span class="team-score" style="color:${tc}">${t.score}</span>
-        </div>`;
-      });
-      html += `</div>`;
-    }
-    html += `</div>`;
-    return html;
-  }).join('');
-}
-
-function renderScaleDetail() {
-  document.getElementById('scaleDetail').innerHTML = LEVELS.map(lv => `
-    <div class="scale-item">
-      <div class="scale-num" style="background:${lv.color}">${lv.level}</div>
-      <div class="scale-info">
-        <h4>${lv.name}</h4>
-        <p>${lv.desc}</p>
-      </div>
-    </div>
-  `).join('');
-}
-
-// ===== Roadmap rendering =====
-function renderRoadmaps() {
-  const wrap = document.getElementById('roadmapWrap');
-  wrap.innerHTML = ROADMAPS.map(rm => {
-    const curClr = getColorForScore(rm.currentScore);
-    const tgtClr = getColorForScore(rm.targetScore);
-    const curPct = (rm.currentScore / 10 * 100).toFixed(1);
-    const tgtPct = (rm.targetScore / 10 * 100).toFixed(1);
-
-    let html = `<div class="roadmap-dept">`;
+    let h = `<div class="dept-card">`;
     // Header
-    html += `<div class="roadmap-dept-header">
-      <div class="dept-icon" style="background:${rm.color}15;color:${rm.color}">${rm.icon}</div>
-      <div>
-        <h3>${rm.dept}</h3>
-        <span style="font-size:12px;color:var(--gray-500);">当前 Lv.${rm.currentScore} → 目标 Lv.${rm.targetScore}</span>
+    h += `<div class="dept-header">
+      <div class="dept-name">
+        <div class="dept-icon" style="background:${dept.color}15;color:${dept.color}">${dept.icon}</div>
+        <div><h3>${dept.name}</h3><span class="level-tag" style="background:${clr}18;color:${clr}">Lv.${dept.score} ${dept.levelName}</span></div>
       </div>
-      <span class="target-tag" style="background:${tgtClr}15;color:${tgtClr}">🎯 目标：Lv.${rm.targetScore} ${LEVELS[rm.targetScore].name}</span>
+      <div class="score-badge" style="color:${clr}">${dept.score}<span class="score-sub">/10</span></div>
     </div>`;
-
-    // Target reason
-    html += `<div style="font-size:12px;color:var(--gray-500);margin-bottom:16px;padding:8px 12px;background:var(--gray-50);border-radius:8px;border-left:3px solid ${tgtClr}">
-      <strong style="color:var(--gray-700)">目标设定依据：</strong>${rm.targetReason}</div>`;
-
-    // Journey bar
-    html += `<div class="journey-bar"><div class="journey-track">
-      <div class="journey-target-fill" style="width:${tgtPct}%;background:${tgtClr}"></div>
-      <div class="journey-fill" style="width:${curPct}%;background:linear-gradient(90deg,${curClr}88,${curClr})"></div>
-      <div class="journey-dot" style="left:${curPct}%;background:${curClr}"></div>
-      <div class="journey-dot" style="left:${tgtPct}%;background:${tgtClr};border-style:dashed;opacity:.7"></div>
-      <span class="journey-label" style="left:${curPct}%;color:${curClr}">当前</span>
-      <span class="journey-label" style="left:${tgtPct}%;color:${tgtClr}">目标</span>
-    </div></div>
-    <div class="journey-end-labels"><span>Lv.0</span><span>Lv.5</span><span>Lv.10</span></div>`;
-
-    // Milestones timeline
-    html += `<div style="margin-top:20px"><div style="font-size:13px;font-weight:600;color:var(--gray-700);margin-bottom:14px;">📍 分阶段里程碑</div>`;
-    html += `<div class="milestones">`;
-    rm.milestones.forEach((ms, mi) => {
-      const fromLv = Math.floor(ms.from);
-      const toLv = ms.to;
-      const isReached = rm.currentScore >= toLv;
-      const isCurrent = rm.currentScore >= fromLv && rm.currentScore < toLv;
-      const dotClass = isReached ? 'reached' : (isCurrent ? 'current' : 'future');
-      const dotColor = isReached ? 'var(--success)' : (isCurrent ? 'var(--primary)' : 'var(--gray-300)');
-      const msColor = getColorForScore(toLv);
-      const stepKey = `${fromLv}→${toLv}`;
-      const genericStep = GENERIC_STEPS[stepKey];
-
-      html += `<div class="milestone">
-        <div class="milestone-dot ${dotClass}" style="background:${dotColor}"></div>
-        <div class="milestone-level" style="color:${msColor}">`;
-      if (ms.label) html += `${ms.label} · `;
-      html += `Lv.${ms.from} → Lv.${ms.to}（${LEVELS[toLv].name}）</div>
-        <div class="milestone-title">${isReached ? '✅ 已达成' : (isCurrent ? '🔄 当前阶段' : '⏳ 待启动')}</div>`;
-
-      html += `<div class="ms-actions">`;
-      // Generic step
-      if (genericStep) {
-        html += `<div class="ms-action generic"><span class="ms-action-tag g">通用</span>${genericStep}</div>`;
-      }
-      // Specific actions
-      ms.actions.forEach(a => {
-        html += `<div class="ms-action specific"><span class="ms-action-tag s">专项</span>${a}</div>`;
+    // Score bar
+    h += `<div class="score-bar-wrap">
+      <div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%;background:linear-gradient(90deg,${clr}88,${clr})"></div></div>
+      <div class="score-bar-labels"><span>0</span><span>5</span><span>10</span></div>
+    </div>`;
+    // Evidence
+    h += `<div class="evidence"><div class="toggle-title" onclick="toggle(this)">诊断依据（${dept.evidence.length}项）</div><ul class="toggle-body evidence-list">`;
+    dept.evidence.forEach(e => { h += `<li>${e}</li>`; });
+    h += `</ul></div>`;
+    // Teams
+    if (dept.teams && dept.teams.length) {
+      h += `<div class="teams-wrap"><div class="teams-title">团队细分</div>`;
+      dept.teams.forEach(t => {
+        const tp=(t.score/10*100).toFixed(1), tc=getColorForScore(t.score);
+        h += `<div class="team-row"><span class="team-name">${t.name}</span><div class="team-bar-bg"><div class="team-bar-fill" style="width:${tp}%;background:${tc}"></div></div><span class="team-score" style="color:${tc}">${t.score}</span></div>`;
       });
-      html += `</div></div>`;
-    });
-    html += `</div></div>`;
-
-    // Department requirements
-    if (rm.requirements && rm.requirements.length) {
-      html += `<div class="dept-reqs">
-        <div class="dept-reqs-title" onclick="toggleEvidence(this)">📋 部门实际需求（${rm.requirements.length}项，来源：访谈会议）</div>
-        <div class="dept-reqs-list">`;
-      rm.requirements.forEach(req => {
-        const priClass = req.priority === 'high' ? 'high' : (req.priority === 'mid' ? 'mid' : 'low');
-        const priLabel = req.priority === 'high' ? '高优' : (req.priority === 'mid' ? '中优' : '低优');
-        html += `<div class="req-card">
-          <span class="req-pri ${priClass}">${priLabel}</span>
-          <div class="req-body">
-            <h5>${req.name}</h5>
-            <p>${req.desc}</p>
-            ${req.aiNote ? `<span class="req-ai-note">💡 ${req.aiNote}</span>` : ''}
-          </div>
-        </div>`;
-      });
-      html += `</div></div>`;
+      h += `</div>`;
     }
-
-    html += `</div>`;
-    return html;
+    // ===== Roadmap section =====
+    if (rm) {
+      const tgtClr = getColorForScore(rm.targetScore);
+      const curPct = (rm.currentScore/10*100).toFixed(1);
+      const tgtPct = (rm.targetScore/10*100).toFixed(1);
+      h += `<div class="roadmap-section">`;
+      h += `<div class="roadmap-header"><span style="font-size:13px;font-weight:600;color:var(--gray-700);">🚀 提升路径</span>
+        <span class="target-tag" style="background:${tgtClr}15;color:${tgtClr};margin-left:auto;">🎯 目标 Lv.${rm.targetScore} ${LEVELS[rm.targetScore].name}</span></div>`;
+      h += `<div class="target-reason"><strong>目标依据：</strong>${rm.targetReason}</div>`;
+      // Journey bar
+      h += `<div class="journey-bar"><div class="journey-track">
+        <div class="journey-target-fill" style="width:${tgtPct}%;background:${tgtClr}"></div>
+        <div class="journey-fill" style="width:${curPct}%;background:linear-gradient(90deg,${clr}88,${clr})"></div>
+        <div class="journey-dot" style="left:${curPct}%;background:${clr}"></div>
+        <div class="journey-dot" style="left:${tgtPct}%;background:${tgtClr};border-style:dashed;opacity:.7"></div>
+        <span class="journey-label" style="left:${curPct}%;color:${clr}">当前</span>
+        <span class="journey-label" style="left:${tgtPct}%;color:${tgtClr}">目标</span>
+      </div></div>
+      <div class="journey-end-labels"><span>Lv.0</span><span>Lv.5</span><span>Lv.10</span></div>`;
+      // Milestones
+      h += `<div style="margin-top:14px"><div class="toggle-title" onclick="toggle(this)" style="font-size:13px;font-weight:600;color:var(--gray-700);">📍 分阶段里程碑（${rm.milestones.length}阶段）</div><div class="toggle-body"><div class="milestones" style="margin-top:10px;">`;
+      rm.milestones.forEach(ms => {
+        const fromLv=Math.floor(ms.from), toLv=ms.to;
+        const isReached=rm.currentScore>=toLv, isCurrent=rm.currentScore>=fromLv&&rm.currentScore<toLv;
+        const dotClass=isReached?'reached':(isCurrent?'current':'future');
+        const dotColor=isReached?'var(--success)':(isCurrent?'var(--primary)':'var(--gray-300)');
+        const msColor=getColorForScore(toLv);
+        const stepKey=`${fromLv}→${toLv}`, gs=GENERIC_STEPS[stepKey];
+        h += `<div class="milestone"><div class="milestone-dot ${dotClass}" style="background:${dotColor}"></div>`;
+        h += `<div class="milestone-level" style="color:${msColor}">`;
+        if(ms.label) h += `${ms.label} · `;
+        h += `Lv.${ms.from} → Lv.${ms.to}（${LEVELS[toLv].name}）</div>`;
+        h += `<div class="milestone-title">${isReached?'✅ 已达成':(isCurrent?'🔄 当前阶段':'⏳ 待启动')}</div>`;
+        h += `<div class="ms-actions">`;
+        if(gs) h += `<div class="ms-action generic"><span class="ms-action-tag g">通用</span>${gs}</div>`;
+        ms.actions.forEach(a => { h += `<div class="ms-action specific"><span class="ms-action-tag s">专项</span>${a}</div>`; });
+        h += `</div></div>`;
+      });
+      h += `</div></div></div>`; // milestones, toggle-body, toggle wrapper
+      h += `</div>`; // roadmap-section
+    }
+    h += `</div>`;
+    return h;
   }).join('');
 }
 
+// ===== Requirements Tab =====
+function renderReqs() {
+  const wrap = document.getElementById('reqWrap');
+  const rms = activeReqFilter === 'all' ? ROADMAPS : ROADMAPS.filter(r => r.dept === activeReqFilter);
+  wrap.innerHTML = rms.map(rm => {
+    if (!rm.requirements || !rm.requirements.length) return '';
+    const highCount = rm.requirements.filter(r=>r.priority==='high').length;
+    let h = `<div class="req-dept-section">`;
+    h += `<div class="req-dept-header">
+      <div class="dept-icon" style="background:${rm.color}15;color:${rm.color};width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">${rm.icon}</div>
+      <h3>${rm.dept}</h3>
+      <span class="req-count">${rm.requirements.length}项需求 · ${highCount}项高优</span>
+    </div>`;
+    h += `<div class="req-grid">`;
+    rm.requirements.forEach(req => {
+      const priClass = req.priority==='high'?'high':(req.priority==='mid'?'mid':'low');
+      const priLabel = req.priority==='high'?'高优':(req.priority==='mid'?'中优':'低优');
+      h += `<div class="req-card"><span class="req-pri ${priClass}">${priLabel}</span><div class="req-body"><h5>${req.name}</h5><p>${req.desc}</p>${req.aiNote?`<span class="req-ai-note">💡 ${req.aiNote}</span>`:''}</div></div>`;
+    });
+    h += `</div></div>`;
+    return h;
+  }).join('');
+}
+
+// ===== Utils =====
 function switchTab(id) {
-  document.querySelectorAll('.tab').forEach((t, i) => {
-    const tabIds = ['diag','road','scale'];
-    t.classList.toggle('active', tabIds[i] === id);
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    t.classList.toggle('active',['diag','reqs'][i]===id);
   });
-  ['tab-diag','tab-road','tab-scale'].forEach(tid => {
-    document.getElementById(tid).classList.toggle('active', tid === 'tab-' + id);
+  ['tab-diag','tab-reqs'].forEach(tid => {
+    document.getElementById(tid).classList.toggle('active', tid==='tab-'+id);
   });
 }
 
-function toggleEvidence(el) {
+function toggle(el) {
   el.classList.toggle('open');
   el.nextElementSibling.classList.toggle('open');
 }
 
-function showTip(e, text) {
-  const tip = document.getElementById('tooltip');
-  tip.innerHTML = text.replace(/\\n/g, '<br>');
-  tip.style.display = 'block';
-  const rect = e.target.getBoundingClientRect();
-  tip.style.left = rect.left + rect.width / 2 - tip.offsetWidth / 2 + 'px';
-  tip.style.top = rect.top - tip.offsetHeight - 10 + window.scrollY + 'px';
+function showTip(e,text) {
+  const tip=document.getElementById('tooltip');
+  tip.innerHTML=text.replace(/\\n/g,'<br>');
+  tip.style.display='block';
+  const r=e.target.getBoundingClientRect();
+  tip.style.left=r.left+r.width/2-tip.offsetWidth/2+'px';
+  tip.style.top=r.top-tip.offsetHeight-10+window.scrollY+'px';
 }
-function hideTip() { document.getElementById('tooltip').style.display = 'none'; }
+function hideTip(){ document.getElementById('tooltip').style.display='none'; }
 
 // Init
 renderScaleBar();
-renderDepts();
-renderScaleDetail();
-renderRoadmaps();
+renderFilterBar('filterBar','dept');
+renderFilterBar('reqFilterBar','req');
+renderDeptCards();
+renderReqs();
 </script>
 </body>
 </html>
