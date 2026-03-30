@@ -2,7 +2,7 @@
   "config": {
     "company": "海底捞",
     "title": "各部门AI提效进度看板",
-    "syncTime": "2026-03-30T07:57:56.016Z",
+    "syncTime": "2026-03-30T07:59:46.864Z",
     "stages": [
       "需求调研",
       "模型选择与提示词学习",
@@ -14,11 +14,11 @@
   "departments": [
     {
       "name": "商业分析部",
-      "stage": "需求调研",
-      "progress": 5,
+      "stage": "自动化工作流学习",
+      "progress": 30,
       "stages": {
-        "需求调研": "进行中",
-        "模型选择与提示词学习": "未开始",
+        "需求调研": "已完成",
+        "模型选择与提示词学习": "已完成",
         "自动化工作流学习": "未开始",
         "全面应用": "未开始",
         "持续优化": "未开始"
@@ -163,8 +163,8 @@
       "dept": "商业分析部",
       "stageName": "需求调研",
       "subName": "AI场景挖掘",
-      "status": "未开始",
-      "completedDate": "",
+      "status": "已完成",
+      "completedDate": "2026-03-30",
       "owner": "",
       "note": ""
     },
@@ -172,8 +172,8 @@
       "dept": "商业分析部",
       "stageName": "模型选择与提示词学习",
       "subName": "模型选型",
-      "status": "未开始",
-      "completedDate": "",
+      "status": "已完成",
+      "completedDate": "2026-03-30",
       "owner": "",
       "note": ""
     },
@@ -181,8 +181,8 @@
       "dept": "商业分析部",
       "stageName": "模型选择与提示词学习",
       "subName": "提示词入门",
-      "status": "未开始",
-      "completedDate": "",
+      "status": "已完成",
+      "completedDate": "2026-03-30",
       "owner": "",
       "note": ""
     },
@@ -190,8 +190,8 @@
       "dept": "商业分析部",
       "stageName": "模型选择与提示词学习",
       "subName": "提示词进阶",
-      "status": "未开始",
-      "completedDate": "",
+      "status": "已完成",
+      "completedDate": "2026-03-30",
       "owner": "",
       "note": ""
     },
