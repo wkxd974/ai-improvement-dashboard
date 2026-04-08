@@ -318,10 +318,10 @@ const DEPARTMENTS=[
       {cat:'challenge',label:'目标',items:['整理3个AI最佳实践案例，为其他团队评估提供参考']},
       {cat:'track',label:'待办',items:['安排其余团队访谈评估，补全品控部（产品部）整体AI使用画像']},
     ]},
-  { name:'人事部', icon:'👥', color:'#7a8a9e', score:1, levelName:'入门聊天',
-    range:{min:0,max:2,minName:'零基础',maxName:'国产大模型对话'},
-    evidence:['主要使用飞书内置豆包进行基础问答','未接触过Kimi/DeepSeek等独立AI产品','没有将AI应用于日常HR工作流程','对AI能力边界认知有限，需要系统性引导'],
-    teams:null,
+  { name:'人事部', icon:'👥', color:'#7a8a9e', score:4, levelName:'国产AI介入工作 ~ AI辅助编程',
+    range:{min:4,max:8,minName:'国产AI介入工作',maxName:'AI辅助编程'},
+    evidence:['COE薪酬绩效组已达到AI辅助编程水平，日常进行大量数据分析','COE学习发展组处于深度数据分析阶段，用AI做满意度调查和培训报告','SSC组长级已开始养龙虾，普通员工用AI做单文档处理','一线HRBP约60%已养龙虾，有多维表格半自动推送','职能HRBP近期开始养龙虾，需求明确但落地初期','团队间AI使用水平差异较大（Lv.4~Lv.8）'],
+    teams:[{name:'COE·薪酬绩效组',score:8},{name:'COE·学习发展组',score:7},{name:'SSC',score:6},{name:'一线HRBP',score:6},{name:'职能HRBP',score:6}],
     currentPlan:[
       {cat:'daily',label:'练习',items:['每天用AI问一个工作相关问题，记录回答是否有用']},
       {cat:'challenge',label:'目标',items:['用AI完整整理一次会议纪要（录音文字→要点→待办）']},
@@ -378,38 +378,9 @@ const ROADMAPS=[
   { dept:'品控部（产品部）', cur:null, tgt:null,
     note:'待完成完整访谈评估后设定里程碑；杨茜团队当前 Lv.4 可作为基准参考',
     milestones:[] },
-  { dept:'人事部', cur:1, tgt:9,
-    note:'从基础问答出发，最终目标实现自动化工作流，覆盖人效看板、档案更新等高频场景',
-    milestones:[
-      { from:1,to:3,label:'入门聊天 → 国际大模型对话',skills:[
-        {t:'sk',s:'学习Prompt三要素：角色设定 + 任务拆解 + 输出格式要求'},
-        {t:'sk',s:'了解AI擅长什么（文本处理、数据整理）、不擅长什么（主观判断、实时数据）'},
-        {t:'sk',s:'掌握多轮对话技巧：追问、纠偏、让AI自检'},
-        {t:'ac',s:'开通GPT企业账号，跳过国产工具直接上手国际模型'},
-        {t:'ac',s:'用AI回答HR常见咨询（请假制度、薪资政策），体验对话能力差异'},
-      ]},
-      { from:3,to:5,label:'国际大模型对话 → 国际AI介入工作',skills:[
-        {t:'sk',s:'学习文件上传与处理：让AI读取Excel/PDF并输出结构化结果'},
-        {t:'sk',s:'掌握Skill文档编写：把重复流程写成AI可执行的标准化规则'},
-        {t:'sk',s:'建立AI质检习惯：先小批量验证，再批量执行'},
-        {t:'ac',s:'用AI处理人效看板：门店打卡数据→汇总→合理值对比→预警输出'},
-        {t:'ac',s:'用AI整合店经理全档案：多数据源→按Skill规则自动填表'},
-        {t:'ac',s:'用AI批量生成贺卡：同模板替换姓名和照片'},
-      ]},
-      { from:5,to:8,label:'国际AI介入工作 → AI辅助编程',skills:[
-        {t:'sk',s:'学习让AI做交叉分析：多维度筛选+透视表+趋势对比'},
-        {t:'ac',s:'用AI分析员工离职预警：考勤异常+绩效波动+入职时长→风险评分'},
-        {t:'ac',s:'用AI做人力成本分析：各区门店人力配置→人效比对→优化建议'},
-        {t:'ac',s:'让AI编写人效看板自动刷新脚本：定时从BI取数→计算→异常标红→推送'},
-      ]},
-      { from:8,to:9,label:'AI辅助编程 → 自动化工作流',skills:[
-        {t:'sk',s:'掌握工作流串联：多个AI脚本→触发器→定时任务→异常处理→通知'},
-        {t:'sk',s:'学习API对接基础：理解数据接口的输入输出格式'},
-        {t:'vi',s:'搭建人效看板全自动化：BI取数→AI计算→异常检测→飞书机器人每日推送'},
-        {t:'vi',s:'搭建店经理档案自动更新流：多系统API→AI整合填表→校验→定期输出'},
-        {t:'vi',s:'搭建AI辅助招聘全流程：简历解析→条件匹配→排序推荐→面试安排→通知'},
-      ]},
-    ]},
+  { dept:'人事部', cur:4, tgt:9,
+    note:'COE组已有较好基础（Lv.7~8），SSC和HRBP从养龙虾阶段出发，目标全模块达到自动化工作流',
+    milestones:[] },
   { dept:'分析组（国内财务部）', cur:2, tgt:10,
     note:'从国产大模型对话出发，目标是自动化工作流并接近多模态与智能体水平，彻底解放重复性报表工作',
     milestones:[
@@ -474,6 +445,13 @@ const ROADMAPS=[
 const REQS=[
   { dept:'人事部',icon:'👥',color:'#7a8a9e',items:[
     {name:'人效看板自动化',desc:'每日从BI取门店打卡数据→计算人均看台→合理值对比→预警输出',pri:'high',ai:'需对接BI数仓接口，AI可实现全流程自动化'},
+    {name:'满意度调查AI分析',desc:'几十万条问卷数据需AI做多维分析生成报告',pri:'high',ai:'多维分析+维度打分+自动报告生成，李茜组当前Lv.7可负责'},
+    {name:'培训评估报告批量生成',desc:'固定模板+学员数据→Skill一键输出50人报告',pri:'high',ai:'固化流程最适合AI全自动处理，李茜组目标任务'},
+    {name:'组织健康度评估',desc:'五维度问卷→AI结构化分析→雷达图+关注项',pri:'high',ai:'AI擅长多维问卷分析与可视化描述，袁铭组需求'},
+    {name:'高潜人才胜任力评估',desc:'测评数据+岗位模型→交叉匹配→适配度报告',pri:'mid',ai:'需确认岗位模型结构；AI可做数据交叉匹配'},
+    {name:'员工流失/晋升预警',desc:'多维数据→综合风险评分→重点关注名单',pri:'mid',ai:'考勤+绩效+入职时长→综合评分，袁铭组需求'},
+    {name:'招聘简历初筛',desc:'人才画像规则→批量筛选→候选清单',pri:'high',ai:'硬指标可AI初筛，SSC需求，目标Lv.8'},
+    {name:'门店数据自动推送',desc:'BI取数→AI处理→多维表格→飞书推送',pri:'high',ai:'全链路自动化，一线HRBP需求，目标Lv.9'},
     {name:'张大哥送祝福贺卡',desc:'季度/年度批量生成数百张贺卡，仅替换姓名和照片',pri:'high',ai:'模板化输出，AI一步完成'},
     {name:'店经理全档案更新',desc:'从PS、智能人事、OA、财务等多系统汇总，按月更新全维度数据表',pri:'high',ai:'编写Skill规则文档，AI按规则从各数据源整合填表'},
     {name:'订阅号文章初筛',desc:'从1000+篇投稿中按规则筛选合格文章',pri:'mid',ai:'硬指标可AI初筛，主观质量判断仍需人工'},
@@ -505,7 +483,7 @@ const PROGRESS_DATA=[
     {date:'2026-03-30',score:2,note:'初始评估'},
   ]},
   { dept:'人事部', target:9, records:[
-    {date:'2026-03-30',score:1,note:'初始评估'},
+    {date:'2026-03-30',score:4,note:'初始评估'},
   ]},
   { dept:'分析组（国内财务部）', target:10, records:[
     {date:'2026-03-30',score:2,note:'初始评估'},
@@ -609,7 +587,106 @@ const SUB_DEPTS={
       ],
     },
   ],
-  '人事部':[],
+  '人事部':[
+    { name:'COE组（张楠）', isGroup:true, children:[
+      { name:'薪酬绩效组（王磊）', score:8, levelName:'AI辅助编程',
+        range:{min:5,max:8,minName:'国际AI介入工作',maxName:'AI辅助编程'},
+        currentPlan:[
+          {cat:'daily',label:'练习',items:['用AI做一次日常人效数据的多维度分析（大区×门店×时段）']},
+          {cat:'challenge',label:'目标',items:['让AI编写薪酬数据自动汇总脚本，替代手工Excel操作']},
+          {cat:'track',label:'追踪',items:['记录AI辅助完成的数据分析任务及准确率']},
+        ],
+        milestones:[
+          {from:8,to:9,label:'AI辅助编程 → 自动化工作流',cur:8,skills:[
+            {t:'sk',s:'掌握工作流编排：定时取数→AI计算→异常检测→推送通知'},
+            {t:'ac',s:'将日常人效看板从手动触发升级为BI取数→AI处理→飞书自动推送'},
+            {t:'ac',s:'搭建薪酬异常检测流：AI自动对比各区数据→标记异常→推送预警'},
+            {t:'vi',s:'实现店经理薪酬核算半自动化：制度规则文档化→AI按规则计算→人工终审'},
+          ]},
+        ],
+      },
+      { name:'学习发展组（李茜）', score:7, levelName:'深度数据分析',
+        range:{min:4,max:7,minName:'国产AI介入工作',maxName:'深度数据分析'},
+        currentPlan:[
+          {cat:'daily',label:'练习',items:['用AI分析一批培训反馈数据，输出学员评估摘要']},
+          {cat:'challenge',label:'目标',items:['将满意度调查问卷结果交给AI做结构化分析和报告生成']},
+          {cat:'track',label:'追踪',items:['记录AI辅助生成的培训报告数量及质量评分']},
+        ],
+        milestones:[
+          {from:7,to:8,label:'深度数据分析 → AI辅助编程',cur:7,skills:[
+            {t:'sk',s:'学习让AI做问卷数据多维分析：定量+定性交叉→维度打分→报告生成'},
+            {t:'ac',s:'用AI批量生成学员培训评估报告：固定模板+学员数据→Skill一键输出'},
+            {t:'ac',s:'让AI分析满意度调查：几十万条数据→按维度汇总→生成雷达图描述+关注项'},
+          ]},
+          {from:8,to:9,label:'AI辅助编程 → 自动化工作流',cur:7,skills:[
+            {t:'sk',s:'掌握Skill封装：将培训报告生成流程固化为可复用工作流'},
+            {t:'vi',s:'搭建店经理全档案自动更新：多系统数据→AI整合→校验→定期输出'},
+            {t:'vi',s:'搭建AI知识库辅助系统：海底捞内部制度+FAQ→AI即时答疑'},
+          ]},
+        ],
+      },
+    ]},
+    { name:'SSC（董明鑫）', score:6, levelName:'"养龙虾"',
+      range:{min:4,max:6,minName:'国产AI介入工作',maxName:'"养龙虾"'},
+      currentPlan:[
+        {cat:'daily',label:'练习',items:['用AI对比两份报表数据，找出差异点并输出分析']},
+        {cat:'challenge',label:'目标',items:['编写招聘简历初筛Skill：硬指标模板→批量下载简历→AI初筛']},
+        {cat:'track',label:'追踪',items:['记录AI辅助处理的报表数量及节省时间']},
+      ],
+      milestones:[
+        {from:6,to:7,label:'"养龙虾" → 深度数据分析',cur:6,skills:[
+          {t:'sk',s:'掌握数据脱敏处理：摘出个人信息列→AI处理→结果VLOOKUP回去'},
+          {t:'ac',s:'用AI做薪资/社保数据对比分析：多报表→差异定位→异常标记'},
+          {t:'ac',s:'让AI打好Excel模板和公式，人工仅粘贴原始数据即可自动计算'},
+        ]},
+        {from:7,to:8,label:'深度数据分析 → AI辅助编程',cur:6,skills:[
+          {t:'ac',s:'用AI编写招聘简历批量初筛脚本：人才画像规则→自动匹配→输出候选清单'},
+          {t:'vi',s:'搭建合同管理半自动化：到期提醒→自动触发→一键下发→签署追踪'},
+        ]},
+      ],
+    },
+    { name:'HRBP', isGroup:true, children:[
+      { name:'一线HRBP（上官帅帅）', score:6, levelName:'"养龙虾"',
+        range:{min:4,max:6,minName:'国产AI介入工作',maxName:'"养龙虾"'},
+        currentPlan:[
+          {cat:'daily',label:'练习',items:['用AI将一份门店数据整理成大白话版的店经理沟通摘要']},
+          {cat:'challenge',label:'目标',items:['把与店经理的沟通话术喂给AI训练成Skill，固定大白话输出风格']},
+          {cat:'track',label:'追踪',items:['记录AI辅助推送的数据报告数量及店经理反馈']},
+        ],
+        milestones:[
+          {from:6,to:7,label:'"养龙虾" → 深度数据分析',cur:6,skills:[
+            {t:'sk',s:'掌握Skill文档编写：把门店数据推送模板写成标准化规则'},
+            {t:'ac',s:'用AI做异常指标分析：考勤/绩效/经营数据→综合分析→大白话输出'},
+            {t:'ac',s:'训练AI学习团队沟通风格：喂入历史沟通记录→微调→固定成Skill'},
+          ]},
+          {from:7,to:9,label:'深度数据分析 → 自动化工作流',cur:6,skills:[
+            {t:'ac',s:'实现BI取数→AI处理→多维表格→飞书自动推送全链路'},
+            {t:'vi',s:'搭建门店数据全自动推送：BI定时取数→AI加工→精准推送至责任人'},
+          ]},
+        ],
+      },
+      { name:'职能HRBP（袁铭）', score:6, levelName:'"养龙虾"',
+        range:{min:4,max:6,minName:'国产AI介入工作',maxName:'"养龙虾"'},
+        currentPlan:[
+          {cat:'daily',label:'练习',items:['用AI分析一份组织架构调整前后的人员变动数据']},
+          {cat:'challenge',label:'目标',items:['将一次问卷调研结果交给AI做组织健康度分析']},
+          {cat:'track',label:'追踪',items:['记录AI辅助完成的分析报告数量及采纳率']},
+        ],
+        milestones:[
+          {from:6,to:7,label:'"养龙虾" → 深度数据分析',cur:6,skills:[
+            {t:'sk',s:'掌握数据脱敏方法：去公司名+摘个人信息→AI安全处理'},
+            {t:'ac',s:'用AI做组织健康度评估：问卷数据→五维度打分→关注项输出'},
+            {t:'ac',s:'用AI做员工流失预警：考勤+绩效+入职时长→风险评分→重点关注名单'},
+          ]},
+          {from:7,to:8,label:'深度数据分析 → AI辅助编程',cur:6,skills:[
+            {t:'ac',s:'用AI做预算达成分析：季度数据→同比环比→偏差归因→管理层简报'},
+            {t:'ac',s:'用AI做高潜人才胜任力评估：测评数据+岗位模型→交叉匹配→适配度报告'},
+            {t:'vi',s:'搭建组织健康度+胜任力评估标准化Skill：每季度输入新数据即可复用'},
+          ]},
+        ],
+      },
+    ]},
+  ],
   '分析组（国内财务部）':[],
   'SuperHi财务部':[],
 };
